@@ -105,7 +105,7 @@ export default StyleSheet.create({
 		flexDirection: "row",
 		alignItems: 'center',
 		justifyContent: 'center',
-		width: DIMENSION_WIDTH-20
+		width: DIMENSION_WIDTH - 20
 	},
 	fullHeight: {
 		height: DIMENSION_HEIGHT - 500,
@@ -136,7 +136,7 @@ export default StyleSheet.create({
 		shadowOffset: { height: 10, width: 0 }
 	},
 	button: {
-		width: (DIMENSION_WIDTH - 50)/3,
+		width: (DIMENSION_WIDTH - 50) / 3,
 		height: 50,
 		backgroundColor: WHITE,
 		alignItems: "center",
@@ -334,7 +334,9 @@ export default StyleSheet.create({
 		justifyContent: 'flex-end'
 	},
 	linkContainer: {
-		flexDirection: 'row'
+		width: DIMENSION_WIDTH - 20,
+		flexDirection: 'row',
+		justifyContent: 'center'
 	},
 	title: { paddingBottom: 10, marginLeft: 20, fontSize: 22, color: DARK_GRAY, textAlign: "center" },
 
@@ -440,12 +442,12 @@ export default StyleSheet.create({
 	},
 	textInputContainer: {
 		backgroundColor: "white",
-        borderRadius: 5,
-        paddingTop: 15,
-        paddingBottom: 15,
-        paddingLeft: 10,
-        paddingRight: 10,
-        marginTop: 10,
+		borderRadius: 5,
+		paddingTop: 15,
+		paddingBottom: 15,
+		paddingLeft: 10,
+		paddingRight: 10,
+		marginTop: 10,
 		marginBottom: 10,
 		borderColor: 'black', borderWidth: 1
 	},
@@ -492,16 +494,18 @@ export default StyleSheet.create({
 		alignItems: 'center'
 	},
 	containerAccountTitle: {
-		display: 'flex',
 		flexDirection: 'row',
-		justifyContent: 'space-between',
-		backgroundColor: 'red',
+		backgroundColor: '#FFE9E6',
 		padding: 10,
-		width: DIMENSION_WIDTH
+		borderBottomWidth: 1,
+		borderColor: '#F5DFDC'
 	},
 	titleButtonStyle: {
+		width: DIMENSION_WIDTH - 200,
 		display: 'flex',
-		flex: 1,
+		flexDirection: 'row',
+		justifyContent: 'flex-end',
+		alignItems: 'flex-end'
 	},
 	accountBodyContainer: {
 		margin: 20
@@ -513,5 +517,19 @@ export default StyleSheet.create({
 	accountDataContainer: {
 		marginBottom: 20,
 		fontSize: 16
+	},
+	accountTextInput: {
+		marginBottom: 20,
+		fontSize: 16,
+		borderWidth: 1,
+		padding: 5
+	},
+	surveyButton: {
+		borderWidth: 1, padding: 10, width: (DIMENSION_WIDTH - 40) / 2, justifyContent: 'center', alignItems: 'center', marginRight: 10,
+		textAlign: 'center',
+		backgroundColor: 'black',
+		marginBottom: 12,
+		paddingVertical: 12,
+		borderRadius: 4
 	}
 });

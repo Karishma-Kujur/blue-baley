@@ -111,10 +111,10 @@ const LoginScreen = (props) => {
                 </ScrollView>
                 <View style={styles.formButton}>
                     <Button label="Login" onPress={handleOnSubmit} />
-                    {/* <View style={styles.linkContainer}>
+                    <View style={styles.linkContainer}>
                         <Text style={styles.label}>Don’t have an account? </Text>
                         <Link label="Sign Up" onPress={() => navigation.navigate('Sign Up')} />
-                    </View> */}
+                    </View>
                 </View>
             </View>
         </KeyboardAvoidingView>

@@ -3,10 +3,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { useIsFocused } from '@react-navigation/native'
 import { View, StyleSheet, Dimensions, Text, Animated, TouchableOpacity, Image } from 'react-native'
-import * as Progress from 'react-native-progress';
-import Button from '../components/shared/Button'
-import TextInput from '../components/shared/TextInput'
-import Link from '../components/shared/Link'
+import * as Progress from 'react-native-progress'
 import CardStack, { Card } from 'react-native-card-stack-swiper'
 import CardItem from './CardItem'
 import Avatar from '../assets/images/avatar.jpeg'
@@ -28,6 +25,7 @@ const MatchesScreen = (props) => {
             alignItems: 'flex-start',
             width: 30,
             height: 30,
+            borderRadius: 15
         }
     ];
     const getProducts = () => {
@@ -40,7 +38,6 @@ const MatchesScreen = (props) => {
             })
             .catch((error) => {
                 setLoader(false)
-                Alert.alert('Invalid User name or Password', 'Please enter valid user name and password')
             })
     }
 

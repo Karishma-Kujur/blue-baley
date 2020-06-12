@@ -4,7 +4,6 @@ import { bindActionCreators } from 'redux';
 import { useIsFocused } from '@react-navigation/native'
 import { View, StyleSheet, Dimensions, Text, ScrollView, TouchableOpacity, FlatList, ImageBackground, TextInput } from 'react-native'
 import Button from '../components/shared/Button'
-// import TextInput from '../components/shared/TextInput'
 import Link from '../components/shared/Link'
 import styles from '../assets/styles';
 import SurveyItem from '../components/SurveyItem'
@@ -16,15 +15,29 @@ import MultiSelect from '../components/shared/MultiSelect'
 const { width, height } = Dimensions.get("window");
 
 const SurveyScreen = (props) => {
+    const [showTransition, changeShowTransition] = useState(true)
     const [surveyCount, changeSurveyCount] = useState(0)
     const [selectedId, changeSelectedId] = useState(null)
     const { navigation, SurveyAction, questions } = props
-    const surveyQuestion = (questions && questions.length > surveyCount) ? questions[surveyCount] : null
+    const surveyQuestion = (Survey && Survey.length > surveyCount) ? Survey[surveyCount] : null
 
     const isFocused = useIsFocused()
     useEffect(() => {
         SurveyAction.getSurveyQuestions()
     }, [isFocused])
+
+    const handleOnPressSave = () => {
+        if (surveyCount < Survey.length - 1) {
+            if (showTransition && surveyCount > (Survey.length - 1) / 2) {
+                changeShowTransition(false)
+                navigation.navigate('Transitions')
+            }
+            changeSurveyCount(surveyCount + 1)
+
+        } else {
+            navigation.navigate('Home')
+        }
+    }
 
     return (
         <View style={styles.containerMatches}>
@@ -38,8 +51,8 @@ const SurveyScreen = (props) => {
                         <View style={styles.questionContainer}>
                             <Text style={styles.question}>{surveyQuestion.question}</Text>
                         </View>
-                        {surveyQuestion.answers.length > 0 && !surveyQuestion.multiselect && <RadioButton items={surveyQuestion.answers} selectedAnswer = {null} />}
-                        {surveyQuestion.answers.length > 0 && surveyQuestion.multiselect && <MultiSelect items={surveyQuestion.answers} selectedAnswer = {[]} />}
+                        {surveyQuestion.answers.length > 0 && !surveyQuestion.multiselect && <RadioButton items={surveyQuestion.answers} selectedAnswer={null} />}
+                        {surveyQuestion.answers.length > 0 && surveyQuestion.multiselect && <MultiSelect items={surveyQuestion.answers} selectedAnswer={[]} />}
 
                         {surveyQuestion.answers.length === 0 &&
                             <View style={styles.textInputContainer}>
@@ -70,10 +83,28 @@ const SurveyScreen = (props) => {
                         />
                     </ScrollView>
 
-                    <View style={styles.bottom}>
-                        <Button label="Next" onPress={() => {
-                            surveyCount < questions.length - 1 ? changeSurveyCount(surveyCount + 1) :
-                                navigation.navigate('Transitions')
+                    <View style={{
+                        display: 'flex', flexDirection: 'row', width: width - 30,
+                        marginBottom: 10, alignItems: 'center', justifyContent: 'center'
+                    }}>
+                        <Button
+                            onPress={() => {
+                                navigation.navigate('Log Off')
+                            }}
+                            label="Save" style={{
+                                borderWidth: 1, padding: 10, width: (width - 40) / 2, justifyContent: 'center', alignItems: 'center', marginRight: 10,
+                                textAlign: 'center',
+                                backgroundColor: 'black',
+                                marginBottom: 12,
+                                borderRadius: 4
+                            }} />
+                        <Button onPress={handleOnPressSave} label="Next" style={{
+                            borderWidth: 1, padding: 10, width: (width - 40) / 2, justifyContent: 'center', alignItems: 'center',
+                            textAlign: 'center',
+                            backgroundColor: 'black',
+                            marginBottom: 12,
+                            paddingVertical: 12,
+                            borderRadius: 4
                         }} />
                     </View>
                 </>

@@ -2,9 +2,9 @@ import React from 'react'
 import { TouchableOpacity, Text, StyleSheet } from 'react-native'
 
 const ButtonContainer = (props) => {
-    const { onPress, label } = props
+    const { onPress, label, style } = props
     return (
-        <TouchableOpacity style={styles.container} onPress={onPress}>
+        <TouchableOpacity style={style ? style :  styles.container} onPress={onPress}>
             <Text style={styles.text}>{label}</Text>
         </TouchableOpacity>
     )

@@ -3,8 +3,6 @@ import { View, StyleSheet, Dimensions, Text, Alert, ScrollView, KeyboardAvoiding
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import Button from '../components/shared/Button'
-import TextInput from '../components/shared/TextInput'
-import Link from '../components/shared/Link'
 import * as LoginAction from '../actions/LoginAction';
 import styles from '../assets/styles';
 
@@ -25,7 +23,7 @@ const LogOffScreen = (props) => {
             </ScrollView>
             <View style={styles.bottom}>
                 <Button label="Log Off" onPress={() => {
-                    navigation.navigate('Login')
+                    navigation.navigate('Landing Page')
                 }} />
             </View>
         </View>

@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
 import { Text, View, Image, Dimensions, TouchableOpacity, ScrollView } from 'react-native';
-import { showMessage, hideMessage } from "react-native-flash-message";
 import { SliderBox } from "react-native-image-slider-box";
 import NoImage from '../assets/images/noImage.png'
 import styles from '../assets/styles';
 import * as ToteAction from '../actions/ToteAction';
-import AwesomeAlert from 'react-native-awesome-alerts'
-import Gallery from 'react-native-image-gallery';
+import CustomDialog from '../components/shared/CustomDialog';
 
 const CardItem = ({
     actions,
@@ -33,6 +31,8 @@ const CardItem = ({
     const [showSize, changeShowSize] = useState(false)
     const [quantity, changeQuantity] = useState(1)
     const [showAlert, changeShowAlert] = useState({ show: false })
+    const [dialogMessage, setDialogMessage] = useState('')
+    const [dialog, showDialog] = useState(false)
     const image = images.length > 0 ? images[0] : ''
     const sizes = ['XS', 'S', 'M', 'L', 'XL']
 
@@ -43,42 +43,39 @@ const CardItem = ({
         }
         ToteAction.addToTote(data)
             .then((result) => {
-                changeShowAlert({ show: true, message: "Added to Bag!" })
+                setDialogMessage('Added to Bag!')
+                showDialog(true)
                 changeShowSize(false)
+                setTimeout(() => {
+                    showDialog(false)
+                    setDialogMessage('')
+                }, 2000);
             })
             .catch((error) => {
                 changeShowSize(false)
-                Alert.alert('Invalid User name or Password', 'Please enter valid user name and password')
+                setDialogMessage('Error occured while adding to bag!')
+                showDialog(true)
+                setTimeout(() => {
+                    showDialog(false)
+                    setDialogMessage('')
+                }, 2000);
             })
     }
 
     return (
         <View style={styles.containerCardItem}>
+            <CustomDialog modalVisible={dialog} message={dialogMessage} />
             <ScrollView>
                 <Image source={image ? {
                     uri: image,
                 } : NoImage}
                     style={imageStyle} />
                 <Text style={styles.nameCardItem}>{name}</Text>
-                <Text style={styles.priceCardItem}>{'$ ' + price}</Text>
+                <Text style={styles.priceCardItem}>{'$ ' + (price || '20')}</Text>
 
-                {/* DESCRIPTION */}
                 {description && (
                     <Text style={styles.descriptionCardItem}>{description}</Text>
                 )}
-                {/* <View style={imageStyle}>
-                <SliderBox
-                    images={images}
-                   autoplay
-                    circleLoop
-                    sliderBoxHeight={420}
-                    imageLoadingColor="#2196F3"
-                    ImageComponentStyle={{borderRadius: 15, width: fullWidth - 80, marginTop: 5}}
-                    onCurrentImagePressed={index =>
-                        console.warn(`image ${index} pressed`)
-                    }
-                />
-            </View> */}
 
                 <View style={styles.fullHeight}>
                     {showSize && (
@@ -107,7 +104,15 @@ const CardItem = ({
                         </Text>
                             </TouchableOpacity>
 
-                            <TouchableOpacity
+                            <TouchableOpacity onPress={() => {
+                                setDialogMessage('Added to Favorites!')
+                                showDialog(true)
+                                changeShowSize(false)
+                                setTimeout(() => {
+                                    showDialog(false)
+                                    setDialogMessage('')
+                                }, 2000);
+                            }}
                                 style={styles.button}
                             >
                                 <Text style={styles.flash}>
@@ -115,7 +120,16 @@ const CardItem = ({
                         </Text>
                             </TouchableOpacity>
 
-                            <TouchableOpacity style={styles.button}>
+                            <TouchableOpacity onPress={() => {
+                                setDialogMessage('Not your Style? Got it!')
+                                showDialog(true)
+                                changeShowSize(false)
+                                setTimeout(() => {
+                                    showDialog(false)
+                                    setDialogMessage('')
+                                }, 2000);
+                            }}
+                            style={styles.button}>
                                 <Text style={styles.flash}>
                                     LOSE it
                         </Text>
@@ -123,7 +137,7 @@ const CardItem = ({
                         </View>
                     )}
                 </View>
-                {/* {images.length > 1 &&
+                {images.length > 1 &&
                     <View>
                         {images.map((item, index) => {
                             if (index !== 0) {
@@ -138,8 +152,21 @@ const CardItem = ({
                             }
                         })}
                     </View>
-                } */}
-                <View style={{ height: 420, marginBottom: 100 }}>
+                }
+                {/* <View style={imageStyle}>
+                <SliderBox
+                    images={images}
+                   autoplay
+                    circleLoop
+                    sliderBoxHeight={420}
+                    imageLoadingColor="#2196F3"
+                    ImageComponentStyle={{borderRadius: 15, width: fullWidth - 80, marginTop: 5}}
+                    onCurrentImagePressed={index =>
+                        console.warn(`image ${index} pressed`)
+                    }
+                />
+            </View> */}
+                {/* <View style={{ height: 420, marginBottom: 100 }}>
                     <Gallery
                         style={{ flex: 1, backgroundColor: 'black' }}
                         images={[
@@ -149,8 +176,7 @@ const CardItem = ({
                             { source: { uri: 'http://i.imgur.com/kj5VXtG.jpg' } }
                         ]}
                     />
-                </View>
-
+                </View> */}
             </ScrollView>
         </View>
     );

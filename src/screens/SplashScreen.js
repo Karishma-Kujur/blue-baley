@@ -1,9 +1,10 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image } from 'react-native';
+import { View, Text, StyleSheet, Image, Dimensions } from 'react-native';
 import GestureRecognizer, { swipeDirections } from 'react-native-swipe-gestures';
 import Button from '../components/shared/Button'
 import Link from '../components/shared/Link'
 import Wallpaper from '../assets/images/Wallpaper.png'
+const { width, height } = Dimensions.get("window");
 
 const SplashScreen = (props) => {
     const { navigation } = props
@@ -27,10 +28,8 @@ const SplashScreen = (props) => {
                 <Image source={Wallpaper} style={styles.wallpaper} />
             </View>
             <View style={styles.actionsContainer}>
-                <View style={styles.row}>
-                    <Button label="GET STATRED" onPress={() => navigation.navigate('Sign Up')} />
-                </View>
-                <View style={styles.row}>
+                <Button label="GET STATRED" onPress={() => navigation.navigate('Sign Up')} />
+                <View style={styles.linkContainer}>
                     <Text style={styles.text}>I am existing user?</Text>
                     <Link label="Login" onPress={() => navigation.navigate('Login')} />
                 </View>
@@ -59,10 +58,15 @@ const styles = StyleSheet.create({
     },
     actionsContainer: {
         flex: 1,
-        justifyContent: 'flex-end'
+        justifyContent: 'flex-end',
+        padding:10
     },
     text: {
-        textAlign: 'center',
-        marginLeft: 250
+        textAlign: 'center'
+    },
+    linkContainer: {
+        width: width - 20,
+        flexDirection: 'row',
+        justifyContent: 'center'
     }
 });

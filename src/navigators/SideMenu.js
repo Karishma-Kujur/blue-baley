@@ -6,6 +6,7 @@ import Favorites from '../screens/Favorites'
 import Home from '../screens/Home'
 import OrderHistory from '../screens/OrderHistory'
 import Account from '../screens/Account'
+import ViewQuestions from '../screens/ViewQuestions';
 
 const SideMenu = (props) => {
   const Drawer = createDrawerNavigator();
@@ -15,10 +16,10 @@ const SideMenu = (props) => {
       <Drawer.Screen name="View Rack" component={Matches} />
       <Drawer.Screen name="View Tote" component={Tote} />
       <Drawer.Screen name="View Favorites" component={Favorites} />
-      <Drawer.Screen name="My Chart" component={Favorites} />
+      <Drawer.Screen name="My Chart" component={ViewQuestions} />
       <Drawer.Screen name="Order History" component={OrderHistory} />
       <Drawer.Screen name="My Account" component={Account} />
-      <Drawer.Screen name="Log Out" component={Favorites} />
+      <Drawer.Screen name="Log Out" component={Home} />
     </Drawer.Navigator>
   )
 }

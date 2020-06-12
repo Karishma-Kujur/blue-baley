@@ -1,8 +1,5 @@
 import React from 'react'
-import { View, StyleSheet, Dimensions, Text, ScrollView, TouchableOpacity, FlatList, Image } from 'react-native'
-import Button from '../components/shared/Button'
-import TextInput from '../components/shared/TextInput'
-import Link from '../components/shared/Link'
+import { View, Dimensions, Text, ScrollView, TouchableOpacity, FlatList, Image } from 'react-native'
 import styles from '../assets/styles';
 import Avatar from '../assets/images/avatar.jpeg'
 import FlashMessage from "react-native-flash-message";
@@ -26,7 +23,7 @@ const HomeScreen = (props) => {
         },
         {
             name: 'My Chart',
-            onClick: () => { }
+            onClick: () => { navigation.navigate('My Chart') }
         },
         {
             name: 'Order History',
@@ -38,7 +35,7 @@ const HomeScreen = (props) => {
         },
         {
             name: 'Log Out',
-            onClick: () => { }
+            onClick: () => { navigation.navigate('Landing Page')}
         }
     ]
     const imageStyle = [
@@ -46,6 +43,7 @@ const HomeScreen = (props) => {
             alignItems: 'flex-start',
             width: 30,
             height: 30,
+            borderRadius: 15
         }
     ];
 

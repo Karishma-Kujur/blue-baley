@@ -3,9 +3,6 @@ import { View, StyleSheet, Dimensions, Text, Alert, ScrollView, KeyboardAvoiding
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import Button from '../components/shared/Button'
-import TextInput from '../components/shared/TextInput'
-import Link from '../components/shared/Link'
-import * as LoginAction from '../actions/LoginAction';
 import styles from '../assets/styles';
 import Spinner from 'react-native-loading-spinner-overlay';
 
@@ -23,7 +20,7 @@ const TransitionsScreen = (props) => {
             </ScrollView>
             <View style={styles.bottom}>
                 <Button label="Next" onPress={() => {
-                    navigation.navigate('Log Off')
+                    navigation.navigate('Survey')
                 }} />
             </View>
         </View>

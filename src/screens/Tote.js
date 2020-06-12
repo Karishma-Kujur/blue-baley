@@ -21,6 +21,7 @@ const ToteScreen = (props) => {
             alignItems: 'flex-start',
             width: 30,
             height: 30,
+            borderRadius: 15
         }
     ];
 

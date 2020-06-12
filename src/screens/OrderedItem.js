@@ -82,7 +82,8 @@ const OrderedItem = ({
             </ScrollView>
             <View style={{ padding: 5 }}>
                 <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', marginBottom: 10 }}>
-                    <Text>Items in Total</Text>
+                    <Text style={{ color: 'grey'}}>13 Items in Total:</Text>
+                    <Text style={{fontWeight: 'bold'}}>US$115.89</Text>
                 </View>
                 <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-end' }}>
                     <TouchableOpacity>

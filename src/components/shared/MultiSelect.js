@@ -22,7 +22,13 @@ const MultiSelect = (props) => {
                     <View style={{ flexDirection: 'row', marginLeft: 20, marginBottom: 15 }}>
                         <TouchableOpacity onPress={() => {
                             let ids = [...selectedId]
-                            ids.push(item.id)
+                            if (ids.includes(item.id)) {
+                                ids = ids.filter(id =>
+                                    id !== item.id
+                                )
+                            } else {
+                                ids.push(item.id)
+                            }
                             changeSelectedId(ids)
                         }
                         }>
