@@ -24,9 +24,7 @@ const SplashScreen = (props) => {
             config={config}
             style={styles.container}
         >
-            <View>
-                <Image source={Wallpaper} style={styles.wallpaper} />
-            </View>
+            <Image source={Wallpaper} style={styles.wallpaper} />
             <View style={styles.actionsContainer}>
                 <Button label="GET STATRED" onPress={() => navigation.navigate('Sign Up')} />
                 <View style={styles.linkContainer}>
@@ -42,24 +40,20 @@ export default SplashScreen
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: '#f7ce26'
+        backgroundColor: '#f7ce26',
+        width: width,
+        height: height,
     },
     wallpaper: {
-        width: '100%',
-        height: '95%',
+        width: width,
+        height: height - 50,
         alignItems: 'flex-end'
-    },
-    row: {
-        width: '100%',
-        flexDirection: 'row',
-        justifyContent: "center",
-        alignItems: "center",
-        textAlign: 'center',
     },
     actionsContainer: {
         flex: 1,
         justifyContent: 'flex-end',
-        padding:10
+        paddingLeft: 10,
+        paddingRight: 10
     },
     text: {
         textAlign: 'center'
@@ -67,6 +61,7 @@ const styles = StyleSheet.create({
     linkContainer: {
         width: width - 20,
         flexDirection: 'row',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        marginBottom: 15
     }
 });

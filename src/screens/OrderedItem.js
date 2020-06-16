@@ -78,7 +78,6 @@ const OrderedItem = ({
                     uri: image,
                 } : NoImage}
                     style={imageStyle} />
-                {/* Items */}
             </ScrollView>
             <View style={{ padding: 5 }}>
                 <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', marginBottom: 10 }}>

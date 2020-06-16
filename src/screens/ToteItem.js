@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
 import { Text, View, Image, Dimensions, TouchableOpacity } from 'react-native';
+import { Chevron } from 'react-native-shapes';
 import CustomPicker from '../components/shared/CustomPicker'
 import styles from '../assets/styles';
-import NoImage from '../assets/images/noImage.png'
+import NoImage from '../assets/images/01.jpg'
 import AddToFavorite from '../assets/images/favorite.jpeg'
 import AddToBag from '../assets/images/bag.jpeg'
-import * as ToteAction from '../actions/ToteAction';
+import * as ToteAction from '../actions/ToteAction'
+import CustomDialog from '../components/shared/CustomDialog'
+import RNPickerSelect from 'react-native-picker-select'
 
 const sizes = [
     { label: 'S', vlaue: 'S' },
@@ -48,6 +51,7 @@ const ToteItem = ({
     toteEdited
 }) => {
     const [selectedQuantity, changeQuantity] = useState(quantity)
+    const [showDialog, changeShowDialog] = useState(false)
     // Custom styling
     const fullWidth = Dimensions.get('window').width;
     const favoriteImageStyle = [
@@ -117,50 +121,129 @@ const ToteItem = ({
     return (
         <View style={styles.toteCardItem}>
             <View style={toteContainer}>
-                {/* IMAGE */}
-                <Image source={image ? {
-                    uri: image,
-                } : NoImage}
-                    style={imageStyle} />
+                <View>
+                    <Image source={image ? {
+                        uri: image,
+                    } : NoImage}
+                        style={imageStyle} />
+                </View>
                 <View style={descriptionStyle}>
                     <Text style={styles.nameToteItem}>{name}</Text>
                     <Text style={styles.priceToteItem}>{price}</Text>
                     <Text style={styles.desceiptionToteItem}>{description}</Text>
-                    {isFavorite && <View style={styles.toteActionContainer}>
-                        <TouchableOpacity onPress={handleMoveToFavorites}>
-                            <Image source={AddToBag} style={bagImageStyle} />
-                        </TouchableOpacity>
+                    {isFavorite &&
+                        <View style={styles.favoriteActionContainer}>
+                            <View style={{ borderWidth: 1, padding: 5 }}>
+                                <TouchableOpacity onPress={handleMoveToFavorites}>
+                                    <Image source={AddToBag} style={bagImageStyle} />
+                                </TouchableOpacity>
+                            </View>
                         </View>}
-                    {!isFavorite && <View style={styles.toteActionContainer}>
-                        <TouchableOpacity onPress={handleMoveToFavorites}>
-                            <Image source={AddToFavorite} style={favoriteImageStyle} />
-                        </TouchableOpacity>
+                </View>
+            </View>
+            <View>
+                {!isFavorite &&
+                    <View style={styles.toteActionContainer}>
+                        <View style={{ borderWidth: 1, padding: 5 }}>
+                            <TouchableOpacity onPress={handleMoveToFavorites}>
+                                <Image source={AddToFavorite} style={favoriteImageStyle} />
+                            </TouchableOpacity>
+                        </View>
                         <View>
                             <Text>Size</Text>
-                            <CustomPicker
-                                items={sizes}
-                                onChange={() => { }}
-                            />
+                            <View>
+                                <RNPickerSelect
+                                    // value={sizes[0].value}
+                                    onValueChange={(value) => console.log(value)}
+                                    items={sizes}
+                                    Icon={() => {
+                                        return <Chevron size={1} color="gray" />;
+                                    }}
+                                    style={{
+                                        inputIOS: {
+                                            fontSize: 16,
+                                            paddingVertical: 2,
+                                            paddingHorizontal: 5,
+                                            borderWidth: 1,
+                                            color: 'black',
+                                            paddingRight: 20, // to ensure the text is never behind the icon
+                                        },
+                                        inputAndroid: {
+                                            backgroundColor: 'transparent',
+                                        },
+                                        iconContainer: {
+                                            top: 10,
+                                            right: 7
+                                        },
+                                    }}
+                                />
+                            </View>
                         </View>
                         <View>
                             <Text>Color</Text>
-                            <CustomPicker
-                                items={colors}
-                                onChange={() => { }}
-                            />
+                            <View>
+                                <RNPickerSelect
+                                    // value={colors[0].value}
+                                    placeholder="Red"
+                                    onValueChange={(value) => console.log(value)}
+                                    items={colors}
+                                    Icon={() => {
+                                        return <Chevron size={1} color="gray" />;
+                                    }}
+                                    style={{
+                                        inputIOS: {
+                                            fontSize: 16,
+                                            paddingVertical: 2,
+                                            paddingHorizontal: 5,
+                                            borderWidth: 1,
+                                            color: 'black',
+                                            paddingRight: 20, // to ensure the text is never behind the icon
+                                        },
+                                        inputAndroid: {
+                                            backgroundColor: 'transparent',
+                                        },
+                                        iconContainer: {
+                                            top: 10,
+                                            right: 7
+                                        },
+                                    }}
+                                />
+                            </View>
                         </View>
                         <View>
                             <Text>Qty</Text>
-                            <CustomPicker
-                                value={selectedQuantity}
-                                items={quantities}
-                                onChange={handleEditToteProduct}
-                            />
+                            <View>
+                                <RNPickerSelect
+                                    // value={quantities[0].value}
+                                    placeholder="0"
+                                    onValueChange={(value) => console.log(value)}
+                                    items={quantities}
+                                    Icon={() => {
+                                        return <Chevron size={1} color="gray" />;
+                                    }}
+                                    style={{
+                                        inputIOS: {
+                                            fontSize: 16,
+                                            paddingVertical: 2,
+                                            paddingHorizontal: 5,
+                                            borderWidth: 1,
+                                            color: 'black',
+                                            paddingRight: 20, // to ensure the text is never behind the icon
+                                        },
+                                        inputAndroid: {
+                                            backgroundColor: 'transparent',
+                                        },
+                                        iconContainer: {
+                                            top: 10,
+                                            right: 7
+                                        },
+                                    }}
+                                />
+                            </View>
                         </View>
                     </View>}
-                </View>
-            </View>
 
+            </View>
         </View>
     );
 };

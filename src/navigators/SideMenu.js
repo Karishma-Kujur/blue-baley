@@ -7,6 +7,7 @@ import Home from '../screens/Home'
 import OrderHistory from '../screens/OrderHistory'
 import Account from '../screens/Account'
 import ViewQuestions from '../screens/ViewQuestions';
+import SplashScreen from '../screens/SplashScreen';
 
 const SideMenu = (props) => {
   const Drawer = createDrawerNavigator();
@@ -19,7 +20,7 @@ const SideMenu = (props) => {
       <Drawer.Screen name="My Chart" component={ViewQuestions} />
       <Drawer.Screen name="Order History" component={OrderHistory} />
       <Drawer.Screen name="My Account" component={Account} />
-      <Drawer.Screen name="Log Out" component={Home} />
+      <Drawer.Screen name="Log Out" component={SplashScreen} />
     </Drawer.Navigator>
   )
 }

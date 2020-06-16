@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react'
+import * as Progress from 'react-native-progress'
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { useIsFocused } from '@react-navigation/native'
 import { View, StyleSheet, Dimensions, Text, ScrollView, TouchableOpacity, FlatList, ImageBackground, TextInput } from 'react-native'
 import Button from '../components/shared/Button'
-import Link from '../components/shared/Link'
 import styles from '../assets/styles';
 import SurveyItem from '../components/SurveyItem'
 import { Survey } from '../constants/Survey'
@@ -18,6 +18,7 @@ const SurveyScreen = (props) => {
     const [showTransition, changeShowTransition] = useState(true)
     const [surveyCount, changeSurveyCount] = useState(0)
     const [selectedId, changeSelectedId] = useState(null)
+    const [progressStatus, changeProgressStatus] = useState(0)
     const { navigation, SurveyAction, questions } = props
     const surveyQuestion = (Survey && Survey.length > surveyCount) ? Survey[surveyCount] : null
 
@@ -28,10 +29,11 @@ const SurveyScreen = (props) => {
 
     const handleOnPressSave = () => {
         if (surveyCount < Survey.length - 1) {
-            if (showTransition && surveyCount > (Survey.length - 1) / 2) {
+            if (showTransition && surveyCount >= (Survey.length - 1) / 2) {
                 changeShowTransition(false)
                 navigation.navigate('Transitions')
             }
+            changeProgressStatus((surveyCount + 1) / Survey.length)
             changeSurveyCount(surveyCount + 1)
 
         } else {
@@ -44,6 +46,9 @@ const SurveyScreen = (props) => {
 
             <View style={styles.top}>
                 <Text style={styles.title}>Survey</Text>
+            </View>
+            <View style={{ height: 8, alignItems: 'center' }}>
+                <Progress.Bar progress={progressStatus} width={width - 60} />
             </View>
             {surveyQuestion &&
                 <>

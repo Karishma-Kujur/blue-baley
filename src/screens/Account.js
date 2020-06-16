@@ -145,15 +145,15 @@ const AccountScreen = (props) => {
                                     {!editAddress && item.name === 'MY ADDRESSES' &&
                                         <View style={styles.accountBodyContainer}>
                                             <Text style={styles.accountTextConatiner}>Billing Address</Text>
-                                            <Text>XXXXXXXXX</Text>
-                                            <Text>XXXXXXXXX</Text>
-                                            <Text>XXXXXXXXX</Text>
-                                            <Text>XXXXXXXXX</Text>
-                                            <Text>XXXXXXXXX</Text>
+                                            <Text>{Accounts.Address.addressLine1}</Text>
+                                            <Text>{Accounts.Address.addressLine2}</Text>
+                                            <Text>{Accounts.Address.city}</Text>
+                                            <Text>{Accounts.Address.market}</Text>
+                                            <Text>{Accounts.Address.zipCode}</Text>
                                         </View>
                                     }
                                     {editAddress && item.name === 'MY ADDRESSES' &&
-                                        <AddressForm />
+                                        <AddressForm details={Accounts.Address}/>
                                     }
                                     {item.name === 'PRIVACY' &&
                                         <View style={{ padding: 20 }}>

@@ -11,37 +11,48 @@ const defaultAddress = [
 ]
 
 const AddressForm = (props) => {
+    const { details } = props
+    const [addressLine1, changeAddressLine1] = useState(details.addressLine1)
+    const [addressLine2, changeAddressLine2] = useState(details.addressLine2)
+    const [city, changeCity] = useState(details.city)
+    const [zipCode, changeZipCode] = useState(details.zipCode)
+    const [market, changeMarket] = useState(details.market)
     return (
         <View style={styles.accountBodyContainer}>
             <Text style={styles.accountTextConatiner}>Address line 1</Text>
             <TextInput
                 style={styles.accountTextInput}
                 secureTextEntry={false}
-                // onChangeText={text => onChangeText(text)}
+                value={addressLine1}
+                onChangeText={text => changeAddressLine1(text)}
             />
             <Text style={styles.accountTextConatiner}>Address line 2</Text>
             <TextInput
                 style={styles.accountTextInput}
                 secureTextEntry={false}
-                // onChangeText={text => onChangeText(text)}
+                value={addressLine2}
+                onChangeText={text => changeAddressLine2(text)}
             />
             <Text style={styles.accountTextConatiner}>City</Text>
             <TextInput
                 style={styles.accountTextInput}
                 secureTextEntry={false}
-                // onChangeText={text => onChangeText(text)}
+                value={city}
+                onChangeText={text => changeCity(text)}
             />
             <Text style={styles.accountTextConatiner}>Zip code</Text>
             <TextInput
                 style={styles.accountTextInput}
                 secureTextEntry={false}
-                // onChangeText={text => onChangeText(text)}
+                value={zipCode}
+                onChangeText={text => changeZipCode(text)}
             />
             <Text style={styles.accountTextConatiner}>Market</Text>
             <TextInput
                 style={styles.accountTextInput}
                 secureTextEntry={false}
-                // onChangeText={text => onChangeText(text)}
+                value={market}
+                onChangeText={text => changeMarket(text)}
             />
         </View>
     )

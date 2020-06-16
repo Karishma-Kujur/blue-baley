@@ -5,7 +5,6 @@ const CustomPicker = (props) => {
     const { onChange, value, items } = props
     return (
         <Picker style={styles.pickerStyle}
-            mode="dropdown"
             selectedValue={value}
             onValueChange={(itemValue, itemPosition) =>
                 onChange({ value: itemValue, choosenIndex: itemPosition })}
@@ -30,7 +29,6 @@ const styles = StyleSheet.create({
     },
     pickerStyle: {
         height: 20,
-        width: "80%",
         color: '#344953',
         justifyContent: 'center',
     }

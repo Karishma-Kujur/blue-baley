@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { useIsFocused } from '@react-navigation/native'
-import { View, StyleSheet, Dimensions, Text, ScrollView, TouchableOpacity, FlatList, Image } from 'react-native'
+import { View, Dimensions, Text, ScrollView, TouchableOpacity, FlatList, Image } from 'react-native'
 import Button from '../components/shared/Button'
 import styles from '../assets/styles';
 import FavoritesItem from './ToteItem'

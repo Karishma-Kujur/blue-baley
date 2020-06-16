@@ -12,65 +12,56 @@ const defaultAddress = [
 
 const PresonalDetailsForm = (props) => {
     const { details } = props
+    const [email, changeEmail] = useState(details.email)
+    const [firstName, changeFirstName] = useState(details.firstName)
+    const [lastName, changeLastName] = useState(details.lastName)
+    const [dateOfBirth, changeDateOfBirth] = useState(details.dateOfBirth)
+    const [phoneNumber, changePhoneNumber] = useState(details.phoneNumber)
+    const [gender, changeGender] = useState(details.gender)
     return (
         <View style={styles.accountBodyContainer}>
             <Text style={styles.accountTextConatiner}>Email</Text>
             <TextInput
                 style={styles.accountTextInput}
                 secureTextEntry={false}
-                value={details.email}
-                // onChangeText={text => onChangeText(text)}
+                value={email}
+                onChangeText={text => changeEmail(text)}
             />
             <Text style={styles.accountTextConatiner}>First Name</Text>
             <TextInput
                 style={styles.accountTextInput}
                 secureTextEntry={false}
-                value={details.firstName}
-                // onChangeText={text => onChangeText(text)}
+                value={firstName}
+                onChangeText={text => changeFirstName(text)}
             />
             <Text style={styles.accountTextConatiner}>Last Name</Text>
             <TextInput
                 style={styles.accountTextInput}
                 secureTextEntry={false}
-                value={details.lastName}
-                // onChangeText={text => onChangeText(text)}
+                value={lastName}
+                onChangeText={text => changeLastName(text)}
             />
             <Text style={styles.accountTextConatiner}>Date of birth</Text>
             <TextInput
                 style={styles.accountTextInput}
                 secureTextEntry={false}
-                value={details.dateOfBirth}
-                // onChangeText={text => onChangeText(text)}
+                value={dateOfBirth}
+                onChangeText={text => changeDateOfBirth(text)}
             />
             <Text style={styles.accountTextConatiner}>Phone number</Text>
             <TextInput
                 style={styles.accountTextInput}
                 secureTextEntry={false}
-                value={details.phoneNumber}
-                // onChangeText={text => onChangeText(text)}
+                value={phoneNumber}
+                onChangeText={text => changePhoneNumber(text)}
             />
             <Text style={styles.accountTextConatiner}>Gender</Text>
             <TextInput
                 style={styles.accountTextInput}
                 secureTextEntry={false}
-                value={details.gender}
-                // onChangeText={text => onChangeText(text)}
+                value={gender}
+                onChangeText={text => changeGender(text)}
             />
-            <Text style={styles.accountTextConatiner}>Zip Code</Text>
-            <TextInput
-                style={styles.accountTextInput}
-                secureTextEntry={false}
-                value={details.zipCode}
-                // onChangeText={text => onChangeText(text)}
-            />
-            <Text style={styles.accountTextConatiner}>Market</Text>
-            <TextInput
-                style={styles.accountTextInput}
-                secureTextEntry={false}
-                value={details.market}
-                // onChangeText={text => onChangeText(text)}
-            />
-            <RadioButton items={defaultAddress} />
         </View>
     )
 }

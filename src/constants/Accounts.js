@@ -9,3 +9,12 @@ export const PersonalInfo =
     zipCode: 'XXXXXX',
     market: 'US'
 }
+
+export const Address = 
+{
+    addressLine1: 'XXXXXXX',
+    addressLine2: 'XXXXXXXX',
+    city: 'XXXXXXXXX',
+    market: 'XXXXXXX',
+    zipCode: 'XXXXXX',
+}

@@ -107,11 +107,6 @@ export default StyleSheet.create({
 		justifyContent: 'center',
 		width: DIMENSION_WIDTH - 20
 	},
-	fullHeight: {
-		height: DIMENSION_HEIGHT - 500,
-		alignItems: 'center',
-		justifyContent: 'center'
-	},
 	sizeContainer: {
 		width: 100,
 		height: 50,
@@ -322,7 +317,7 @@ export default StyleSheet.create({
 		marginBottom: 10
 	},
 	titleContainer: {
-		paddingTop: 50,
+		paddingTop: 30,
 		marginHorizontal: 10,
 		flexDirection: "row",
 		justifyContent: "flex-start",
