@@ -74,32 +74,27 @@ const SignUpScreen = (props) => {
         if (formError)
             return null;
         const data = {
-            // "email": email,
-            // "first_name": firstName,
-            // "last_name": lastName,
+            "email": email,
+            "first_name": firstName,
+            "last_name": lastName,
             "username": email,
             "password": password
         }
-        setLoader(true)
-        LoginApi.login(data)
-            .then((result) => {
-                setLoader(false)
-                // dispatch(toaster.success('You are successfully registered. Please check you email to receive the invite'))
-                navigation.navigate('Survey')
-            })
-            .catch((error) => {
-                setLoader(false)
-                // dispatch(toaster.error(error.message))
-            })
+        // setLoader(true)
+        navigation.navigate('Survey')
         // SignupAction.signupUser(data)
         //     .then((result) => {
-        //         setLoader(false)
-        //         // dispatch(toaster.success('You are successfully registered. Please check you email to receive the invite'))
-        //         navigation.navigate('Survey')
+        //         LoginApi.login(data)
+        //             .then((result) => {
+        //                 setLoader(false)
+        //                 navigation.navigate('Survey')
+        //             })
+        //             .catch((error) => {
+        //                 setLoader(false)
+        //             })
         //     })
         //     .catch((error) => {
         //         setLoader(false)
-        //         // dispatch(toaster.error(error.message))
         //     })
     }
 

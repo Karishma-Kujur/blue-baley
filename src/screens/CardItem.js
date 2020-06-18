@@ -2,9 +2,11 @@ import React, { useState } from 'react';
 import { Text, View, Image, Dimensions, TouchableOpacity, ScrollView, Animated } from 'react-native';
 import { SliderBox } from "react-native-image-slider-box";
 import NoImage from '../assets/images/02.jpg'
+import Similar from '../assets/images/similar.png';
 import styles from '../assets/styles';
 import * as ToteAction from '../actions/ToteAction';
 import CustomDialog from '../components/shared/CustomDialog';
+import PopupDialog, { DialogContent, DialogTitle } from 'react-native-popup-dialog';
 
 const CardItem = ({
     actions,
@@ -29,16 +31,32 @@ const CardItem = ({
         }
     ];
 
+    const similarImageStyle = [
+        {
+            width: fullWidth / 2 - 20,
+            height: 200,
+            margin: 2,
+            borderRadius: 8,
+        }
+    ];
+
+    const similarIconStyle = [
+        {
+            width: 25,
+            height: 25
+        }
+    ]
+
     const [showSize, changeShowSize] = useState(false)
     const [quantity, changeQuantity] = useState(1)
     const [showAlert, changeShowAlert] = useState({ show: false })
     const [dialogMessage, setDialogMessage] = useState('')
     const [dialog, showDialog] = useState(false)
+    const [suggestionDialog, showSuggestionDialog] = useState(false)
     const image = images.length > 0 ? images[0] : ''
     const sizes = ['XS', 'S', 'M', 'L', 'XL']
 
     const handleOnClickSave = () => {
-        panelRef.snapTo({ index: 1 });
         setDialogMessage('Added to Favorites!')
         showDialog(true)
         changeShowSize(false)
@@ -83,6 +101,11 @@ const CardItem = ({
                         uri: image,
                     } : NoImage}
                         style={imageStyle} />
+                    <TouchableOpacity style={{ bottom: 40, left: 10, backgroundColor: 'white', width: 35, padding: 5, borderRadius: 18 }}
+                        onPress={() => showSuggestionDialog(true)}
+                    >
+                        <Image source={Similar} style={similarIconStyle} />
+                    </TouchableOpacity>
                     <Text style={styles.nameCardItem}>{name}</Text>
                     <Text style={styles.priceCardItem}>{'$ ' + (price || '20')}</Text>
 
@@ -142,6 +165,55 @@ const CardItem = ({
                         </View>
                     )}
                 </View>
+                <PopupDialog
+                    visible={suggestionDialog}
+                    containerStyle={{ justifyContent: 'flex-end' }}
+                    height={280}
+                    width={fullWidth}
+                    onTouchOutside={() => showSuggestionDialog(false)
+                    }
+                    dialogTitle={<DialogTitle title="Similar Products" />}
+                >
+                    <DialogContent>
+                        <ScrollView
+                            horizontal={true}
+                            // contentContainerStyle={{ width: `${100 * 0.3}%` }}
+                            showsHorizontalScrollIndicator={false}
+                            // scrollEventThrottle={200}
+                            // decelerationRate="fast"
+                            pagingEnabled
+                        >
+                            <Image source={image ? {
+                                uri: image,
+                            } : NoImage}
+                                style={similarImageStyle} />
+                            <Image source={image ? {
+                                uri: image,
+                            } : NoImage}
+                                style={similarImageStyle} />
+                            <Image source={image ? {
+                                uri: image,
+                            } : NoImage}
+                                style={similarImageStyle} />
+                            <Image source={image ? {
+                                uri: image,
+                            } : NoImage}
+                                style={similarImageStyle} />
+                            <Image source={image ? {
+                                uri: image,
+                            } : NoImage}
+                                style={similarImageStyle} />
+                            <Image source={image ? {
+                                uri: image,
+                            } : NoImage}
+                                style={similarImageStyle} />
+                            <Image source={image ? {
+                                uri: image,
+                            } : NoImage}
+                                style={similarImageStyle} />
+                        </ScrollView>
+                    </DialogContent>
+                </PopupDialog>
             </ScrollView>
         </View>
     );

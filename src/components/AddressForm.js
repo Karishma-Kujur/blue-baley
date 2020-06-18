@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Text, View, TextInput } from 'react-native'
+import { Text, View, TextInput, KeyboardAvoidingView } from 'react-native'
 import RadioButton from '../components/shared/RadioButton'
 import styles from '../assets/styles';
 
@@ -12,13 +12,14 @@ const defaultAddress = [
 
 const AddressForm = (props) => {
     const { details } = props
-    const [addressLine1, changeAddressLine1] = useState(details.addressLine1)
-    const [addressLine2, changeAddressLine2] = useState(details.addressLine2)
-    const [city, changeCity] = useState(details.city)
-    const [zipCode, changeZipCode] = useState(details.zipCode)
-    const [market, changeMarket] = useState(details.market)
+    const [addressLine1, changeAddressLine1] = useState((details && details.addressLine1) || '')
+    const [addressLine2, changeAddressLine2] = useState((details && details.addressLine2) || '')
+    const [city, changeCity] = useState((details && details.city) || '')
+    const [zipCode, changeZipCode] = useState((details && details.zipCode) || '')
+    const [market, changeMarket] = useState((details && details.market) || '')
     return (
         <View style={styles.accountBodyContainer}>
+
             <Text style={styles.accountTextConatiner}>Address line 1</Text>
             <TextInput
                 style={styles.accountTextInput}

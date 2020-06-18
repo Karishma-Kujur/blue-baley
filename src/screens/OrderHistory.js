@@ -2,9 +2,10 @@ import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { useIsFocused } from '@react-navigation/native'
-import { View, StyleSheet, Dimensions, Text, ScrollView, TouchableOpacity, FlatList, Image } from 'react-native'
+import { View, Dimensions, Text, ScrollView, TouchableOpacity, FlatList, Image } from 'react-native'
 import styles from '../assets/styles';
 import OrderedItem from './OrderedItem'
+import TrackOrder from './TrackOrder'
 import Avatar from '../assets/images/avatar.jpeg'
 import * as ToteAction from '../actions/ToteAction';
 import * as ToteApi from '../api/Tote'
@@ -15,6 +16,7 @@ const { width, height } = Dimensions.get("window");
 const OrderHistory = (props) => {
     const { navigation, ToteAction, toteItems } = props
     const [spinner, setLoader] = useState('')
+    const [trackOrder, setTrackOrder] = useState(false)
     const imageStyle = [
         {
             alignItems: 'flex-start',
@@ -48,34 +50,38 @@ const OrderHistory = (props) => {
     }
 
     return (
-        <View style={styles.containerMatches}>
-            <Spinner
-                visible={spinner}
-            />
-            <View style={styles.titleContainer}>
-                <TouchableOpacity onPress={() => { navigation.openDrawer() }}>
-                    <Image source={Avatar} style={imageStyle} />
-                </TouchableOpacity>
-                <Text style={styles.title}>My Orders</Text>
-            </View>
-            <ScrollView>
-                <FlatList
-                    data={toteItems}
-                    keyExtractor={(item, index) => index.toString()}
-                    renderItem={({ item }) => (
-                        <OrderedItem
-                            id={item.id}
-                            image={item.image}
-                            name={item.name}
-                            price={item.price}
-                            description={item.description}
-                            quantity={item.quantity}
-                            toteEdited={handleRefreshTote}
+        <>
+            {trackOrder ? <TrackOrder closeTackOrder={() => setTrackOrder(false)} /> :
+                <View style={styles.containerMatches}>
+                    <Spinner
+                        visible={spinner}
+                    />
+                    <View style={styles.titleContainer}>
+                        <TouchableOpacity onPress={() => { navigation.openDrawer() }}>
+                            <Image source={Avatar} style={imageStyle} />
+                        </TouchableOpacity>
+                        <Text style={styles.title}>My Orders</Text>
+                    </View>
+                    <ScrollView>
+                        <FlatList
+                            data={toteItems}
+                            keyExtractor={(item, index) => index.toString()}
+                            renderItem={({ item }) => (
+                                <OrderedItem
+                                    id={item.id}
+                                    image={item.image}
+                                    name={item.name}
+                                    price={item.price}
+                                    description={item.description}
+                                    quantity={item.quantity}
+                                    toteEdited={handleRefreshTote}
+                                    setTrackOrder={() => setTrackOrder(true)}
+                                />
+                            )}
                         />
-                    )}
-                />
-            </ScrollView>
-        </View>
+                    </ScrollView>
+                </View>}
+        </>
     )
 }
 

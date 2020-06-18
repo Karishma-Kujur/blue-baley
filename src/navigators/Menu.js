@@ -8,6 +8,9 @@ import SplashScreen from '../screens/SplashScreen'
 import Survey from '../screens/Survey'
 import Transitions from '../screens/Transitions'
 import LogOff from '../screens/LogOff'
+import PaymentScreen from '../screens/PaymentScreen';
+import OrderPlaced from '../screens/OrderPlaced';
+import AddAddress from '../screens/AddAddress';
 
 const NavigatorMenu = (props) => {
     const Stack = createStackNavigator();
@@ -23,10 +26,10 @@ const NavigatorMenu = (props) => {
             <Stack.Screen name="Survey" component={Survey} />
             <Stack.Screen name="Transitions" component={Transitions} />
             <Stack.Screen name="Log Off" component={LogOff} />
-            <Stack.Screen
-                name="Home"
-                component={SideMenu}
-            />
+            <Stack.Screen name="Home" component={SideMenu} />
+            <Stack.Screen name="Payment" component={PaymentScreen} />
+            <Stack.Screen name="Order Placed" component={OrderPlaced} />
+            <Stack.Screen name="Add Address" component={AddAddress} />
         </Stack.Navigator>
     )
 }

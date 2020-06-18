@@ -144,11 +144,17 @@ export default StyleSheet.create({
 		shadowOffset: { height: 10, width: 0 }
 	},
 	toteActionContainer: {
-		flex: 1,
 		flexDirection: 'row',
 		justifyContent: 'space-between',
 		alignItems: 'flex-end',
-		marginBottom: 5
+		margin: 8,
+		width: DIMENSION_WIDTH - 60
+	},
+	favoriteActionContainer: {
+		flex: 1,
+		flexDirection: 'row',
+		alignItems: 'flex-end',
+		margin: 8,
 	},
 	nameToteItem: {
 		paddingTop: 15,
@@ -519,12 +525,4 @@ export default StyleSheet.create({
 		borderWidth: 1,
 		padding: 5
 	},
-	surveyButton: {
-		borderWidth: 1, padding: 10, width: (DIMENSION_WIDTH - 40) / 2, justifyContent: 'center', alignItems: 'center', marginRight: 10,
-		textAlign: 'center',
-		backgroundColor: 'black',
-		marginBottom: 12,
-		paddingVertical: 12,
-		borderRadius: 4
-	}
 });

@@ -1,28 +1,17 @@
 import React, { useState } from 'react';
-import { Text, View, Image, Dimensions, TouchableOpacity, ScrollView } from 'react-native';
-import CustomPicker from '../components/shared/CustomPicker'
+import { Text, View, Image, Dimensions, TouchableOpacity, ScrollView, LayoutAnimation } from 'react-native';
+import PopupDialog, { DialogContent, DialogTitle, DialogFooter, DialogButton } from 'react-native-popup-dialog';
+import RadioButton from '../components/shared/RadioButton'
 import styles from '../assets/styles';
 import NoImage from '../assets/images/noImage.png'
-import AddToFavorite from '../assets/images/favorite.jpeg'
-import AddToBag from '../assets/images/bag.jpeg'
-import * as ToteAction from '../actions/ToteAction';
+import * as Orders from '../constants/Orders'
 
 const OrderedItem = ({
     actions,
-    description,
     image,
-    matches,
-    name,
-    onPressLeft,
-    onPressRight,
-    isFavorite,
-    price,
-    quantity,
     id,
-    toteEdited
+    setTrackOrder
 }) => {
-    const [selectedQuantity, changeQuantity] = useState(quantity)
-    // Custom styling
     const fullWidth = Dimensions.get('window').width;
 
     const imageStyle = [
@@ -32,6 +21,8 @@ const OrderedItem = ({
             margin: 2
         }
     ];
+    const [returnOrder, setReturnOrder] = useState(false)
+    const [returnSuccess, setReturnSuccess] = useState(false)
 
     return (
         <View style={styles.toteCardItem}>
@@ -81,27 +72,86 @@ const OrderedItem = ({
             </ScrollView>
             <View style={{ padding: 5 }}>
                 <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', marginBottom: 10 }}>
-                    <Text style={{ color: 'grey'}}>13 Items in Total:</Text>
-                    <Text style={{fontWeight: 'bold'}}>US$115.89</Text>
+                    <Text style={{ color: 'grey' }}>13 Items in Total:</Text>
+                    <Text style={{ fontWeight: 'bold' }}>US$115.89</Text>
                 </View>
-                <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-end' }}>
-                    <TouchableOpacity>
-                        <View style={{ borderWidth: 1, padding: 3, marginRight: 5 }}>
-                            <Text>Track</Text>
+                {!returnOrder &&
+                    <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-end' }}>
+                        <TouchableOpacity onPress={() => setTrackOrder(true)}>
+                            <View style={{ borderWidth: 1, padding: 3, marginRight: 5 }}>
+                                <Text>Track</Text>
+                            </View>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={() => {
+                            LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+                            setReturnOrder(true)
+                        }
+                        }>
+                            <View style={{ borderWidth: 1, padding: 3, marginRight: 5 }}>
+                                <Text>Return Item</Text>
+                            </View>
+                        </TouchableOpacity>
+                        <TouchableOpacity>
+                            <View style={{ borderWidth: 1, padding: 3, backgroundColor: 'black' }}>
+                                <Text style={{ color: 'white' }}>Review</Text>
+                            </View>
+                        </TouchableOpacity>
+                    </View>
+                }
+                {returnOrder &&
+                    <>
+                        <View style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', marginTop: 10 }}>
+                            <Text style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 20 }}>Why are you returning this?</Text>
+                            <RadioButton items={Orders.ReturnOrder} selectedAnswer={null} />
                         </View>
-                    </TouchableOpacity>
-                    <TouchableOpacity>
-                        <View style={{ borderWidth: 1, padding: 3, marginRight: 5 }}>
-                            <Text>Return Item</Text>
+                        <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-end' }}>
+                            <TouchableOpacity onPress={() => {
+                                LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+                                setReturnOrder(false)
+                            }
+                            }>
+                                <View style={{ borderWidth: 1, padding: 3, marginRight: 5 }}>
+                                    <Text>Cancel</Text>
+                                </View>
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={() => {
+                                LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+                                setReturnOrder(false)
+                                setReturnSuccess(true)
+                            }}>
+                                <View style={{ borderWidth: 1, padding: 3, marginRight: 5 }}>
+                                    <Text>Continue</Text>
+                                </View>
+                            </TouchableOpacity>
                         </View>
-                    </TouchableOpacity>
-                    <TouchableOpacity>
-                        <View style={{ borderWidth: 1, padding: 3, backgroundColor: 'black' }}>
-                            <Text style={{ color: 'white' }}>Review</Text>
-                        </View>
-                    </TouchableOpacity>
-                </View>
+                    </>
+                }
             </View>
+            <PopupDialog
+                visible={returnSuccess}
+                // containerStyle={{ justifyContent: 'flex-end' }}
+                height={200}
+                width={fullWidth - 40}
+                onTouchOutside={() => setReturnSuccess(false)
+                }
+                footer={
+                    <DialogFooter>
+                        <DialogButton
+                            text="Got it!"
+                            onPress={() => {
+                                setReturnSuccess(false)
+                            }}
+                        />
+                    </DialogFooter>
+                }
+            >
+                <DialogContent>
+                    <View style={{ height: 120, justifyContent: 'center', alignItems: 'center' }}>
+                        <Text style={{marginTop: 15, fontWeight: 'bold', fontSize: 18}}>Your return has been initiated!</Text>
+                        <Text style={{marginTop: 15, fontSize: 16}}>You will receive the pickup date and time in your registered email id. </Text>
+                    </View>
+                </DialogContent>
+            </PopupDialog>
         </View>
     );
 };
