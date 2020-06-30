@@ -1,20 +1,78 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { useIsFocused } from '@react-navigation/native'
 import { View, KeyboardAvoidingView, Dimensions, Text, ScrollView, TouchableOpacity, FlatList, Image, LayoutAnimation } from 'react-native'
 import styles from '../assets/styles';
 import Avatar from '../assets/images/avatar.jpeg'
 import RadioButton from '../components/shared/RadioButton'
 import PresonalDetailsForm from '../components/PersonalDetailsForm'
 import AddressForm from '../components/AddressForm'
+import Spinner from 'react-native-loading-spinner-overlay';
 import * as Accounts from '../constants/Accounts'
+import * as UserAction from '../actions/UserAction';
+import * as UserApi from '../api/User'
 
 const { width, height } = Dimensions.get("window");
 
 const AccountScreen = (props) => {
-    const { navigation } = props
+    const { navigation, user, UserAction } = props
     const [removeCard, changeRemoveCard] = useState(false)
     const [editPersonalDetails, changeEditPersonalDetails] = useState(false)
     const [editAddress, changeEditAddress] = useState(false)
     const [expandedIds, changeExpanded] = useState([])
+    const [spinner, setLoader] = useState('')
+    const [personalDetails, setPersonalDetails] = useState(user)
+    const [address, setAddress] = useState(user.billing)
+
+    const handleSavePersonalDetails = () => {
+        if (editPersonalDetails) {
+            let data = {
+                email: personalDetails.email,
+                first_name: personalDetails.firstName,
+                last_name: personalDetails.lastName,
+                billing: {
+                    first_name: personalDetails.firstName,
+                    last_name: personalDetails.lastName,
+                    phone: personalDetails.phone
+                }
+            }
+            UserApi.updateUserDetails(user.id, data)
+                .then((result) => {
+                    // setLoader(false)
+                    UserAction.setUser(result)
+                })
+                .catch((error) => {
+                    // setLoader(false)
+                })
+        }
+        changeEditPersonalDetails(!editPersonalDetails)
+    }
+
+    const handleSaveAddress = () => {
+        if (editAddress) {
+            let data = {
+                billing: {
+                    address_1: address.address_1,
+                    address_2: address.address_2,
+                    city: address.city,
+                    postcode: address.postcode,
+                    state: address.state
+                }
+            }
+            UserApi.updateUserDetails(user.id, data)
+                .then((result) => {
+                    // setLoader(false)
+                    UserAction.setUser(result)
+
+                })
+                .catch((error) => {
+                    // setLoader(false)
+                })
+        }
+        changeEditAddress(!editAddress)
+    }
+
     const menuList = [
         {
             id: 1,
@@ -26,13 +84,13 @@ const AccountScreen = (props) => {
             id: 2,
             name: 'Personal Details',
             button: expandedIds.includes(2) ? (editPersonalDetails ? 'Save' : 'Edit') : '',
-            onClick: () => { changeEditPersonalDetails(!editPersonalDetails) }
+            onClick: () => { handleSavePersonalDetails() }
         },
         {
             id: 3,
             name: 'MY ADDRESSES',
             button: expandedIds.includes(3) ? (editAddress ? 'Save' : 'Edit') : '',
-            onClick: () => { changeEditAddress(!editAddress) }
+            onClick: () => { handleSaveAddress() }
         },
         {
             id: 4,
@@ -56,11 +114,41 @@ const AccountScreen = (props) => {
         }
     ]
 
+    const getUserDetails = () => {
+        setLoader(true)
+        UserApi.getUserDetails(user.id)
+            .then((result) => {
+                setLoader(false)
+                UserAction.setUser(result)
+
+            })
+            .catch((error) => {
+                setLoader(false)
+            })
+    }
+
+    const isFocused = useIsFocused()
+    useEffect(() => {
+        getUserDetails()
+    }, [isFocused])
+
+    const changeAddress = (field, value) => {
+        let newAddress = { ...address }
+        newAddress[field] = value
+        setAddress(newAddress)
+    }
+
+    const changePersonalDetails = (field, value) => {
+        let details = { ...personalDetails}
+        details[field] = value
+        setPersonalDetails(details)
+    }
+
     return (
         <>
-            {/* <Spinner
+            <Spinner
                 visible={spinner}
-            /> */}
+            />
             <View style={styles.titleContainer}>
                 <TouchableOpacity onPress={() => { navigation.openDrawer() }}>
                     <Image source={Avatar} style={imageStyle} />
@@ -122,39 +210,35 @@ const AccountScreen = (props) => {
                                         {!editPersonalDetails && item.name === 'Personal Details' &&
                                             <View style={styles.accountBodyContainer}>
                                                 <Text style={styles.accountTextConatiner}>Email</Text>
-                                                <Text style={styles.accountDataContainer}>{Accounts.PersonalInfo.email}</Text>
+                                                <Text style={styles.accountDataContainer}>{user.email}</Text>
                                                 <Text style={styles.accountTextConatiner}>First Name</Text>
-                                                <Text style={styles.accountDataContainer}>{Accounts.PersonalInfo.firstName}</Text>
+                                                <Text style={styles.accountDataContainer}>{user.firstName}</Text>
                                                 <Text style={styles.accountTextConatiner}>Last Name</Text>
-                                                <Text style={styles.accountDataContainer}>{Accounts.PersonalInfo.lastName}</Text>
+                                                <Text style={styles.accountDataContainer}>{user.lastName}</Text>
                                                 <Text style={styles.accountTextConatiner}>Date of birth</Text>
                                                 <Text style={styles.accountDataContainer}>{Accounts.PersonalInfo.dateOfBirth}</Text>
                                                 <Text style={styles.accountTextConatiner}>Phone number</Text>
-                                                <Text style={styles.accountDataContainer}>{Accounts.PersonalInfo.phoneNumber}</Text>
+                                                <Text style={styles.accountDataContainer}>{user.billing.phone}</Text>
                                                 <Text style={styles.accountTextConatiner}>Gender</Text>
                                                 <Text style={styles.accountDataContainer}>{Accounts.PersonalInfo.gender}</Text>
-                                                <Text style={styles.accountTextConatiner}>Zip Code</Text>
-                                                <Text style={styles.accountDataContainer}>{Accounts.PersonalInfo.zipCode}</Text>
-                                                <Text style={styles.accountTextConatiner}>Market</Text>
-                                                <Text style={styles.accountDataContainer}>{Accounts.PersonalInfo.market}</Text>
-                                                <RadioButton items={defaultAddress} />
                                             </View>
                                         }
                                         {editPersonalDetails && item.name === 'Personal Details' &&
-                                            <PresonalDetailsForm details={Accounts.PersonalInfo} />
+                                            <PresonalDetailsForm details={personalDetails} changePersonalDetails={changePersonalDetails} />
                                         }
                                         {!editAddress && item.name === 'MY ADDRESSES' &&
                                             <View style={styles.accountBodyContainer}>
                                                 <Text style={styles.accountTextConatiner}>Billing Address</Text>
-                                                <Text>{Accounts.Address.addressLine1}</Text>
-                                                <Text>{Accounts.Address.addressLine2}</Text>
-                                                <Text>{Accounts.Address.city}</Text>
-                                                <Text>{Accounts.Address.market}</Text>
-                                                <Text>{Accounts.Address.zipCode}</Text>
+                                                <Text>{user.billing.address_1}</Text>
+                                                <Text>{user.billing.address_2}</Text>
+                                                <Text>{user.billing.city}</Text>
+                                                <Text>{user.billing.state}</Text>
+                                                <Text>{user.billing.country}</Text>
+                                                <Text>{user.billing.postcode}</Text>
                                             </View>
                                         }
                                         {editAddress && item.name === 'MY ADDRESSES' &&
-                                            <AddressForm details={Accounts.Address} />
+                                            <AddressForm address={address} changeAddress={changeAddress} />
                                         }
                                         {item.name === 'PRIVACY' &&
                                             <View style={{ padding: 20 }}>
@@ -175,4 +259,15 @@ const AccountScreen = (props) => {
         </>
     )
 }
-export default AccountScreen
+const mapStateToProps = ({ user }) => {
+    return {
+        user: user
+    };
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        UserAction: bindActionCreators(UserAction, dispatch)
+    };
+}
+export default connect(mapStateToProps, mapDispatchToProps)(AccountScreen)

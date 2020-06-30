@@ -16,7 +16,7 @@ import * as Accounts from '../constants/Accounts'
 const { width, height } = Dimensions.get("window");
 
 const ToteScreen = (props) => {
-    const { navigation, ToteAction, toteItems } = props
+    const { navigation, ToteAction, toteItems, user } = props
     const [spinner, setLoader] = useState('')
     const [addAddress, setAddAddress] = useState(false)
     const [selectAddress, showSelectAddress] = useState(false)
@@ -100,7 +100,7 @@ const ToteScreen = (props) => {
                                     showSelectAddress(false)
                                     navigation.navigate('Add Address')
                                 }}>
-                                    <Text style={{fontWeight: 'bold', color: 'grey'}}>+ ADD ADDRESS</Text>
+                                    <Text style={{fontWeight: 'bold', color: 'grey'}}>EDIT ADDRESS</Text>
                                 </TouchableOpacity>
 
                             </View>
@@ -119,9 +119,9 @@ const ToteScreen = (props) => {
                     }
                 >
                     <DialogContent>
-                        <Text style={{ marginTop: 10, marginBottom: 8, fontWeight: 'bold', fontSize: 14 }}>{Accounts.PersonalInfo.firstName + ' ' + Accounts.PersonalInfo.lastName}</Text>
-                        <Text>{Accounts.Address.addressLine1 + ', ' + Accounts.Address.addressLine2}</Text>
-                        <Text>{Accounts.Address.city + ', ' + Accounts.Address.zipCode + ', ' + Accounts.Address.market}</Text>
+                        <Text style={{ marginTop: 10, marginBottom: 8, fontWeight: 'bold', fontSize: 14 }}>{user.firstName + ' ' + user.lastName}</Text>
+                        <Text>{user.billing.address_1 + ', ' + user.billing.address_2}</Text>
+                        <Text>{user.billing.city + ', ' + user.billing.postcode + ', ' + user.billing.state}</Text>
                         <Text style={{ marginTop: 10 }}>{'Mobile: ' + Accounts.PersonalInfo.phoneNumber}</Text>
                     </DialogContent>
                 </PopupDialog>
@@ -133,9 +133,10 @@ const ToteScreen = (props) => {
     )
 }
 
-const mapStateToProps = ({ tote }) => {
+const mapStateToProps = ({ tote, user }) => {
     return {
-        toteItems: tote
+        toteItems: tote,
+        user
     };
 }
 

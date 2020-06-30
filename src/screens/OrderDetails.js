@@ -7,14 +7,14 @@ import styles from '../assets/styles';
 import OrderedItem from './OrderedItem'
 import TrackOrder from './TrackOrder'
 import Avatar from '../assets/images/avatar.jpeg'
-import * as ProductAction from '../actions/ProductAction';
-import * as ProductApi from '../api/Products'
+import * as ToteAction from '../actions/ToteAction';
+import * as ToteApi from '../api/Tote'
 import Spinner from 'react-native-loading-spinner-overlay';
 
 const { width, height } = Dimensions.get("window");
 
-const OrderHistory = (props) => {
-    const { navigation, ProductAction, toteItems } = props
+const OrderDetails = (props) => {
+    const { navigation, ToteAction, toteItems } = props
     const [spinner, setLoader] = useState('')
     const [trackOrder, setTrackOrder] = useState(false)
     const imageStyle = [
@@ -26,12 +26,12 @@ const OrderHistory = (props) => {
         }
     ];
 
-    const getOrderHistory = () => {
+    const getTotes = () => {
         setLoader(true)
-        ProductApi.getOrderHistory()
+        ToteApi.getTotes()
             .then((result) => {
                 setLoader(false)
-                ProductAction.setTotes(result)
+                ToteAction.setTotes(result)
 
             })
             .catch((error) => {
@@ -42,8 +42,12 @@ const OrderHistory = (props) => {
 
     const isFocused = useIsFocused()
     useEffect(() => {
-        getOrderHistory()
+        getTotes()
     }, [isFocused])
+
+    const handleRefreshTote = () => {
+        getTotes()
+    }
 
     return (
         <>
@@ -70,6 +74,7 @@ const OrderHistory = (props) => {
                                     price={item.price}
                                     description={item.description}
                                     quantity={item.quantity}
+                                    toteEdited={handleRefreshTote}
                                     setTrackOrder={() => setTrackOrder(true)}
                                 />
                             )}
@@ -88,8 +93,8 @@ const mapStateToProps = ({ tote }) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        ProductAction: bindActionCreators(ProductAction, dispatch)
+        ToteAction: bindActionCreators(ToteAction, dispatch)
     };
 }
-export default connect(mapStateToProps, mapDispatchToProps)(OrderHistory)
+export default connect(mapStateToProps, mapDispatchToProps)(OrderDetails)
 

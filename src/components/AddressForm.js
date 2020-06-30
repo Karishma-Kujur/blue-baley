@@ -11,12 +11,7 @@ const defaultAddress = [
 ]
 
 const AddressForm = (props) => {
-    const { details } = props
-    const [addressLine1, changeAddressLine1] = useState((details && details.addressLine1) || '')
-    const [addressLine2, changeAddressLine2] = useState((details && details.addressLine2) || '')
-    const [city, changeCity] = useState((details && details.city) || '')
-    const [zipCode, changeZipCode] = useState((details && details.zipCode) || '')
-    const [market, changeMarket] = useState((details && details.market) || '')
+    const { changeAddress, address } = props
     return (
         <View style={styles.accountBodyContainer}>
 
@@ -24,36 +19,36 @@ const AddressForm = (props) => {
             <TextInput
                 style={styles.accountTextInput}
                 secureTextEntry={false}
-                value={addressLine1}
-                onChangeText={text => changeAddressLine1(text)}
+                value={address.address_1}
+                onChangeText={text => changeAddress('address_1', text)}
             />
             <Text style={styles.accountTextConatiner}>Address line 2</Text>
             <TextInput
                 style={styles.accountTextInput}
                 secureTextEntry={false}
-                value={addressLine2}
-                onChangeText={text => changeAddressLine2(text)}
+                value={address.address_2}
+                onChangeText={text => changeAddress('address_2', text)}
             />
             <Text style={styles.accountTextConatiner}>City</Text>
             <TextInput
                 style={styles.accountTextInput}
                 secureTextEntry={false}
-                value={city}
-                onChangeText={text => changeCity(text)}
+                value={address.city}
+                onChangeText={text => changeAddress('city', text)}
             />
             <Text style={styles.accountTextConatiner}>Zip code</Text>
             <TextInput
                 style={styles.accountTextInput}
                 secureTextEntry={false}
-                value={zipCode}
-                onChangeText={text => changeZipCode(text)}
+                value={address.postcode}
+                onChangeText={text => changeAddress('postcode', text)}
             />
             <Text style={styles.accountTextConatiner}>Market</Text>
             <TextInput
                 style={styles.accountTextInput}
                 secureTextEntry={false}
-                value={market}
-                onChangeText={text => changeMarket(text)}
+                value={address.state}
+                onChangeText={text => changeAddress('state', text)}
             />
         </View>
     )

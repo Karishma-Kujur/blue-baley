@@ -1,5 +1,6 @@
 export default {
 	products: [],
 	tote: [],
-	survey: []
+	survey: [],
+	user: {}
 };

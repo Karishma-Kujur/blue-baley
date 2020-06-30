@@ -80,22 +80,21 @@ const SignUpScreen = (props) => {
             "username": email,
             "password": password
         }
-        // setLoader(true)
-        navigation.navigate('Survey')
+        setLoader(true)
         // SignupAction.signupUser(data)
         //     .then((result) => {
-        //         LoginApi.login(data)
-        //             .then((result) => {
-        //                 setLoader(false)
-        //                 navigation.navigate('Survey')
-        //             })
-        //             .catch((error) => {
-        //                 setLoader(false)
-        //             })
-        //     })
-        //     .catch((error) => {
-        //         setLoader(false)
-        //     })
+                LoginApi.login(data)
+                    .then((result) => {
+                        setLoader(false)
+                        navigation.navigate('Survey')
+                    })
+                    .catch((error) => {
+                        setLoader(false)
+                    })
+            // })
+            // .catch((error) => {
+            //     setLoader(false)
+            // })
     }
 
     const onChangeText = (value, validatorObj, onChange) => {

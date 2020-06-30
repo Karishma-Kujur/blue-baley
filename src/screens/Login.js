@@ -5,14 +5,15 @@ import { bindActionCreators } from 'redux';
 import Button from '../components/shared/Button'
 import TextInput from '../components/shared/TextInput'
 import Link from '../components/shared/Link'
-import * as LoginAction from '../actions/LoginAction';
+import * as LoginApi from '../api/Login';
+import * as UserAction from '../actions/UserAction';
 import styles from '../assets/styles';
 import Spinner from 'react-native-loading-spinner-overlay';
 
 const { width, height } = Dimensions.get("window");
 
 const LoginScreen = (props) => {
-    const { navigation } = props
+    const { navigation, UserAction } = props
     const [userName, setUserName] = useState('')
     const [userNameError, setUserNameError] = useState(false)
     const [password, setPassword] = useState('')
@@ -71,10 +72,10 @@ const LoginScreen = (props) => {
             "password": password
         }
         setLoader(true)
-        LoginAction.loginUser(data)
+        LoginApi.login(data)
             .then((result) => {
                 setLoader(false)
-                // dispatch(toaster.success('You are successfully registered. Please check you email to receive the invite'))
+                UserAction.setUser(result)
                 navigation.navigate('Home')
             })
             .catch((error) => {
@@ -123,7 +124,7 @@ const LoginScreen = (props) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        // LoginAction: bindActionCreators(LoginAction, dispatch)
+        UserAction: bindActionCreators(UserAction, dispatch)
     };
 }
 

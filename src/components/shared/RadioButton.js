@@ -4,7 +4,7 @@ import Selected from '../../assets/images/selected.png'
 import UnSelected from '../../assets/images/unselected.png'
 
 const RadioButtonComponent = (props) => {
-    const { checked, value, items, selectedAnswer } = props
+    const { checked, value, items, selectedAnswer, setAnswer } = props
     const [selectedId, changeSelectedId] = useState(selectedAnswer)
 
     const imageStyle = [
@@ -20,8 +20,10 @@ const RadioButtonComponent = (props) => {
             {items.map((item) => {
                 return (
                     <View style={{ flexDirection: 'row', marginLeft: 20, marginBottom: 10 }}>
-                        <TouchableOpacity onPress={() => 
+                        <TouchableOpacity onPress={() => {
                             changeSelectedId(item.id)
+                            setAnswer(item.answer)
+                        }
                         }>
                             {selectedId === item.id ?
                                 <Image source={Selected} style={imageStyle} /> :

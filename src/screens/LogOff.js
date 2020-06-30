@@ -3,7 +3,6 @@ import { View, StyleSheet, Dimensions, Text, Alert, ScrollView, KeyboardAvoiding
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import Button from '../components/shared/Button'
-import * as LoginAction from '../actions/LoginAction';
 import styles from '../assets/styles';
 
 const { width, height } = Dimensions.get("window");

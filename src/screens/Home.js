@@ -1,13 +1,19 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { useIsFocused } from '@react-navigation/native'
 import { View, Dimensions, Text, ScrollView, TouchableOpacity, FlatList, Image } from 'react-native'
 import styles from '../assets/styles';
 import Avatar from '../assets/images/avatar.jpeg'
-import FlashMessage from "react-native-flash-message";
+import Spinner from 'react-native-loading-spinner-overlay'
+import * as UserAction from '../actions/UserAction'
+import * as UserApi from '../api/User'
 
 const { width, height } = Dimensions.get("window");
 
 const HomeScreen = (props) => {
-    const { navigation } = props
+    const { navigation, UserAction, user } = props
+    const [spinner, setLoader] = useState('')
     const menuList = [
         {
             name: 'View Rack',
@@ -35,7 +41,7 @@ const HomeScreen = (props) => {
         },
         {
             name: 'Log Out',
-            onClick: () => { navigation.navigate('Landing Page')}
+            onClick: () => { navigation.navigate('Landing Page') }
         }
     ]
     const imageStyle = [
@@ -47,8 +53,29 @@ const HomeScreen = (props) => {
         }
     ];
 
+    const getUserDetails = () => {
+        setLoader(true)
+        UserApi.getUserDetails(user.id)
+            .then((result) => {
+                setLoader(false)
+                UserAction.setUser(result)
+
+            })
+            .catch((error) => {
+                setLoader(false)
+            })
+    }
+
+    const isFocused = useIsFocused()
+    useEffect(() => {
+        getUserDetails()
+    }, [isFocused])
+
     return (
         <>
+            <Spinner
+                visible={spinner}
+            />
             <ScrollView>
                 <View style={styles.titleContainer}>
                     <TouchableOpacity onPress={() => { navigation.openDrawer() }}>
@@ -56,7 +83,7 @@ const HomeScreen = (props) => {
                     </TouchableOpacity>
                 </View>
                 <View style={styles.homeContainer}>
-                <Text style={styles.homeTitle}>Hello, Beautiful</Text>
+                    <Text style={styles.homeTitle}>Hello, Beautiful</Text>
                     <FlatList
                         data={menuList}
                         keyExtractor={(item, index) => index.toString()}
@@ -70,8 +97,17 @@ const HomeScreen = (props) => {
                     />
                 </View>
             </ScrollView>
-            <FlashMessage position="top" />
         </>
     )
 }
-export default HomeScreen
+const mapStateToProps = ({ user }) => {
+    return {
+        user: user
+    };
+}
+const mapDispatchToProps = (dispatch) => {
+    return {
+        UserAction: bindActionCreators(UserAction, dispatch)
+    };
+}
+export default connect(mapStateToProps, mapDispatchToProps)(HomeScreen)

@@ -9,6 +9,7 @@ import styles from '../assets/styles';
 import SurveyItem from '../components/SurveyItem'
 import { Survey } from '../constants/Survey'
 import * as SurveyAction from '../actions/SurveyAction';
+import * as SurveyApi from '../api/Survey'
 import RadioButton from '../components/shared/RadioButton'
 import MultiSelect from '../components/shared/MultiSelect'
 
@@ -19,31 +20,77 @@ const SurveyScreen = (props) => {
     const [surveyCount, changeSurveyCount] = useState(0)
     const [selectedId, changeSelectedId] = useState(null)
     const [progressStatus, changeProgressStatus] = useState(0)
+    const [spinner, setLoader] = useState('')
+    const [answers, changeAnswers] = useState({
+        quizId: 2,
+        results: []
+    })
     const { navigation, SurveyAction, questions } = props
-    const surveyQuestion = (Survey && Survey.length > surveyCount) ? Survey[surveyCount] : null
+    const surveyQuestion = (questions && questions.length > surveyCount) ? questions[surveyCount] : null
 
     const isFocused = useIsFocused()
     useEffect(() => {
         SurveyAction.getSurveyQuestions()
     }, [isFocused])
 
+    useEffect(() => {
+        if (questions.length > 0) {
+            changeProgressStatus(1 / questions.length)
+        }
+    }, [questions])
+
     const handleOnPressSave = () => {
-        if (surveyCount < Survey.length - 1) {
-            if (showTransition && surveyCount >= (Survey.length - 1) / 2) {
+        setLoader(true)
+        navigation.navigate('Log Off')
+        let data = { ...answers}
+        data.results = JSON.stringify(data.results)
+        SurveyApi.submitAnswers(data)
+            .then((result) => {
+                setLoader(false)
+                navigation.navigate('Log Off')
+
+            })
+            .catch((error) => {
+                setLoader(false)
+            })
+    }
+
+    const handleOnPressNext = () => {
+        if (surveyCount < questions.length - 1) {
+            if (showTransition && surveyCount >= (questions.length - 1) / 2) {
                 changeShowTransition(false)
                 navigation.navigate('Transitions')
             }
-            changeProgressStatus((surveyCount + 1) / Survey.length)
+            changeProgressStatus((surveyCount + 1) / questions.length)
             changeSurveyCount(surveyCount + 1)
 
         } else {
-            navigation.navigate('Home')
+            // navigation.navigate('Home')
+            setLoader(true)
+            SurveyApi.submitAnswers(answers)
+                .then((result) => {
+                    setLoader(false)
+                    navigation.navigate('Home')
+
+                })
+                .catch((error) => {
+                    setLoader(false)
+                })
+
         }
+    }
+
+    const setAnswer = (text) => {
+        let answersObj = { ...answers }
+        answersObj.results.push({
+            id: surveyQuestion.id,
+            answer: text
+        })
+        changeAnswers(answersObj)
     }
 
     return (
         <View style={styles.containerMatches}>
-
             <View style={styles.top}>
                 <Text style={styles.title}>Survey</Text>
             </View>
@@ -56,7 +103,7 @@ const SurveyScreen = (props) => {
                         <View style={styles.questionContainer}>
                             <Text style={styles.question}>{surveyQuestion.question}</Text>
                         </View>
-                        {surveyQuestion.answers.length > 0 && !surveyQuestion.multiselect && <RadioButton items={surveyQuestion.answers} selectedAnswer={null} />}
+                        {surveyQuestion.answers.length > 0 && !surveyQuestion.multiselect && <RadioButton items={surveyQuestion.answers} selectedAnswer={null} setAnswer={setAnswer} />}
                         {surveyQuestion.answers.length > 0 && surveyQuestion.multiselect && <MultiSelect items={surveyQuestion.answers} selectedAnswer={[]} />}
 
                         {surveyQuestion.answers.length === 0 &&
@@ -65,7 +112,7 @@ const SurveyScreen = (props) => {
                                     multiline
                                     numberOfLines={4}
                                     style={styles.textInput}
-                                // onChangeText={text => onChangeText(text)}
+                                    onChangeText={text => setAnswer(text)}
                                 // value={value}
                                 />
                             </View>
@@ -93,9 +140,7 @@ const SurveyScreen = (props) => {
                         marginBottom: 10, alignItems: 'center', justifyContent: 'center'
                     }}>
                         <Button
-                            onPress={() => {
-                                navigation.navigate('Log Off')
-                            }}
+                            onPress={handleOnPressSave}
                             label="Save" style={{
                                 borderWidth: 1, padding: 10, width: (width - 40) / 2, justifyContent: 'center', alignItems: 'center', marginRight: 10,
                                 textAlign: 'center',
@@ -103,12 +148,11 @@ const SurveyScreen = (props) => {
                                 marginBottom: 12,
                                 borderRadius: 4
                             }} />
-                        <Button onPress={handleOnPressSave} label="Next" style={{
+                        <Button onPress={handleOnPressNext} label="Next" style={{
                             borderWidth: 1, padding: 10, width: (width - 40) / 2, justifyContent: 'center', alignItems: 'center',
                             textAlign: 'center',
                             backgroundColor: 'black',
                             marginBottom: 12,
-                            paddingVertical: 12,
                             borderRadius: 4
                         }} />
                     </View>

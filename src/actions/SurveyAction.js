@@ -5,9 +5,8 @@ import *  as types from '../constants/ActionTypes';
 
 export function getSurveyQuestions() {
     return (dispatch) => {
-        const url = `${Constants.URL.wc}/quiz-survey-master/v1/questions?quizID=1?consumer_key=${Constants.Keys.ConsumerKey}&consumer_secret=${Constants.Keys.ConsumerSecret}`
+        const url = `${Constants.URL.wc}/quiz-survey-master/v1/questions?quizID=2?consumer_key=${Constants.Keys.ConsumerKey}&consumer_secret=${Constants.Keys.ConsumerSecret}`
         return axios.get(url).then(response => {
-            console.log(response.data);
             dispatch({
                 type: types.GET_SURVEY_QUESTION_SUCCESS,
                 surveyQuestions: getSurveyQuestionsFromResult(response.data)
@@ -26,8 +25,9 @@ const getSurveyQuestionsFromResult = (result) => {
         surveyQuestions.push({
             id: product.id,
             question: product.name,
+            required: product.required === "1" ? true : false,
             multiselect: (product.type === "0" || product.type === "1") ? false : true,
-            answers: getAnswer(product.answers)
+            answers: getAnswer(product.answers),
         })
     })
     return surveyQuestions;

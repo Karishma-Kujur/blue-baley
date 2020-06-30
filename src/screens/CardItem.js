@@ -5,8 +5,10 @@ import NoImage from '../assets/images/02.jpg'
 import Similar from '../assets/images/similar.png';
 import styles from '../assets/styles';
 import * as ToteAction from '../actions/ToteAction';
+import * as ProductsApi from '../api/Products';
 import CustomDialog from '../components/shared/CustomDialog';
 import PopupDialog, { DialogContent, DialogTitle } from 'react-native-popup-dialog';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 const CardItem = ({
     actions,
@@ -52,18 +54,34 @@ const CardItem = ({
     const [showAlert, changeShowAlert] = useState({ show: false })
     const [dialogMessage, setDialogMessage] = useState('')
     const [dialog, showDialog] = useState(false)
+    const [spinner, setLoader] = useState('')
     const [suggestionDialog, showSuggestionDialog] = useState(false)
-    const image = images.length > 0 ? images[0] : ''
+    const [image, changeImage] = useState(images.length > 0 ? images[0] : '')
+    // const image = images.length > 0 ? images[0] : ''
     const sizes = ['XS', 'S', 'M', 'L', 'XL']
 
     const handleOnClickSave = () => {
-        setDialogMessage('Added to Favorites!')
-        showDialog(true)
-        changeShowSize(false)
-        setTimeout(() => {
-            showDialog(false)
-            setDialogMessage('')
-        }, 2000);
+        setLoader(true)
+        ProductsApi.saveProducts({ productId: productId })
+            .then((result) => {
+                setLoader(false)
+                setDialogMessage('Added to Favorites!')
+                showDialog(true)
+                setTimeout(() => {
+                    showDialog(false)
+                    setDialogMessage('')
+                }, 2000);
+            })
+            .catch((error) => {
+                setLoader(false)
+                setDialogMessage('Something went wrong! Please try again later')
+                showDialog(true)
+                setTimeout(() => {
+                    showDialog(false)
+                    setDialogMessage('')
+                }, 2000);
+            })
+
     }
 
     const handleOnClickBag = () => {
@@ -94,6 +112,9 @@ const CardItem = ({
 
     return (
         <View style={styles.containerCardItem}>
+            <Spinner
+                visible={spinner}
+            />
             <CustomDialog modalVisible={dialog} message={dialogMessage} />
             <ScrollView>
                 <View style={{ height: fullHeight - 150 }}>
@@ -165,55 +186,38 @@ const CardItem = ({
                         </View>
                     )}
                 </View>
-                <PopupDialog
-                    visible={suggestionDialog}
-                    containerStyle={{ justifyContent: 'flex-end' }}
-                    height={280}
-                    width={fullWidth}
-                    onTouchOutside={() => showSuggestionDialog(false)
-                    }
-                    dialogTitle={<DialogTitle title="Similar Products" />}
-                >
-                    <DialogContent>
-                        <ScrollView
-                            horizontal={true}
-                            // contentContainerStyle={{ width: `${100 * 0.3}%` }}
-                            showsHorizontalScrollIndicator={false}
-                            // scrollEventThrottle={200}
-                            // decelerationRate="fast"
-                            pagingEnabled
-                        >
-                            <Image source={image ? {
-                                uri: image,
-                            } : NoImage}
-                                style={similarImageStyle} />
-                            <Image source={image ? {
-                                uri: image,
-                            } : NoImage}
-                                style={similarImageStyle} />
-                            <Image source={image ? {
-                                uri: image,
-                            } : NoImage}
-                                style={similarImageStyle} />
-                            <Image source={image ? {
-                                uri: image,
-                            } : NoImage}
-                                style={similarImageStyle} />
-                            <Image source={image ? {
-                                uri: image,
-                            } : NoImage}
-                                style={similarImageStyle} />
-                            <Image source={image ? {
-                                uri: image,
-                            } : NoImage}
-                                style={similarImageStyle} />
-                            <Image source={image ? {
-                                uri: image,
-                            } : NoImage}
-                                style={similarImageStyle} />
-                        </ScrollView>
-                    </DialogContent>
-                </PopupDialog>
+                {suggestionDialog &&
+                    <PopupDialog
+                        visible={suggestionDialog}
+                        containerStyle={{ justifyContent: 'flex-end' }}
+                        height={280}
+                        width={fullWidth}
+                        onTouchOutside={() => showSuggestionDialog(false)
+                        }
+                        dialogTitle={<DialogTitle title="Similar Products" />}
+                    >
+                        <DialogContent>
+                            <ScrollView
+                                horizontal={true}
+                                // contentContainerStyle={{ width: `${100 * 0.3}%` }}
+                                showsHorizontalScrollIndicator={false}
+                                // scrollEventThrottle={200}
+                                // decelerationRate="fast"
+                                pagingEnabled
+                            >
+                                {images.map((img) => {
+                                    return (
+                                        <Image source={img ? {
+                                            uri: img,
+                                        } : NoImage}
+                                            style={similarImageStyle} />
+                                    )
+                                })
+                                }
+                            </ScrollView>
+                        </DialogContent>
+                    </PopupDialog>
+                }
             </ScrollView>
         </View>
     );
