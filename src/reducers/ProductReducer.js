@@ -1,10 +1,21 @@
 import * as types from '../constants/ActionTypes';
-import InitialState from './InitialState';
+import { Record } from 'immutable'
 
-export default function (state = InitialState.products, action) {
+const ProductsRecords = Record({
+	list: [],
+	favorites: [],
+	orderHistory: [],
+})
+const initialState = new ProductsRecords()
+
+export default function (state = initialState, action) {
 	switch (action.type) {
 		case types.GET_PRODUCTS_SUCCESS:
-			return action.products;
+			return state.set('list', action.products);
+		case types.SET_FAVORITES:
+			return state.set('favorites', action.favorites);
+		case types.SET_ORDER_HISTORY:
+			return state.set('orderHistory', action.orderHistory);
 		default:
 			return state;
 	}

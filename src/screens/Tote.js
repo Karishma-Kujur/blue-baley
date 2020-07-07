@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { useIsFocused } from '@react-navigation/native'
-import { View, Dimensions, Text, ScrollView, TouchableOpacity, FlatList, Image } from 'react-native'
+import { View, Dimensions, Text, ScrollView, TouchableOpacity, FlatList, Image, Linking } from 'react-native'
 import Button from '../components/shared/Button'
 import styles from '../assets/styles';
 import ToteItem from './ToteItem'
@@ -52,9 +52,20 @@ const ToteScreen = (props) => {
         getTotes()
     }
 
-    const handleProceedToShipping = () => {
-        showSelectAddress(true)
-    }
+    const url = 'https://www.departmynt.co/checkout'
+    const handleProceedToShipping = useCallback(async () => {
+        // showSelectAddress(true)
+        // Checking if the link is supported for links with custom URL scheme.
+        const supported = await Linking.canOpenURL(url);
+
+        if (supported) {
+            // Opening the link with some app, if the URL scheme is "http" the web link should be opened
+            // by some browser in the mobile
+            await Linking.openURL(url);
+        } else {
+            // Alert.alert(`Don't know how to open this URL: ${url}`);
+        }
+    }, [url]);
 
     return (
         <View style={styles.containerMatches}>
@@ -74,6 +85,7 @@ const ToteScreen = (props) => {
                     renderItem={({ item }) => (
                         <ToteItem
                             id={item.id}
+                            productId={item.productId}
                             image={item.image}
                             name={item.name}
                             price={item.price}
@@ -93,14 +105,14 @@ const ToteScreen = (props) => {
                     dialogTitle={
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', borderBottomWidth: 1, borderBottomColor: 'grey' }}>
                             <View style={{ justifyContent: 'center', alignItems: 'center', margin: 20 }}>
-                                <Text style={{fontWeight: 'bold'}}>SELECT DELIVERY ADDRESS</Text>
+                                <Text style={{ fontWeight: 'bold' }}>SELECT DELIVERY ADDRESS</Text>
                             </View>
                             <View style={{ justifyContent: 'center', alignItems: 'center', margin: 20 }}>
                                 <TouchableOpacity onPress={() => {
                                     showSelectAddress(false)
                                     navigation.navigate('Add Address')
                                 }}>
-                                    <Text style={{fontWeight: 'bold', color: 'grey'}}>EDIT ADDRESS</Text>
+                                    <Text style={{ fontWeight: 'bold', color: 'grey' }}>EDIT ADDRESS</Text>
                                 </TouchableOpacity>
 
                             </View>
@@ -120,7 +132,7 @@ const ToteScreen = (props) => {
                 >
                     <DialogContent>
                         <Text style={{ marginTop: 10, marginBottom: 8, fontWeight: 'bold', fontSize: 14 }}>{user.firstName + ' ' + user.lastName}</Text>
-                        <Text>{user.billing.address_1 + ', ' + user.billing.address_2}</Text>
+                        {user.billing && user.billing.address_1 && <Text>{user.billing.address_1 + ', ' + user.billing.address_2}</Text>}
                         <Text>{user.billing.city + ', ' + user.billing.postcode + ', ' + user.billing.state}</Text>
                         <Text style={{ marginTop: 10 }}>{'Mobile: ' + Accounts.PersonalInfo.phoneNumber}</Text>
                     </DialogContent>

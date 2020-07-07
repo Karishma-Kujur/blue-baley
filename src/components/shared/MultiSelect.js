@@ -4,8 +4,7 @@ import Checked from '../../assets/images/checked.png'
 import UnChecked from '../../assets/images/unchecked.jpeg'
 
 const MultiSelect = (props) => {
-    const { checked, value, items, selectedAnswer } = props
-    const [selectedId, changeSelectedId] = useState(selectedAnswer)
+    const { items, selectedId, changeSelectedId } = props
 
     const imageStyle = [
         {
@@ -21,7 +20,7 @@ const MultiSelect = (props) => {
                 return (
                     <View style={{ flexDirection: 'row', marginLeft: 20, marginBottom: 15 }}>
                         <TouchableOpacity onPress={() => {
-                            let ids = [...selectedId]
+                            let ids = [...selectedId || []]
                             if (ids.includes(item.id)) {
                                 ids = ids.filter(id =>
                                     id !== item.id
@@ -32,7 +31,7 @@ const MultiSelect = (props) => {
                             changeSelectedId(ids)
                         }
                         }>
-                            {selectedId.includes(item.id) ?
+                            {selectedId && selectedId.includes(item.id) ?
                                 <Image source={Checked} style={imageStyle} /> :
                                 <Image source={UnChecked} style={imageStyle} />}
                         </TouchableOpacity>

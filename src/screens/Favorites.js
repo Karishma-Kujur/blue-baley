@@ -14,7 +14,7 @@ import Spinner from 'react-native-loading-spinner-overlay';
 const { width, height } = Dimensions.get("window");
 
 const FavoritesScreen = (props) => {
-  const { navigation, ProductAction, products } = props
+  const { navigation, ProductAction, products, user, favorites } = props
   const [spinner, setLoader] = useState('')
   const imageStyle = [
     {
@@ -25,23 +25,44 @@ const FavoritesScreen = (props) => {
     }
   ];
 
-  const getProducts = () => {
+  const getFavoritesByProductId = (productIds, data) => {
+    const favoriteItems = [];
+    productIds.forEach((productId) => {
+      let item = data.find((product) => product.id === Number(productId))
+      if (item)
+        favoriteItems.push(item)
+    })
+    return favoriteItems;
+  }
+
+  const getFavorites = () => {
     setLoader(true)
     ProductApi.getProducts()
       .then((result) => {
-        setLoader(false)
         ProductAction.setProducts(result)
+        ProductApi.getFavorites(user.id)
+          .then((productIds) => {
+            let favoriteItems = getFavoritesByProductId(productIds, result)
+            setLoader(false)
+            ProductAction.setFavorites(favoriteItems)
+          })
+          .catch((error) => {
+            setLoader(false)
+          })
 
       })
       .catch((error) => {
         setLoader(false)
-        Alert.alert('Invalid User name or Password', 'Please enter valid user name and password')
       })
+  }
+
+  const handleRefreshFavorites = () => {
+    getFavorites();
   }
 
   const isFocused = useIsFocused()
   useEffect(() => {
-    getProducts()
+    getFavorites()
   }, [isFocused])
   return (
     <View style={styles.containerMatches}>
@@ -56,7 +77,7 @@ const FavoritesScreen = (props) => {
       </View>
       <ScrollView>
         <FlatList
-          data={products}
+          data={favorites}
           keyExtractor={(item, index) => index.toString()}
           renderItem={({ item }) => (
             <TouchableOpacity>
@@ -66,6 +87,8 @@ const FavoritesScreen = (props) => {
                 price={item.price}
                 productId={item.id}
                 isFavorite={true}
+                toteEdited={handleRefreshFavorites}
+                user={user}
               />
             </TouchableOpacity>
           )}
@@ -77,9 +100,11 @@ const FavoritesScreen = (props) => {
     </View>
   )
 }
-const mapStateToProps = ({ products }) => {
+const mapStateToProps = ({ products, user }) => {
   return {
-    products: products
+    favorites: products.favorites,
+    products: products.list,
+    user
   };
 }
 

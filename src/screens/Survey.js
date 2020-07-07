@@ -42,7 +42,7 @@ const SurveyScreen = (props) => {
     const handleOnPressSave = () => {
         setLoader(true)
         navigation.navigate('Log Off')
-        let data = { ...answers}
+        let data = { ...answers }
         data.results = JSON.stringify(data.results)
         SurveyApi.submitAnswers(data)
             .then((result) => {
@@ -56,36 +56,67 @@ const SurveyScreen = (props) => {
     }
 
     const handleOnPressNext = () => {
-        if (surveyCount < questions.length - 1) {
-            if (showTransition && surveyCount >= (questions.length - 1) / 2) {
-                changeShowTransition(false)
-                navigation.navigate('Transitions')
+        if (surveyQuestion.multiselect) {
+            setAnswer(selectedId)
+        }
+        let answer = answers.results.find((element) => element.id === surveyQuestion.id)
+        if ((surveyQuestion.required && answer) || !surveyQuestion.required) {
+            if (surveyCount < questions.length - 1) {
+                if (showTransition && surveyCount >= (questions.length - 1) / 2) {
+                    changeShowTransition(false)
+                    navigation.navigate('Transitions')
+                }
+                changeProgressStatus((surveyCount + 1) / questions.length)
+                changeSurveyCount(surveyCount + 1)
+                changeSelectedId(null)
+
+            } else {
+                // navigation.navigate('Home')
+                setLoader(true)
+                SurveyApi.submitAnswers(answers)
+                    .then((result) => {
+                        setLoader(false)
+                        navigation.navigate('Home')
+
+                    })
+                    .catch((error) => {
+                        setLoader(false)
+                    })
+
             }
-            changeProgressStatus((surveyCount + 1) / questions.length)
-            changeSurveyCount(surveyCount + 1)
-
-        } else {
-            // navigation.navigate('Home')
-            setLoader(true)
-            SurveyApi.submitAnswers(answers)
-                .then((result) => {
-                    setLoader(false)
-                    navigation.navigate('Home')
-
-                })
-                .catch((error) => {
-                    setLoader(false)
-                })
-
         }
     }
 
     const setAnswer = (text) => {
         let answersObj = { ...answers }
-        answersObj.results.push({
-            id: surveyQuestion.id,
-            answer: text
-        })
+        if (surveyQuestion.multiselect) {
+            text && text.forEach((id) => {
+                let obj = surveyQuestion.answers.find((answer) => answer.id === id)
+                answersObj.results.push({
+                    id: surveyQuestion.id,
+                    answer: obj.answer
+                })
+            })
+        }
+        else {
+            let found = false
+            answersObj.results = answersObj.results.map((answer) => {
+                if (answer.id === surveyQuestion.id) {
+                    found = true
+                    return {
+                        id: surveyQuestion.id,
+                        answer: text
+                    }
+                }
+                else return answer
+            })
+            if (!found) {
+                answersObj.results.push({
+                    id: surveyQuestion.id,
+                    answer: text
+                })
+            }
+        }
         changeAnswers(answersObj)
     }
 
@@ -103,8 +134,22 @@ const SurveyScreen = (props) => {
                         <View style={styles.questionContainer}>
                             <Text style={styles.question}>{surveyQuestion.question}</Text>
                         </View>
-                        {surveyQuestion.answers.length > 0 && !surveyQuestion.multiselect && <RadioButton items={surveyQuestion.answers} selectedAnswer={null} setAnswer={setAnswer} />}
-                        {surveyQuestion.answers.length > 0 && surveyQuestion.multiselect && <MultiSelect items={surveyQuestion.answers} selectedAnswer={[]} />}
+                        {surveyQuestion.answers.length > 0 && !surveyQuestion.multiselect &&
+                            <RadioButton
+                                items={surveyQuestion.answers}
+                                selectedAnswer={null}
+                                setAnswer={setAnswer}
+                                selectedId={selectedId}
+                                changeSelectedId={(value) => changeSelectedId(value)}
+                            />}
+                        {surveyQuestion.answers.length > 0 && surveyQuestion.multiselect &&
+                            <MultiSelect
+                                items={surveyQuestion.answers}
+                                selectedAnswer={[]}
+                                setAnswer={setAnswer}
+                                selectedId={selectedId}
+                                changeSelectedId={(value) => changeSelectedId(value)}
+                            />}
 
                         {surveyQuestion.answers.length === 0 &&
                             <View style={styles.textInputContainer}>

@@ -1,6 +1,3 @@
-import axios from 'axios';
-
-import Constants from '../appConfig/Constants';
 import *  as types from '../constants/ActionTypes';
 
 export function setProducts(result) {
@@ -13,25 +10,22 @@ export function setProducts(result) {
     };
 }
 
-const getProjectsFromResult = (result) => {
-    const productsList = result
-    const products = []
-    productsList.forEach((product) => {
-        products.push({
-            id: product.id,
-            name: product.name,
-            description: product.description,
-            price: product.price,
-            images: getProductImages(product.images)
-        })
-    })
-    return products;
+export function setFavorites(result) {
+    return (dispatch) => {
+        dispatch({
+            type: types.SET_FAVORITES,
+            favorites: result
+        }
+        )
+    };
 }
 
-const getProductImages = (images) => {
-    const productImages = []
-    images.forEach((image) => {
-        productImages.push(image.src)
-    })
-    return productImages
+export function setOrderHistory(result) {
+    return (dispatch) => {
+        dispatch({
+            type: types.SET_ORDER_HISTORY,
+            orderHistory: result
+        }
+        )
+    };
 }

@@ -1,15 +1,18 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { useIsFocused } from '@react-navigation/native'
 import { View, StyleSheet, Dimensions, Text, ScrollView, TouchableOpacity, FlatList, Image, LayoutAnimation } from 'react-native'
 import styles from '../assets/styles';
 import Avatar from '../assets/images/avatar.jpeg'
 import FlashMessage from "react-native-flash-message";
-import { Survey } from '../constants/Survey'
+import * as SurveyAction from '../actions/SurveyAction';
 import Answers from '../components/shared/Answers'
 
 const { width, height } = Dimensions.get("window");
 
 const ViewQuestions = (props) => {
-    const { navigation } = props
+    const { navigation, SurveyAction, questions } = props
     const [expandedIds, changeExpanded] = useState([])
     const imageStyle = [
         {
@@ -19,6 +22,11 @@ const ViewQuestions = (props) => {
             borderRadius: 15
         }
     ];
+
+    const isFocused = useIsFocused()
+    useEffect(() => {
+        SurveyAction.getSurveyQuestions()
+    }, [isFocused])
 
     return (
         <>
@@ -34,7 +42,7 @@ const ViewQuestions = (props) => {
             <ScrollView>
                 <View style={{marginTop: 10}}>
                     <FlatList
-                        data={Survey}
+                        data={questions}
                         keyExtractor={(item, index) => index.toString()}
                         renderItem={({ item }) => (
                             <>
@@ -69,4 +77,15 @@ const ViewQuestions = (props) => {
         </>
     )
 }
-export default ViewQuestions
+const mapStateToProps = ({ survey }) => {
+    return {
+        questions: survey
+    };
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        SurveyAction: bindActionCreators(SurveyAction, dispatch)
+    };
+}
+export default connect(mapStateToProps, mapDispatchToProps)(ViewQuestions)

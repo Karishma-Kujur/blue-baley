@@ -38,7 +38,8 @@ const getAnswer = (list) => {
     list.forEach((answer, index) => {
         answers.push({
             id: index,
-            answer: answer[0]
+            answer: answer[0],
+            keyAttribute: answer[1]
         })
     })
     return answers

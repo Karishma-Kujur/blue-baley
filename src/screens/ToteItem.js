@@ -7,6 +7,7 @@ import NoImage from '../assets/images/01.jpg'
 import AddToFavorite from '../assets/images/favorite.jpeg'
 import AddToBag from '../assets/images/bag.jpeg'
 import * as ToteAction from '../actions/ToteAction'
+import * as ProductsApi from '../api/Products';
 import CustomDialog from '../components/shared/CustomDialog'
 import RNPickerSelect from 'react-native-picker-select'
 
@@ -48,6 +49,8 @@ const ToteItem = ({
     price,
     quantity,
     id,
+    productId,
+    user,
     toteEdited
 }) => {
     const [selectedQuantity, changeQuantity] = useState(quantity)
@@ -104,6 +107,24 @@ const ToteItem = ({
             })
     }
 
+    const handleMoveToBag = () => {
+        const data = {
+            "product_id": productId,
+            "quantity": 1
+        }
+        ToteAction.addToTote(data)
+            .then((result) => {
+                ProductsApi.removeFromFavorites(productId, user.id)
+                .then((result) => {
+                    toteEdited()
+                })
+                .catch((error) => {
+                })
+            })
+            .catch((error) => {
+            })
+    }
+
     const handleMoveToFavorites = () => {
         const data = {
             cart_item_key: id,
@@ -111,10 +132,14 @@ const ToteItem = ({
         }
         ToteAction.editTote(data)
             .then((result) => {
-                toteEdited()
+                ProductsApi.saveProducts({ productId: productId })
+                    .then((result) => {
+                        toteEdited()
+                    })
+                    .catch((error) => {
+                    })
             })
             .catch((error) => {
-                Alert.alert('Invalid User name or Password', 'Please enter valid user name and password')
             })
     }
 
@@ -134,7 +159,7 @@ const ToteItem = ({
                     {isFavorite &&
                         <View style={styles.favoriteActionContainer}>
                             <View style={{ borderWidth: 1, padding: 5 }}>
-                                <TouchableOpacity onPress={handleMoveToFavorites}>
+                                <TouchableOpacity onPress={handleMoveToBag}>
                                     <Image source={AddToBag} style={bagImageStyle} />
                                 </TouchableOpacity>
                             </View>

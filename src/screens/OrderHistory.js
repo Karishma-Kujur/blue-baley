@@ -31,7 +31,7 @@ const OrderHistory = (props) => {
         ProductApi.getOrderHistory()
             .then((result) => {
                 setLoader(false)
-                ProductAction.setTotes(result)
+                ProductAction.setOrderHistory(result)
 
             })
             .catch((error) => {

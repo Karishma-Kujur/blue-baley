@@ -1,11 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { View, Text, TouchableOpacity, Image } from 'react-native';
 import Selected from '../../assets/images/selected.png'
 import UnSelected from '../../assets/images/unselected.png'
 
 const RadioButtonComponent = (props) => {
-    const { checked, value, items, selectedAnswer, setAnswer } = props
-    const [selectedId, changeSelectedId] = useState(selectedAnswer)
+    const { items, selectedAnswer, setAnswer, selectedId, changeSelectedId } = props
 
     const imageStyle = [
         {

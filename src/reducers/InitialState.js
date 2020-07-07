@@ -2,5 +2,7 @@ export default {
 	products: [],
 	tote: [],
 	survey: [],
-	user: {}
+	user: {},
+	favorites: [],
+	orderHistory: []
 };

@@ -86,8 +86,8 @@ const CardItem = ({
 
     const handleOnClickBag = () => {
         const data = {
-            "product_id": productId,
-            "quantity": 1
+            id: productId,
+            quantity: 1
         }
         ToteAction.addToTote(data)
             .then((result) => {
@@ -123,7 +123,9 @@ const CardItem = ({
                     } : NoImage}
                         style={imageStyle} />
                     <TouchableOpacity style={{ bottom: 40, left: 10, backgroundColor: 'white', width: 35, padding: 5, borderRadius: 18 }}
-                        onPress={() => showSuggestionDialog(true)}
+                        onPress={() => {
+                            if (images && images.length > 0) showSuggestionDialog(true)
+                        }}
                     >
                         <Image source={Similar} style={similarIconStyle} />
                     </TouchableOpacity>
@@ -186,38 +188,38 @@ const CardItem = ({
                         </View>
                     )}
                 </View>
-                {suggestionDialog &&
-                    <PopupDialog
-                        visible={suggestionDialog}
-                        containerStyle={{ justifyContent: 'flex-end' }}
-                        height={280}
-                        width={fullWidth}
-                        onTouchOutside={() => showSuggestionDialog(false)
-                        }
-                        dialogTitle={<DialogTitle title="Similar Products" />}
-                    >
-                        <DialogContent>
-                            <ScrollView
-                                horizontal={true}
-                                // contentContainerStyle={{ width: `${100 * 0.3}%` }}
-                                showsHorizontalScrollIndicator={false}
-                                // scrollEventThrottle={200}
-                                // decelerationRate="fast"
-                                pagingEnabled
-                            >
-                                {images.map((img) => {
-                                    return (
-                                        <Image source={img ? {
-                                            uri: img,
-                                        } : NoImage}
-                                            style={similarImageStyle} />
-                                    )
-                                })
-                                }
-                            </ScrollView>
-                        </DialogContent>
-                    </PopupDialog>
-                }
+                <PopupDialog
+                    visible={suggestionDialog}
+                    containerStyle={{ justifyContent: 'flex-end' }}
+                    height={280}
+                    width={fullWidth}
+                    onTouchOutside={() => {
+                        showSuggestionDialog(false)
+                    }
+                    }
+                    dialogTitle={<DialogTitle title="Similar Products" />}
+                >
+                    <DialogContent>
+                        <ScrollView
+                            horizontal={true}
+                            // contentContainerStyle={{ width: `${100 * 0.3}%` }}
+                            showsHorizontalScrollIndicator={false}
+                            // scrollEventThrottle={200}
+                            // decelerationRate="fast"
+                            pagingEnabled
+                        >
+                            {images.map((img) => {
+                                return (
+                                    <Image source={img ? {
+                                        uri: img,
+                                    } : NoImage}
+                                        style={similarImageStyle} />
+                                )
+                            })
+                            }
+                        </ScrollView>
+                    </DialogContent>
+                </PopupDialog>
             </ScrollView>
         </View>
     );

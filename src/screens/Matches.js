@@ -106,7 +106,7 @@ const MatchesScreen = (props) => {
 
 const mapStateToProps = ({ products }) => {
     return {
-        products: products
+        products: products.list
     };
 }
 

@@ -6,6 +6,7 @@ import { View, Dimensions, Text, ScrollView, TouchableOpacity, FlatList, Image }
 import styles from '../assets/styles';
 import Avatar from '../assets/images/avatar.jpeg'
 import Spinner from 'react-native-loading-spinner-overlay'
+import * as LoginApi from '../api/Login'
 import * as UserAction from '../actions/UserAction'
 import * as UserApi from '../api/User'
 
@@ -41,7 +42,17 @@ const HomeScreen = (props) => {
         },
         {
             name: 'Log Out',
-            onClick: () => { navigation.navigate('Landing Page') }
+            onClick: () => {
+                setLoader(true)
+                LoginApi.logout()
+                    .then((result) => {
+                        setLoader(false)
+                        navigation.navigate('Landing Page')
+                    })
+                    .catch((error) => {
+                        setLoader(false)
+                    })
+            }
         }
     ]
     const imageStyle = [

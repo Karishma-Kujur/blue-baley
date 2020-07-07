@@ -27,6 +27,30 @@ export function saveProducts(data) {
     });
 }
 
+export function removeFromFavorites(productId, userId) {
+    return new Promise((resolve, reject) => {
+        const url = `${Constants.URL.wc}/user/delete_favorite?user_id=${userId}&product_id=${productId}&consumer_key=${Constants.Keys.ConsumerKey}&consumer_secret=${Constants.Keys.ConsumerSecret}`
+        axios.delete(url).then(response => {
+            resolve(response.data)
+        }).catch(err => {
+            console.log(err);
+            reject(err)
+        })
+    });
+}
+
+export function getFavorites(userId) {
+    return new Promise((resolve, reject) => {
+        const url = `${Constants.URL.wc}/user/get_favorite?user_id=${userId}`
+        axios.get(url).then(response => {
+            resolve(response.data)
+        }).catch(err => {
+            console.log(err);
+            reject(err)
+        })
+    });
+}
+
 export function placeOder(data) {
     return new Promise((resolve, reject) => {
         const url = `${Constants.URL.wc}/wc/v3/orders?consumer_key=${Constants.Keys.ConsumerKey}&consumer_secret=${Constants.Keys.ConsumerSecret}`
