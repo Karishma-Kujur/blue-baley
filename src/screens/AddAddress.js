@@ -34,7 +34,7 @@ const AddAddress = (props) => {
             .then((result) => {
                 // setLoader(false)
                 UserAction.setUser(result)
-                navigation.navigate('View Tote')
+                navigation.navigate('Checkout')
 
             })
             .catch((error) => {
@@ -47,7 +47,7 @@ const AddAddress = (props) => {
         <View style={{ marginTop: 40, height: height - 50 }}>
             <View style={{ flexDirection: 'row' }}>
                 <TouchableOpacity onPress={() => {
-                    navigation.navigate('View Tote')
+                    navigation.navigate('Checkout')
                 }}
                     style={{ marginLeft: 20 }}>
                     <Image source={Back} style={{ width: 24, height: 24, borderRadius: 12 }} />

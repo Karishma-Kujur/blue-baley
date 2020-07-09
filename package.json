@@ -18,6 +18,7 @@
     "@react-navigation/stack": "^5.2.18",
     "axios": "^0.19.2",
     "globalize": "^1.5.0",
+    "immutable": "^4.0.0-rc.12",
     "react": "^16.11.0",
     "react-dom": "^16.13.1",
     "react-native": "0.62.2",

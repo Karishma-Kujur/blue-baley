@@ -30,15 +30,24 @@ const MatchesScreen = (props) => {
     ];
     const getProducts = () => {
         setLoader(true)
-        ProductApi.getProducts()
+        ProductApi.getCategory()
             .then((result) => {
-                setLoader(false)
-                ProductAction.setProducts(result)
+                let categories = result.join('+')
+                ProductApi.getProducts(categories)
+                    .then((data) => {
+                        setLoader(false)
+                        ProductAction.setMatches(data)
+
+                    })
+                    .catch((error) => {
+                        setLoader(false)
+                    })
 
             })
             .catch((error) => {
                 setLoader(false)
             })
+
     }
 
     const isFocused = useIsFocused()
@@ -106,7 +115,7 @@ const MatchesScreen = (props) => {
 
 const mapStateToProps = ({ products }) => {
     return {
-        products: products.list
+        products: products.matches
     };
 }
 

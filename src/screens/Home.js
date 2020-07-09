@@ -6,6 +6,8 @@ import { View, Dimensions, Text, ScrollView, TouchableOpacity, FlatList, Image }
 import styles from '../assets/styles';
 import Avatar from '../assets/images/avatar.jpeg'
 import Spinner from 'react-native-loading-spinner-overlay'
+import * as ProductAction from '../actions/ProductAction'
+import * as ProductApi from '../api/Products'
 import * as LoginApi from '../api/Login'
 import * as UserAction from '../actions/UserAction'
 import * as UserApi from '../api/User'
@@ -13,7 +15,7 @@ import * as UserApi from '../api/User'
 const { width, height } = Dimensions.get("window");
 
 const HomeScreen = (props) => {
-    const { navigation, UserAction, user } = props
+    const { navigation, UserAction, user, ProductAction } = props
     const [spinner, setLoader] = useState('')
     const menuList = [
         {
@@ -77,9 +79,23 @@ const HomeScreen = (props) => {
             })
     }
 
+    const getAllProducts = () => {
+        setLoader(true)
+        ProductApi.getProducts()
+            .then((result) => {
+                setLoader(false)
+                ProductAction.setProducts(result)
+
+            })
+            .catch((error) => {
+                setLoader(false)
+            })
+    }
+
     const isFocused = useIsFocused()
     useEffect(() => {
         getUserDetails()
+        getAllProducts()
     }, [isFocused])
 
     return (
@@ -113,12 +129,13 @@ const HomeScreen = (props) => {
 }
 const mapStateToProps = ({ user }) => {
     return {
-        user: user
+        user
     };
 }
 const mapDispatchToProps = (dispatch) => {
     return {
-        UserAction: bindActionCreators(UserAction, dispatch)
+        UserAction: bindActionCreators(UserAction, dispatch),
+        ProductAction: bindActionCreators(ProductAction, dispatch)
     };
 }
 export default connect(mapStateToProps, mapDispatchToProps)(HomeScreen)

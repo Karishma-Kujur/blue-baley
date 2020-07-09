@@ -11,7 +11,8 @@ import LogOff from '../screens/LogOff'
 import PaymentScreen from '../screens/PaymentScreen';
 import OrderPlaced from '../screens/OrderPlaced';
 import AddAddress from '../screens/AddAddress';
-import OrderDetails from '../screens/OrderDetails'
+import OrderDetails from '../screens/OrderDetails';
+import CheckOutScreen from '../screens/CheckoutScreen'
 
 const NavigatorMenu = (props) => {
     const Stack = createStackNavigator();
@@ -32,6 +33,7 @@ const NavigatorMenu = (props) => {
             <Stack.Screen name="Order Placed" component={OrderPlaced} />
             <Stack.Screen name="Add Address" component={AddAddress} />
             <Stack.Screen name="Order Details" component={OrderDetails} />
+            <Stack.Screen name="Checkout" component={CheckOutScreen} />
         </Stack.Navigator>
     )
 }

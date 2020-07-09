@@ -19,7 +19,6 @@ const LoginScreen = (props) => {
     const [password, setPassword] = useState('')
     const [passwordError, setPasswordError] = useState(false)
     const [spinner, setLoader] = useState('')
-    const [formError, setFormError] = useState(false)
     const validator = {
         userName: {
             type: 'string',
@@ -55,16 +54,14 @@ const LoginScreen = (props) => {
 
     const validateInput = (value, setError) => {
         if (value === '') {
-            setFormError(true)
             setError(true)
         }
     }
 
     const handleOnSubmit = () => {
-
         validateInput(userName, setUserNameError);
         validateInput(password, setPasswordError);
-        if (formError)
+        if (!userName && !password)
             return null;
 
         const data = {

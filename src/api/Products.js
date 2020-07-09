@@ -1,11 +1,26 @@
 import axios from 'axios';
 
 import Constants from '../appConfig/Constants';
-import * as types from '../constants/ActionTypes';
 
-export function getProducts() {
+export function getCategory() {
     return new Promise((resolve, reject) => {
-        const url = `${Constants.URL.wc}/wc/v3/products?consumer_key=${Constants.Keys.ConsumerKey}&consumer_secret=${Constants.Keys.ConsumerSecret}`
+        const url = `${Constants.URL.wc}/user_survey/getCategoryResults?consumer_key=${Constants.Keys.ConsumerKey}&consumer_secret=${Constants.Keys.ConsumerSecret}`
+        axios.get(url).then(response => {
+            resolve(response.data)
+        }).catch(err => {
+            console.log(err);
+            reject(err)
+        })
+    });
+}
+
+export function getProducts(categories) {
+    return new Promise((resolve, reject) => {
+        let url = ''
+        if (categories)
+            url = `${Constants.URL.wc}/wc/v3/products?consumer_key=${Constants.Keys.ConsumerKey}&consumer_secret=${Constants.Keys.ConsumerSecret}&category=26`
+        else
+            url = `${Constants.URL.wc}/wc/v3/products?consumer_key=${Constants.Keys.ConsumerKey}&consumer_secret=${Constants.Keys.ConsumerSecret}`
         axios.get(url).then(response => {
             resolve(getProjectsFromResult(response.data))
         }).catch(err => {
@@ -67,7 +82,7 @@ export function getOrderHistory() {
     return new Promise((resolve, reject) => {
         const url = `${Constants.URL.wc}/wc/v3/orders?consumer_key=${Constants.Keys.ConsumerKey}&consumer_secret=${Constants.Keys.ConsumerSecret}`
         axios.get(url).then(response => {
-            resolve(response.data)
+            resolve(getOrderHistoryFromResult(response.data))
         }).catch(err => {
             console.log(err);
             reject(err)
@@ -96,4 +111,21 @@ const getProductImages = (images) => {
         productImages.push(image.src)
     })
     return productImages
+}
+
+const getOrderHistoryFromResult = (result) => {
+    const orderDetails = result
+    const orderHistory = []
+    orderDetails.forEach((element) => {
+        orderHistory.push({
+            id: element.id,
+            status: element.status,
+            total: element.total,
+            paymentMethod: element.payment_method,
+            currency: element.currency,
+            currencySymbol: element.currency_symbol,
+            list: element.line_items
+        })
+    })
+    return orderHistory;
 }

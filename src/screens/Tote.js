@@ -10,8 +10,6 @@ import Avatar from '../assets/images/avatar.jpeg'
 import * as ToteAction from '../actions/ToteAction';
 import * as ToteApi from '../api/Tote'
 import Spinner from 'react-native-loading-spinner-overlay';
-import PopupDialog, { DialogContent, DialogTitle, DialogFooter, DialogButton } from 'react-native-popup-dialog';
-import * as Accounts from '../constants/Accounts'
 
 const { width, height } = Dimensions.get("window");
 
@@ -52,20 +50,10 @@ const ToteScreen = (props) => {
         getTotes()
     }
 
-    const url = 'https://www.departmynt.co/checkout'
-    const handleProceedToShipping = useCallback(async () => {
-        // showSelectAddress(true)
-        // Checking if the link is supported for links with custom URL scheme.
-        const supported = await Linking.canOpenURL(url);
 
-        if (supported) {
-            // Opening the link with some app, if the URL scheme is "http" the web link should be opened
-            // by some browser in the mobile
-            await Linking.openURL(url);
-        } else {
-            // Alert.alert(`Don't know how to open this URL: ${url}`);
-        }
-    }, [url]);
+    const handleProceedToShipping = () => {
+        navigation.navigate('Checkout')
+    }
 
     return (
         <View style={styles.containerMatches}>
@@ -95,48 +83,13 @@ const ToteScreen = (props) => {
                         />
                     )}
                 />
-                <PopupDialog
-                    visible={selectAddress}
-                    containerStyle={{ justifyContent: 'flex-end' }}
-                    height={240}
-                    width={width}
-                    onTouchOutside={() => showSelectAddress(false)
-                    }
-                    dialogTitle={
-                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', borderBottomWidth: 1, borderBottomColor: 'grey' }}>
-                            <View style={{ justifyContent: 'center', alignItems: 'center', margin: 20 }}>
-                                <Text style={{ fontWeight: 'bold' }}>SELECT DELIVERY ADDRESS</Text>
-                            </View>
-                            <View style={{ justifyContent: 'center', alignItems: 'center', margin: 20 }}>
-                                <TouchableOpacity onPress={() => {
-                                    showSelectAddress(false)
-                                    navigation.navigate('Add Address')
-                                }}>
-                                    <Text style={{ fontWeight: 'bold', color: 'grey' }}>EDIT ADDRESS</Text>
-                                </TouchableOpacity>
 
-                            </View>
-                        </View>
-                    }
-                    footer={
-                        <DialogFooter>
-                            <DialogButton
-                                text="DELIVER HERE"
-                                onPress={() => {
-                                    showSelectAddress(false)
-                                    navigation.navigate('Payment')
-                                }}
-                            />
-                        </DialogFooter>
-                    }
-                >
-                    <DialogContent>
-                        <Text style={{ marginTop: 10, marginBottom: 8, fontWeight: 'bold', fontSize: 14 }}>{user.firstName + ' ' + user.lastName}</Text>
-                        {user.billing && user.billing.address_1 && <Text>{user.billing.address_1 + ', ' + user.billing.address_2}</Text>}
-                        <Text>{user.billing.city + ', ' + user.billing.postcode + ', ' + user.billing.state}</Text>
-                        <Text style={{ marginTop: 10 }}>{'Mobile: ' + Accounts.PersonalInfo.phoneNumber}</Text>
-                    </DialogContent>
-                </PopupDialog>
+                <View style={{ padding: 10 }}>
+                    <Text style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 10 }}>Price Details:</Text>
+                    <Text style={{ fontSize: 16, marginBottom: 10 }}>{"Price (" + toteItems.length + " items)"}</Text>
+                    <Text style={{ fontSize: 16, marginBottom: 10 }}>{"Delivery Fee"}</Text>
+                    <Text style={{ fontSize: 16, fontWeight: 'bold', marginBottom: 10 }}>{"Total Amount"}</Text>
+                </View>
             </ScrollView>
             <View style={styles.bottom}>
                 <Button label="Proceed to shipping" onPress={handleProceedToShipping} />

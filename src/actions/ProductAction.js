@@ -10,6 +10,16 @@ export function setProducts(result) {
     };
 }
 
+export function setMatches(result) {
+    return (dispatch) => {
+        dispatch({
+            type: types.GET_MATCHES_SUCCESS,
+            matches: result
+        }
+        )
+    };
+}
+
 export function setFavorites(result) {
     return (dispatch) => {
         dispatch({

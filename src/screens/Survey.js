@@ -94,7 +94,8 @@ const SurveyScreen = (props) => {
                 let obj = surveyQuestion.answers.find((answer) => answer.id === id)
                 answersObj.results.push({
                     id: surveyQuestion.id,
-                    answer: obj.answer
+                    answer: obj.answer,
+                    answerKey: obj.keyAttribute
                 })
             })
         }

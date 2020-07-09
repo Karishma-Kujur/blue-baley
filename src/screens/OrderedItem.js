@@ -10,6 +10,11 @@ const OrderedItem = ({
     actions,
     image,
     id,
+    price,
+    status,
+    list,
+    currency,
+    currencySymbol,
     setTrackOrder
 }) => {
     const fullWidth = Dimensions.get('window').width;
@@ -29,7 +34,7 @@ const OrderedItem = ({
             <View style={{ padding: 10 }}>
                 <View style={{ display: 'flex', flexDirection: 'row' }}>
                     <View style={{ backgroundColor: 'green', borderRadius: 50, width: 12, height: 12, marginRight: 10 }}></View>
-                    <Text style={{ fontWeight: 'bold' }}>DELIVERED</Text>
+                    <Text style={{ fontWeight: 'bold' }}>{status}</Text>
                 </View>
                 <Text style={{ color: 'grey', fontSize: 12 }}>Order # 123456789</Text>
             </View>
@@ -41,39 +46,17 @@ const OrderedItem = ({
                 // decelerationRate="fast"
                 pagingEnabled
             >
-                <Image source={image ? {
-                    uri: image,
-                } : NoImage}
-                    style={imageStyle} />
-                <Image source={image ? {
-                    uri: image,
-                } : NoImage}
-                    style={imageStyle} />
-                <Image source={image ? {
-                    uri: image,
-                } : NoImage}
-                    style={imageStyle} />
-                <Image source={image ? {
-                    uri: image,
-                } : NoImage}
-                    style={imageStyle} />
-                <Image source={image ? {
-                    uri: image,
-                } : NoImage}
-                    style={imageStyle} />
-                <Image source={image ? {
-                    uri: image,
-                } : NoImage}
-                    style={imageStyle} />
-                <Image source={image ? {
-                    uri: image,
-                } : NoImage}
-                    style={imageStyle} />
+                {list.map((item) =>
+                    <Image source={item.images.length ? {
+                        uri: item.images[0],
+                    } : NoImage}
+                        style={imageStyle} />
+                )}
             </ScrollView>
             <View style={{ padding: 5 }}>
                 <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', marginBottom: 10 }}>
-                    <Text style={{ color: 'grey' }}>13 Items in Total:</Text>
-                    <Text style={{ fontWeight: 'bold' }}>US$115.89</Text>
+                    <Text style={{ color: 'grey' }}>{list.length + ' Items in Total:'}</Text>
+                    <Text style={{ fontWeight: 'bold' }}>{currency + currencySymbol + price}</Text>
                 </View>
                 {!returnOrder &&
                     <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-end' }}>
@@ -147,8 +130,8 @@ const OrderedItem = ({
             >
                 <DialogContent>
                     <View style={{ height: 120, justifyContent: 'center', alignItems: 'center' }}>
-                        <Text style={{marginTop: 15, fontWeight: 'bold', fontSize: 18}}>Your return has been initiated!</Text>
-                        <Text style={{marginTop: 15, fontSize: 16}}>You will receive the pickup date and time in your registered email id. </Text>
+                        <Text style={{ marginTop: 15, fontWeight: 'bold', fontSize: 18 }}>Your return has been initiated!</Text>
+                        <Text style={{ marginTop: 15, fontSize: 16 }}>You will receive the pickup date and time in your registered email id. </Text>
                     </View>
                 </DialogContent>
             </PopupDialog>

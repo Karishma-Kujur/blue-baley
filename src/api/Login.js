@@ -1,7 +1,6 @@
 import axios from 'axios';
 
 import Constants from '../appConfig/Constants';
-import *  as types from '../constants/ActionTypes';
 
 export function login(data) {
     return new Promise((resolve, reject) => {

@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { Text, View, Image, Dimensions, TouchableOpacity, ScrollView, Animated } from 'react-native';
 import { SliderBox } from "react-native-image-slider-box";
-import NoImage from '../assets/images/02.jpg'
+import NoImage from '../assets/images/noImage.png'
 import Similar from '../assets/images/similar.png';
 import styles from '../assets/styles';
-import * as ToteAction from '../actions/ToteAction';
 import * as ProductsApi from '../api/Products';
+import * as ToteApi from '../api/Tote';
 import CustomDialog from '../components/shared/CustomDialog';
 import PopupDialog, { DialogContent, DialogTitle } from 'react-native-popup-dialog';
 import Spinner from 'react-native-loading-spinner-overlay';
@@ -89,7 +89,7 @@ const CardItem = ({
             id: productId,
             quantity: 1
         }
-        ToteAction.addToTote(data)
+        ToteApi.addToTote(data)
             .then((result) => {
                 setDialogMessage('Added to Bag!')
                 showDialog(true)

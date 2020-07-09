@@ -3,7 +3,7 @@ import { Text, View, Image, Dimensions, TouchableOpacity } from 'react-native';
 import { Chevron } from 'react-native-shapes';
 import CustomPicker from '../components/shared/CustomPicker'
 import styles from '../assets/styles';
-import NoImage from '../assets/images/01.jpg'
+import NoImage from '../assets/images/noImage.png'
 import AddToFavorite from '../assets/images/favorite.jpeg'
 import AddToBag from '../assets/images/bag.jpeg'
 import * as ToteAction from '../actions/ToteAction'

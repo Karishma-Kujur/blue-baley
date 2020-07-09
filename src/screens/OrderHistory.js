@@ -14,7 +14,7 @@ import Spinner from 'react-native-loading-spinner-overlay';
 const { width, height } = Dimensions.get("window");
 
 const OrderHistory = (props) => {
-    const { navigation, ProductAction, toteItems } = props
+    const { navigation, ProductAction, orderHistory, products } = props
     const [spinner, setLoader] = useState('')
     const [trackOrder, setTrackOrder] = useState(false)
     const imageStyle = [
@@ -26,12 +26,32 @@ const OrderHistory = (props) => {
         }
     ];
 
+    const getDataById = (data) => {
+        const orders = [...data];
+        data.forEach((order, index) => {
+            const orderedItems = []
+            order.list.forEach((item) => {
+                let product = products.find((element) => item.product_id === element.id)
+                if (product) {
+                    orderedItems.push(
+                        {
+                            ...item,
+                            images: product.images
+                        }
+                    )
+                }
+            })
+            orders[index].list = orderedItems
+        })
+        return orders;
+    }
+
     const getOrderHistory = () => {
         setLoader(true)
         ProductApi.getOrderHistory()
             .then((result) => {
                 setLoader(false)
-                ProductAction.setOrderHistory(result)
+                ProductAction.setOrderHistory(getDataById(result))
 
             })
             .catch((error) => {
@@ -60,16 +80,16 @@ const OrderHistory = (props) => {
                     </View>
                     <ScrollView>
                         <FlatList
-                            data={toteItems}
+                            data={orderHistory}
                             keyExtractor={(item, index) => index.toString()}
                             renderItem={({ item }) => (
                                 <OrderedItem
                                     id={item.id}
-                                    image={item.image}
-                                    name={item.name}
-                                    price={item.price}
-                                    description={item.description}
-                                    quantity={item.quantity}
+                                    price={item.total}
+                                    status={item.status}
+                                    list={item.list}
+                                    currency={item.currency}
+                                    currencySymbol={item.currencySymbol}
                                     setTrackOrder={() => setTrackOrder(true)}
                                 />
                             )}
@@ -80,9 +100,10 @@ const OrderHistory = (props) => {
     )
 }
 
-const mapStateToProps = ({ tote }) => {
+const mapStateToProps = ({ products }) => {
     return {
-        toteItems: tote
+        orderHistory: products.orderHistory,
+        products: products.list
     };
 }
 

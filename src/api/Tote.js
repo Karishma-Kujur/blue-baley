@@ -4,14 +4,9 @@ import Constants from '../appConfig/Constants';
 import *  as types from '../constants/ActionTypes';
 
 export function getTotes() {
-    const config = {
-        data: {
-            "thumb": true
-        }
-    }
     return new Promise((resolve, reject) => {
         const url = `${Constants.URL.wc}/cocart/v1/get-cart?consumer_key=${Constants.Keys.ConsumerKey}&consumer_secret=${Constants.Keys.ConsumerSecret}`
-        axios.get(url, config).then(response => {
+        axios.get(url).then(response => {
             resolve(getToteItemsFromResult(response.data))
         }).catch(err => {
             console.log(err);

@@ -46,6 +46,8 @@ end
 
 target 'blue_baley' do
   # Pods for blue_baley
+  pod 'Stripe', '~> 14.0.0'
+
   pod 'FBLazyVector', :path => "../node_modules/react-native/Libraries/FBLazyVector"
   pod 'FBReactNativeSpec', :path => "../node_modules/react-native/Libraries/FBReactNativeSpec"
   pod 'RCTRequired', :path => "../node_modules/react-native/Libraries/RCTRequired"
@@ -80,6 +82,9 @@ target 'blue_baley' do
   pod 'RNGestureHandler', :path => '../node_modules/react-native-gesture-handler'
 
   pod 'react-native-netinfo', :path => '../node_modules/@react-native-community/netinfo'
+  pod 'Interactable', :path => '../node_modules/react-native-interactable'
+
+  pod 'tipsi-stripe', :path => '../node_modules/tipsi-stripe'
 
   target 'blue_baleyTests' do
     inherit! :complete

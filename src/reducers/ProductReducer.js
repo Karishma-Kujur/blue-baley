@@ -5,6 +5,7 @@ const ProductsRecords = Record({
 	list: [],
 	favorites: [],
 	orderHistory: [],
+	matches: []
 })
 const initialState = new ProductsRecords()
 
@@ -16,6 +17,8 @@ export default function (state = initialState, action) {
 			return state.set('favorites', action.favorites);
 		case types.SET_ORDER_HISTORY:
 			return state.set('orderHistory', action.orderHistory);
+		case types.GET_MATCHES_SUCCESS:
+			return state.set('matches', action.matches)
 		default:
 			return state;
 	}

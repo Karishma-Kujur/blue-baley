@@ -61,7 +61,6 @@ const SignUpScreen = (props) => {
     const validateInput = (value, setError) => {
         if (value === '') {
             setError(true)
-            setFormError(true)
         }
     }
 
@@ -71,7 +70,7 @@ const SignUpScreen = (props) => {
         validateInput(lastName, setLastNameError);
         validateInput(password, setPasswordError);
 
-        if (formError)
+        if (!email && !firstName && !lastName && !password)
             return null;
         const data = {
             "email": email,
@@ -83,18 +82,18 @@ const SignUpScreen = (props) => {
         setLoader(true)
         // SignupAction.signupUser(data)
         //     .then((result) => {
-                LoginApi.login(data)
-                    .then((result) => {
-                        setLoader(false)
-                        navigation.navigate('Survey')
-                    })
-                    .catch((error) => {
-                        setLoader(false)
-                    })
-            // })
-            // .catch((error) => {
-            //     setLoader(false)
-            // })
+        LoginApi.login(data)
+            .then((result) => {
+                setLoader(false)
+                navigation.navigate('Survey')
+            })
+            .catch((error) => {
+                setLoader(false)
+            })
+        // })
+        // .catch((error) => {
+        //     setLoader(false)
+        // })
     }
 
     const onChangeText = (value, validatorObj, onChange) => {
