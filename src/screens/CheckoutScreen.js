@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { useIsFocused } from '@react-navigation/native'
-import { View, Text, Dimensions, ScrollView, TouchableOpacity, Image } from 'react-native';
+import { View, Text, Dimensions, ScrollView, TouchableOpacity, Image, Linking } from 'react-native';
 import styles from '../assets/styles';
 import Button from '../components/shared/Button'
 import Back from '../assets/images/back.png'
@@ -58,11 +58,8 @@ const CheckoutScreen = (props) => {
         getPaymentGateways()
     }, [])
 
-    const handleDeliveryMethodPress = (paymentMethod) => {
+    const handleDeliveryMethodPress = () => {
         let data = {
-            payment_method: paymentMethod.id,
-            payment_method_title: paymentMethod.method_title,
-            set_paid: false,
             billing: {
                 first_name: user.billing.first_name,
                 last_name: user.billing.last_name,
@@ -85,14 +82,7 @@ const CheckoutScreen = (props) => {
                 postcode: user.billing.postcode,
                 country: user.billing.country,
             },
-            line_items: [],
-            shipping_lines: [
-                {
-                    method_id: "flat_rate",
-                    method_title: "Flat Rate",
-                    total: 10
-                }
-            ]
+            line_items: []
         }
         tote.forEach((item) => {
             data.line_items.push({
@@ -102,8 +92,13 @@ const CheckoutScreen = (props) => {
         })
         ProductApi.placeOder(data)
             .then((result) => {
-                setLoader(false)
-                navigation.navigate("Order Placed")
+                const paymentUrl =
+                    `https://www.departmynt.co/wp-json/checkout/order-pay/${result.id}` +
+                    `?pay_for_order=true&key=${result.order_key}`;
+
+                return Linking.openURL(paymentUrl);
+                // setLoader(false)
+                // navigation.navigate("Order Placed")
 
             })
             .catch((error) => {
@@ -264,7 +259,7 @@ const CheckoutScreen = (props) => {
             }}>
 
 
-                {!token ? <Button label="Proceed" onPress={() => handleCardPayPress()} />
+                {!token ? <Button label="Proceed" onPress={() => handleDeliveryMethodPress()} />
                     :
                     <Button label="Buy Now" onPress={() => doPayment()} />
                 }

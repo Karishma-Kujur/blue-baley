@@ -80,20 +80,20 @@ const SignUpScreen = (props) => {
             "password": password
         }
         setLoader(true)
-        // SignupAction.signupUser(data)
-        //     .then((result) => {
-        LoginApi.login(data)
+        SignupAction.signupUser(data)
             .then((result) => {
-                setLoader(false)
-                navigation.navigate('Survey')
+                LoginApi.login(data)
+                    .then((result) => {
+                        setLoader(false)
+                        navigation.navigate('Survey')
+                    })
+                    .catch((error) => {
+                        setLoader(false)
+                    })
             })
             .catch((error) => {
                 setLoader(false)
             })
-        // })
-        // .catch((error) => {
-        //     setLoader(false)
-        // })
     }
 
     const onChangeText = (value, validatorObj, onChange) => {
