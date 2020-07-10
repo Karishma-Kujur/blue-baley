@@ -12,7 +12,7 @@ import CustomDialog from '../components/shared/CustomDialog'
 import RNPickerSelect from 'react-native-picker-select'
 
 const sizes = [
-    { label: 'S', vlaue: 'S' },
+    { label: 'S', value: 'S' },
     { label: 'M', value: 'M' },
     { label: 'L', value: 'L' }
 ]
@@ -167,7 +167,7 @@ const ToteItem = ({
                 </View>
             </View>
             <View>
-                {!isFavorite &&
+                {!isFavorite && 
                     <View style={styles.toteActionContainer}>
                         <View style={{ borderWidth: 1, padding: 5 }}>
                             <TouchableOpacity onPress={handleMoveToFavorites}>
@@ -184,6 +184,7 @@ const ToteItem = ({
                                     Icon={() => {
                                         return <Chevron size={1} color="gray" />;
                                     }}
+                                   // useNativeAndroidPickerStyle={false}
                                     style={{
                                         inputIOS: {
                                             fontSize: 16,
@@ -209,7 +210,7 @@ const ToteItem = ({
                             <View>
                                 <RNPickerSelect
                                     // value={colors[0].value}
-                                    placeholder="Red"
+                                   // placeholder="Red"
                                     onValueChange={(value) => console.log(value)}
                                     items={colors}
                                     Icon={() => {
@@ -240,7 +241,7 @@ const ToteItem = ({
                             <View>
                                 <RNPickerSelect
                                     // value={quantities[0].value}
-                                    placeholder="0"
+                                   // placeholder="0"
                                     onValueChange={(value) => console.log(value)}
                                     items={quantities}
                                     Icon={() => {

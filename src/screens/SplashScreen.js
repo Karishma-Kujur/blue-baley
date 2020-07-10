@@ -47,7 +47,8 @@ const styles = StyleSheet.create({
     wallpaper: {
         width: width,
         height: height - 50,
-        alignItems: 'flex-end'
+        alignItems: 'flex-end',
+        flex:6
     },
     actionsContainer: {
         flex: 1,
@@ -62,6 +63,7 @@ const styles = StyleSheet.create({
         width: width - 20,
         flexDirection: 'row',
         justifyContent: 'center',
-        marginBottom: 15
+        marginBottom: 15,
+        flex:4
     }
 });
