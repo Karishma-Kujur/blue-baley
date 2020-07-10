@@ -74,12 +74,12 @@ const AccountScreen = (props) => {
     }
 
     const menuList = [
-        {
-            id: 1,
-            name: 'Card Details',
-            button: expandedIds.includes(1) ? (removeCard ? '' : 'Remove Card') : '',
-            onClick: () => { changeRemoveCard(!removeCard) }
-        },
+        // {
+        //     id: 1,
+        //     name: 'Card Details',
+        //     button: expandedIds.includes(1) ? (removeCard ? '' : 'Remove Card') : '',
+        //     onClick: () => { changeRemoveCard(!removeCard) }
+        // },
         {
             id: 2,
             name: 'Personal Details',
@@ -215,8 +215,6 @@ const AccountScreen = (props) => {
                                                 <Text style={styles.accountDataContainer}>{user.firstName}</Text>
                                                 <Text style={styles.accountTextConatiner}>Last Name</Text>
                                                 <Text style={styles.accountDataContainer}>{user.lastName}</Text>
-                                                <Text style={styles.accountTextConatiner}>Date of birth</Text>
-                                                <Text style={styles.accountDataContainer}>{Accounts.PersonalInfo.dateOfBirth}</Text>
                                                 <Text style={styles.accountTextConatiner}>Phone number</Text>
                                                 <Text style={styles.accountDataContainer}>{user.billing.phone}</Text>
                                                 <Text style={styles.accountTextConatiner}>Gender</Text>

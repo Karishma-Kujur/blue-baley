@@ -18,6 +18,9 @@ const ToteScreen = (props) => {
     const [spinner, setLoader] = useState('')
     const [addAddress, setAddAddress] = useState(false)
     const [selectAddress, showSelectAddress] = useState(false)
+    const [price, setPrice] = useState(0)
+    const [total, setTotal] = useState(0)
+
     const imageStyle = [
         {
             alignItems: 'flex-start',
@@ -45,6 +48,16 @@ const ToteScreen = (props) => {
     useEffect(() => {
         getTotes()
     }, [isFocused])
+
+    useEffect(() => {
+        let totalPrice = 0
+        toteItems.forEach((item) => {
+            let data = item.price.split('$')[1]
+            totalPrice = totalPrice + Number(data)
+        })
+        setPrice(totalPrice)
+        setTotal(totalPrice)
+    }, [toteItems])
 
     const handleRefreshTote = () => {
         getTotes()
@@ -86,9 +99,18 @@ const ToteScreen = (props) => {
 
                 <View style={{ padding: 10 }}>
                     <Text style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 10 }}>Price Details:</Text>
-                    <Text style={{ fontSize: 16, marginBottom: 10 }}>{"Price (" + toteItems.length + " items)"}</Text>
-                    <Text style={{ fontSize: 16, marginBottom: 10 }}>{"Delivery Fee"}</Text>
-                    <Text style={{ fontSize: 16, fontWeight: 'bold', marginBottom: 10 }}>{"Total Amount"}</Text>
+                    <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+                        <Text style={{ fontSize: 16, marginBottom: 10 }}>{"Price (" + toteItems.length + " items)"}</Text>
+                        <Text style={{ fontSize: 16, marginBottom: 10 }}>{"$ "+price}</Text>
+                    </View>
+                    <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+                        <Text style={{ fontSize: 16, marginBottom: 10 }}>{"Delivery Fee"}</Text>
+                        <Text style={{ fontSize: 16, marginBottom: 10 }}>0.00</Text>
+                    </View>
+                    <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+                        <Text style={{ fontSize: 16, fontWeight: 'bold', marginBottom: 10 }}>{"Total Amount"}</Text>
+                        <Text style={{ fontSize: 16, fontWeight: 'bold', marginBottom: 10 }}>{"$ " + total}</Text>
+                    </View>
                 </View>
             </ScrollView>
             <View style={styles.bottom}>

@@ -99,10 +99,34 @@ const getProjectsFromResult = (result) => {
             name: product.name,
             description: product.description,
             price: product.price,
+            attributes: getProductAttributes(product.attributes),
             images: getProductImages(product.images)
         })
     })
     return products;
+}
+
+const getProductAttributes = (attributes) => {
+    const data = []
+    attributes.forEach((element) => {
+        data.push({
+            id: element.id,
+            name: element.name,
+            options: getOptions(element.options)
+        })
+    })
+    return data
+}
+
+const getOptions = (options) => {
+    let data = []
+    options.forEach((option) => {
+        data.push({
+            value: option,
+            label: option
+        })
+    })
+    return data
 }
 
 const getProductImages = (images) => {
