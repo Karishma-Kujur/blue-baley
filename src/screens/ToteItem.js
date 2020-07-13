@@ -38,19 +38,17 @@ const quantities = [
 ]
 
 const ToteItem = ({
-    actions,
     description,
     image,
     matches,
     name,
-    onPressLeft,
-    onPressRight,
     isFavorite,
     price,
     quantity,
     id,
     productId,
     user,
+    attributes,
     toteEdited
 }) => {
     const [selectedQuantity, changeQuantity] = useState(quantity)
@@ -115,11 +113,11 @@ const ToteItem = ({
         ToteAction.addToTote(data)
             .then((result) => {
                 ProductsApi.removeFromFavorites(productId, user.id)
-                .then((result) => {
-                    toteEdited()
-                })
-                .catch((error) => {
-                })
+                    .then((result) => {
+                        toteEdited()
+                    })
+                    .catch((error) => {
+                    })
             })
             .catch((error) => {
             })
@@ -167,106 +165,110 @@ const ToteItem = ({
                 </View>
             </View>
             <View>
-                {!isFavorite && 
+                {!isFavorite &&
                     <View style={styles.toteActionContainer}>
                         <View style={{ borderWidth: 1, padding: 5 }}>
                             <TouchableOpacity onPress={handleMoveToFavorites}>
                                 <Image source={AddToFavorite} style={favoriteImageStyle} />
                             </TouchableOpacity>
                         </View>
-                        <View>
-                            <Text>Size</Text>
+                        {sizes.length &&
                             <View>
-                                <RNPickerSelect
-                                    // value={sizes[0].value}
-                                    onValueChange={(value) => console.log(value)}
-                                    items={sizes}
-                                    Icon={() => {
-                                        return <Chevron size={1} color="gray" />;
-                                    }}
-                                   // useNativeAndroidPickerStyle={false}
-                                    style={{
-                                        inputIOS: {
-                                            fontSize: 16,
-                                            paddingVertical: 2,
-                                            paddingHorizontal: 5,
-                                            borderWidth: 1,
-                                            color: 'black',
-                                            paddingRight: 20, // to ensure the text is never behind the icon
-                                        },
-                                        inputAndroid: {
-                                            backgroundColor: 'transparent',
-                                        },
-                                        iconContainer: {
-                                            top: 10,
-                                            right: 7
-                                        },
-                                    }}
-                                />
+                                <Text>Size</Text>
+                                <View>
+                                    <RNPickerSelect
+                                        value={sizes[0]}
+                                        onValueChange={(value) => console.log(value)}
+                                        items={sizes}
+                                        Icon={() => {
+                                            return <Chevron size={1} color="gray" />;
+                                        }}
+                                        // useNativeAndroidPickerStyle={false}
+                                        style={{
+                                            inputIOS: {
+                                                fontSize: 16,
+                                                paddingVertical: 2,
+                                                paddingHorizontal: 5,
+                                                borderWidth: 1,
+                                                color: 'black',
+                                                paddingRight: 20, // to ensure the text is never behind the icon
+                                            },
+                                            inputAndroid: {
+                                                backgroundColor: 'transparent',
+                                            },
+                                            iconContainer: {
+                                                top: 10,
+                                                right: 7
+                                            },
+                                        }}
+                                    />
+                                </View>
                             </View>
-                        </View>
-                        <View>
-                            <Text>Color</Text>
+                        }
+                        {colors.length &&
                             <View>
-                                <RNPickerSelect
-                                    // value={colors[0].value}
-                                   // placeholder="Red"
-                                    onValueChange={(value) => console.log(value)}
-                                    items={colors}
-                                    Icon={() => {
-                                        return <Chevron size={1} color="gray" />;
-                                    }}
-                                    style={{
-                                        inputIOS: {
-                                            fontSize: 16,
-                                            paddingVertical: 2,
-                                            paddingHorizontal: 5,
-                                            borderWidth: 1,
-                                            color: 'black',
-                                            paddingRight: 20, // to ensure the text is never behind the icon
-                                        },
-                                        inputAndroid: {
-                                            backgroundColor: 'transparent',
-                                        },
-                                        iconContainer: {
-                                            top: 10,
-                                            right: 7
-                                        },
-                                    }}
-                                />
+                                <Text>Color</Text>
+                                <View>
+                                    <RNPickerSelect
+                                        value={colors[0]}
+                                        onValueChange={(value) => console.log(value)}
+                                        items={colors}
+                                        Icon={() => {
+                                            return <Chevron size={1} color="gray" />;
+                                        }}
+                                        style={{
+                                            inputIOS: {
+                                                fontSize: 16,
+                                                paddingVertical: 2,
+                                                paddingHorizontal: 5,
+                                                borderWidth: 1,
+                                                color: 'black',
+                                                paddingRight: 20, // to ensure the text is never behind the icon
+                                            },
+                                            inputAndroid: {
+                                                backgroundColor: 'transparent',
+                                            },
+                                            iconContainer: {
+                                                top: 10,
+                                                right: 7
+                                            },
+                                        }}
+                                    />
+                                </View>
                             </View>
-                        </View>
-                        <View>
-                            <Text>Qty</Text>
+                        }
+                        {quantities.length &&
                             <View>
-                                <RNPickerSelect
-                                    // value={quantities[0].value}
-                                   // placeholder="0"
-                                    onValueChange={(value) => console.log(value)}
-                                    items={quantities}
-                                    Icon={() => {
-                                        return <Chevron size={1} color="gray" />;
-                                    }}
-                                    style={{
-                                        inputIOS: {
-                                            fontSize: 16,
-                                            paddingVertical: 2,
-                                            paddingHorizontal: 5,
-                                            borderWidth: 1,
-                                            color: 'black',
-                                            paddingRight: 20, // to ensure the text is never behind the icon
-                                        },
-                                        inputAndroid: {
-                                            backgroundColor: 'transparent',
-                                        },
-                                        iconContainer: {
-                                            top: 10,
-                                            right: 7
-                                        },
-                                    }}
-                                />
+                                <Text>Qty</Text>
+                                <View>
+                                    <RNPickerSelect
+                                        value={quantities[0]}
+                                        onValueChange={(value) => handleEditToteProduct(value)}
+                                        items={quantities}
+                                        Icon={() => {
+                                            return <Chevron size={1} color="gray" />;
+                                        }}
+                                        style={{
+                                            inputIOS: {
+                                                fontSize: 16,
+                                                paddingVertical: 2,
+                                                paddingHorizontal: 5,
+                                                borderWidth: 1,
+                                                color: 'black',
+                                                paddingRight: 20, // to ensure the text is never behind the icon
+                                            },
+                                            inputAndroid: {
+                                                backgroundColor: 'transparent',
+                                            },
+                                            iconContainer: {
+                                                top: 10,
+                                                right: 7
+                                            },
+                                        }}
+                                    />
+                                </View>
                             </View>
-                        </View>
+                        }
                     </View>}
 
             </View>

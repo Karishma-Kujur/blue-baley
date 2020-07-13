@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Text, View, Image, Dimensions, TouchableOpacity, ScrollView, Animated } from 'react-native';
 import { SliderBox } from "react-native-image-slider-box";
 import NoImage from '../assets/images/noImage.png'
@@ -12,15 +12,14 @@ import Spinner from 'react-native-loading-spinner-overlay';
 
 const CardItem = ({
     actions,
-    description,
     images,
     matches,
     name,
     onPressBagIt,
-    onPressRight,
     variant,
     price,
-    productId
+    productId,
+    attributes
 }) => {
     // Custom styling
     const fullWidth = Dimensions.get('window').width;
@@ -57,8 +56,20 @@ const CardItem = ({
     const [spinner, setLoader] = useState('')
     const [suggestionDialog, showSuggestionDialog] = useState(false)
     const [image, changeImage] = useState(images.length > 0 ? images[0] : '')
-    // const image = images.length > 0 ? images[0] : ''
-    const sizes = ['XS', 'S', 'M', 'L', 'XL']
+    const [sizes, setSizes] = useState(null)
+
+    useEffect(() => {
+        if (attributes) {
+            let sizeAttributes = attributes.find((element) => element.name === 'size')
+            if (sizeAttributes) {
+                let newSizes = []
+                sizeAttributes.options.forEach((size) => {
+                    newSizes.push(size.label)
+                })
+                setSizes(newSizes)
+            }
+        }
+    }, [attributes])
 
     const handleOnClickSave = () => {
         setLoader(true)
@@ -130,11 +141,7 @@ const CardItem = ({
                         <Image source={Similar} style={similarIconStyle} />
                     </TouchableOpacity>
                     <Text style={styles.nameCardItem}>{name}</Text>
-                    <Text style={styles.priceCardItem}>{'$ ' + (price || '20')}</Text>
-
-                    {description && (
-                        <Text style={styles.descriptionCardItem}>{description}</Text>
-                    )}
+                    <Text style={styles.priceCardItem}>{'$ ' + (price || '0')}</Text>
                 </View>
                 <View style={{ height: 80 }}>
                     {showSize && (
@@ -156,7 +163,12 @@ const CardItem = ({
                     {!showSize && actions && (
                         <View style={styles.actionsCardItem}>
                             <TouchableOpacity style={styles.button} onPress={() => {
-                                changeShowSize(true)
+                                if (sizes) {
+                                    changeShowSize(true)
+                                }
+                                else {
+                                    handleOnClickBag()
+                                }
                             }}>
                                 <Text style={styles.flash}>
                                     BAG it

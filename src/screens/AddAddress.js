@@ -27,7 +27,8 @@ const AddAddress = (props) => {
                 address_2: address.address_2,
                 city: address.city,
                 postcode: address.postcode,
-                state: address.state
+                state: address.state,
+                country: address.country
             }
         }
         UserApi.updateUserDetails(user.id, data)

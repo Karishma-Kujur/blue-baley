@@ -49,6 +49,7 @@ const HomeScreen = (props) => {
                 LoginApi.logout()
                     .then((result) => {
                         setLoader(false)
+                        UserAction.setUser({})
                         navigation.navigate('Landing Page')
                     })
                     .catch((error) => {
@@ -71,7 +72,12 @@ const HomeScreen = (props) => {
         UserApi.getUserDetails(user.id)
             .then((result) => {
                 setLoader(false)
-                UserAction.setUser(result)
+                let userData = {
+                    ...result,
+                    userName: user.userName,
+                    password: user.password
+                }
+                UserAction.setUser(userData)
 
             })
             .catch((error) => {

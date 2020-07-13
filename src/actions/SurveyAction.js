@@ -27,6 +27,7 @@ const getSurveyQuestionsFromResult = (result) => {
             question: product.name,
             required: product.required === "1" ? true : false,
             multiselect: (product.type === "0" || product.type === "1") ? false : true,
+            answerType: product.answerEditor === 'rich' ? 'image' : 'text',
             answers: getAnswer(product.answers),
         })
     })

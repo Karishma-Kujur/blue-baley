@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { connect } from 'react-redux';
 import { View, Text, StyleSheet, Image, Dimensions } from 'react-native';
 import GestureRecognizer, { swipeDirections } from 'react-native-swipe-gestures';
 import Button from '../components/shared/Button'
@@ -7,7 +8,13 @@ import Wallpaper from '../assets/images/Wallpaper.png'
 const { width, height } = Dimensions.get("window");
 
 const SplashScreen = (props) => {
-    const { navigation } = props
+    const { navigation, user } = props
+
+    useEffect(() => {
+        if (user && user.userName && user.password) {
+            navigation.navigate('Home')
+        }
+    }, [])
 
     const onSwipeLeft = (gestureState) => {
         navigation.navigate('Sign Up')
@@ -35,8 +42,12 @@ const SplashScreen = (props) => {
         </GestureRecognizer>
     );
 }
-
-export default SplashScreen
+const mapStateToProps = ({ user }) => {
+    return {
+        user
+    };
+}
+export default connect(mapStateToProps, null)(SplashScreen)
 
 const styles = StyleSheet.create({
     container: {
@@ -48,7 +59,7 @@ const styles = StyleSheet.create({
         width: width,
         height: height - 50,
         alignItems: 'flex-end',
-        flex:6
+        flex: 6
     },
     actionsContainer: {
         flex: 1,
@@ -64,6 +75,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'center',
         marginBottom: 15,
-        flex:4
+        flex: 4
     }
 });

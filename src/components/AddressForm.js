@@ -43,12 +43,19 @@ const AddressForm = (props) => {
                 value={address.postcode}
                 onChangeText={text => changeAddress('postcode', text)}
             />
-            <Text style={styles.accountTextConatiner}>Market</Text>
+            <Text style={styles.accountTextConatiner}>State</Text>
             <TextInput
                 style={styles.accountTextInput}
                 secureTextEntry={false}
                 value={address.state}
                 onChangeText={text => changeAddress('state', text)}
+            />
+            <Text style={styles.accountTextConatiner}>Country</Text>
+            <TextInput
+                style={styles.accountTextInput}
+                secureTextEntry={false}
+                value={address.country}
+                onChangeText={text => changeAddress('country', text)}
             />
         </View>
     )

@@ -103,7 +103,7 @@ const MatchesScreen = (props) => {
                                 name={item.name}
                                 price={item.price}
                                 productId={item.id}
-                                // description={item.description}
+                                attributes={item.attributes}
                                 actions
                             />
                         </Card>))}

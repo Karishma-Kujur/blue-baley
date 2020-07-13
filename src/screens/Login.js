@@ -72,7 +72,12 @@ const LoginScreen = (props) => {
         LoginApi.login(data)
             .then((result) => {
                 setLoader(false)
-                UserAction.setUser(result)
+                let userData = {
+                    ...result,
+                    userName: userName,
+                    password: password
+                }
+                UserAction.setUser(userData)
                 navigation.navigate('Home')
             })
             .catch((error) => {

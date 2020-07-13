@@ -141,6 +141,7 @@ const SurveyScreen = (props) => {
                                 selectedAnswer={null}
                                 setAnswer={setAnswer}
                                 selectedId={selectedId}
+                                answerType={surveyQuestion.answerType}
                                 changeSelectedId={(value) => changeSelectedId(value)}
                             />}
                         {surveyQuestion.answers.length > 0 && surveyQuestion.multiselect &&
@@ -149,6 +150,7 @@ const SurveyScreen = (props) => {
                                 selectedAnswer={[]}
                                 setAnswer={setAnswer}
                                 selectedId={selectedId}
+                                answerType={surveyQuestion.answerType}
                                 changeSelectedId={(value) => changeSelectedId(value)}
                             />}
 

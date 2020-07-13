@@ -92,29 +92,39 @@ const ToteScreen = (props) => {
                             price={item.price}
                             description={item.description}
                             quantity={item.quantity}
+                            attributes={item.attributes}
                             toteEdited={handleRefreshTote}
                         />
                     )}
                 />
 
                 <View style={{ padding: 10 }}>
-                    <Text style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 10 }}>Price Details:</Text>
-                    <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-                        <Text style={{ fontSize: 16, marginBottom: 10 }}>{"Price (" + toteItems.length + " items)"}</Text>
-                        <Text style={{ fontSize: 16, marginBottom: 10 }}>{"$ "+price}</Text>
-                    </View>
-                    <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-                        <Text style={{ fontSize: 16, marginBottom: 10 }}>{"Delivery Fee"}</Text>
-                        <Text style={{ fontSize: 16, marginBottom: 10 }}>0.00</Text>
-                    </View>
-                    <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-                        <Text style={{ fontSize: 16, fontWeight: 'bold', marginBottom: 10 }}>{"Total Amount"}</Text>
-                        <Text style={{ fontSize: 16, fontWeight: 'bold', marginBottom: 10 }}>{"$ " + total}</Text>
-                    </View>
+                    {toteItems.length ?
+                        <>
+                            <Text style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 10 }}>Price Details:</Text>
+                            <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+                                <Text style={{ fontSize: 16, marginBottom: 10 }}>{"Price (" + toteItems.length + " items)"}</Text>
+                                <Text style={{ fontSize: 16, marginBottom: 10 }}>{"$ " + price}</Text>
+                            </View>
+                            <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+                                <Text style={{ fontSize: 16, marginBottom: 10 }}>{"Delivery Fee"}</Text>
+                                <Text style={{ fontSize: 16, marginBottom: 10 }}>0.00</Text>
+                            </View>
+                            <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+                                <Text style={{ fontSize: 16, fontWeight: 'bold', marginBottom: 10 }}>{"Total Amount"}</Text>
+                                <Text style={{ fontSize: 16, fontWeight: 'bold', marginBottom: 10 }}>{"$ " + total}</Text>
+                            </View>
+                        </> : <View style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: height/3 }}>
+                            <Text style={{ fontSize: 16, fontWeight: 'bold' }}> No items available in your cart</Text>
+                        </View>
+                    }
                 </View>
             </ScrollView>
             <View style={styles.bottom}>
-                <Button label="Proceed to shipping" onPress={handleProceedToShipping} />
+                {toteItems.length ?
+                    <Button label="Proceed to shipping" onPress={handleProceedToShipping} />
+                    :
+                    <Button label="Shop Now" onPress={handleProceedToShipping} />}
             </View>
         </View>
     )

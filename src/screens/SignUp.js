@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { View, StyleSheet, Dimensions, Text, Platform, ScrollView, KeyboardAvoidingView } from 'react-native'
+import { View, Dimensions, Text, Platform, ScrollView, KeyboardAvoidingView } from 'react-native'
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import Button from '../components/shared/Button'
@@ -7,13 +7,14 @@ import TextInput from '../components/shared/TextInput'
 import Link from '../components/shared/Link'
 import styles from '../assets/styles';
 import * as SignupAction from '../actions/SignupAction';
+import * as UserAction from '../actions/UserAction';
 import * as LoginApi from '../api/Login';
 import Spinner from 'react-native-loading-spinner-overlay';
 
 const { width, height } = Dimensions.get("window");
 
 const SignUpScreen = (props) => {
-    const { navigation } = props
+    const { navigation, UserAction } = props
     const [firstName, setFirstName] = useState('')
     const [firstNameError, setFirstNameError] = useState(false)
     const [lastName, setLastName] = useState('')
@@ -83,8 +84,14 @@ const SignUpScreen = (props) => {
         SignupAction.signupUser(data)
             .then((result) => {
                 LoginApi.login(data)
-                    .then((result) => {
+                    .then((userResult) => {
                         setLoader(false)
+                        let userData = {
+                            ...userResult,
+                            userName: email,
+                            password: password
+                        }
+                        UserAction.setUser(userData)
                         navigation.navigate('Survey')
                     })
                     .catch((error) => {
@@ -105,8 +112,6 @@ const SignUpScreen = (props) => {
                 validatorObj.onError(true)
             }
             validatorObj.onChange(value)
-            // validateFormField(value, validatorObj.field, validatorObj.type, newError, validatorObj.extras);
-            // updateErrorObject({...errorObject, ...newError});
         } else {
             onChange(value)
         }
@@ -170,5 +175,10 @@ const SignUpScreen = (props) => {
 
     )
 }
+const mapDispatchToProps = (dispatch) => {
+    return {
+        UserAction: bindActionCreators(UserAction, dispatch)
+    };
+}
 
-export default SignUpScreen
+export default connect(null, mapDispatchToProps)(SignUpScreen)

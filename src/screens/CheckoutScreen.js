@@ -2,61 +2,98 @@ import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { useIsFocused } from '@react-navigation/native'
-import { View, Text, Dimensions, ScrollView, TouchableOpacity, Image, Linking } from 'react-native';
-import styles from '../assets/styles';
+import { View, Text, Dimensions, ScrollView, TouchableOpacity, Image, Linking, Platform, Alert } from 'react-native';
 import Button from '../components/shared/Button'
 import Back from '../assets/images/back.png'
 import Link from '../components/shared/Link'
 import * as ProductApi from '../api/Products'
-import * as PaymentApi from '../api/Payment'
-import * as PaymentAction from '../actions/PaymentAction'
-import stripe from 'tipsi-stripe'
 import Spinner from 'react-native-loading-spinner-overlay'
 import { RadioButton, Title } from 'react-native-paper';
+import InAppBrowser from 'react-native-inappbrowser-reborn'
+import DeepLinking from 'react-native-deep-linking'
 
 const { width, height } = Dimensions.get("window");
 
 const CheckoutScreen = (props) => {
-    const { navigation, tote, user, PaymentAction, paymentMethods } = props
+    const { navigation, tote, user } = props
     const [spinner, setLoader] = useState(false)
     const [token, setToken] = useState(null)
     const [success, setSuccess] = useState(null)
     const [allowed, setAllowed] = useState(null)
-    const [checked, setChecked] = useState(null)
 
-    const imageStyle = [
-        {
-            borderRadius: 8,
-            width: width / 2 - 30,
-            height: 170,
-            marginRight: 10
-        }
-    ];
-
-    const getPaymentGateways = () => {
-        PaymentApi.getPaymentGateways()
-            .then((result) => {
-                setLoader(false)
-                PaymentAction.setPaymentMethods(result)
-
-            })
-            .catch((error) => {
-                setLoader(false)
-            })
+    const handleUrl = (url) => {
+        Linking.canOpenURL(url).then((supported) => {
+            if (supported) {
+                DeepLinking.evaluateUrl(url)
+            }
+        })
     }
 
-    const publishKey = async () => {
-        stripe.setOptions({
-            publishableKey: 'pk_test_51H2xnHF7LMnQF33B4WzDRfeGv8WJUBGNM9wv1zzxtZpiKKXUlbKYoztWftXdYCAWtUnIO0Qf2Tv51pIO9VHdbENo00q7tM4JmZ'
+
+    const addRoutesToDeepLinking = () => {
+        DeepLinking.addScheme('https://')
+
+        DeepLinking.addRoute('/testurl.com/#/sign-in', (response) => {
+            navigation.navigate("Order Placed")
         })
-        const allowed = await stripe.deviceSupportsNativePay()
-        setAllowed(allowed)
     }
 
     useEffect(() => {
-        publishKey()
-        getPaymentGateways()
+        addRoutesToDeepLinking()
+        if (Platform.OS === 'android') {
+            Linking.getInitialURL().then(url => {
+                navigate(url);
+            });
+        } else {
+            Linking.addEventListener('url', handleUrl);
+        }
+        return () => {
+            Linking.removeEventListener('url', handleUrl);
+        }
     }, [])
+
+    const openLink = async () => {
+        try {
+            const url = `https://www.departmynt.co/wp-json/user/getUser?username=${user.userName}&password=${user.password}&order_key=wc_order_GchNmsD3MoD8Q&orderId=674`
+            if (await InAppBrowser.isAvailable()) {
+                const result = await InAppBrowser.open(url, {
+                    // iOS Properties
+                    dismissButtonStyle: 'cancel',
+                    preferredBarTintColor: '#453AA4',
+                    preferredControlTintColor: 'white',
+                    readerMode: false,
+                    animated: true,
+                    // modalPresentationStyle: 'overFullScreen',
+                    // modalTransitionStyle: 'partialCurl',
+                    modalEnabled: true,
+                    enableBarCollapsing: false,
+                    // Android Properties
+                    showTitle: true,
+                    toolbarColor: '#6200EE',
+                    secondaryToolbarColor: 'black',
+                    enableUrlBarHiding: true,
+                    enableDefaultShare: true,
+                    forceCloseOnRedirection: false,
+                    // Specify full animation resource identifier(package:anim/name)
+                    // or only resource name(in case of animation bundled with app).
+                    animations: {
+                        startEnter: 'slide_in_right',
+                        startExit: 'slide_out_left',
+                        endEnter: 'slide_in_left',
+                        endExit: 'slide_out_right'
+                    },
+                    headers: {
+                        'my-custom-header': 'my custom header value'
+                    }
+                })
+                Alert.alert(JSON.stringify(result))
+            }
+            else
+                Linking.openURL(url)
+        } catch (error) {
+            Alert.alert(error.message)
+        }
+    }
 
     const handleDeliveryMethodPress = () => {
         let data = {
@@ -92,101 +129,20 @@ const CheckoutScreen = (props) => {
         })
         ProductApi.placeOder(data)
             .then((result) => {
-                const paymentUrl =
-                    `https://www.departmynt.co/wp-json/checkout/order-pay/${result.id}` +
-                    `?pay_for_order=true&key=${result.order_key}`;
-
-                return Linking.openURL(paymentUrl);
-                // setLoader(false)
-                // navigation.navigate("Order Placed")
-
+                ProductApi.clearTote()
+                    .then((resultData) => {
+                        openLink(resultData);
+                        setLoader(false)
+                        navigation.navigate("Order Placed")
+                    })
+                    .catch((error) => {
+                        setLoader(false)
+                    })
             })
             .catch((error) => {
                 setLoader(false)
             })
     }
-
-    const handleCardPayPress = async () => {
-        try {
-            setLoader(true)
-            setToken(null)
-            const newToken = await stripe.paymentRequestWithCardForm({
-                // Only iOS support this options
-                smsAutofillDisabled: true,
-                requiredBillingAddressFields: 'full',
-                prefilledInformation: {
-                    billingAddress: {
-                        name: user.billing.firstName,
-                        line1: user.billing.address_1,
-                        line2: user.billing.address_2,
-                        city: user.billing.city,
-                        state: user.billing.state,
-                        country: 'Estonia',
-                        postalCode: user.billing.postcode,
-                        email: 'admin@enappd.com',
-                    },
-                },
-            })
-            setLoader(false)
-            setToken(newToken)
-        } catch (error) {
-            setLoader(false)
-        }
-    }
-
-    const doPayment = async () => {
-        // Use firebase serve for local testing if you don't have a paid firebase account
-        const data = {
-            payment_method: 'stripe',
-            order_id: '543',
-            payment_token: token.tokenId
-        }
-        PaymentApi.doPayment(data)
-            .then((result) => {
-                setLoader(false)
-                navigation.navigate("Order Placed")
-
-            })
-            .catch((error) => {
-                setLoader(false)
-            })
-    }
-
-    const handleApplePayPress = async () => {
-        try {
-            setLoader(true)
-            setToken(null)
-            const newToken = await stripe.paymentRequestWithNativePay({
-                // requiredBillingAddressFields: ['all'],
-                // requiredShippingAddressFields: ['all'],
-                shippingMethods: [{
-                    id: 'fedex',
-                    label: 'FedEX',
-                    detail: 'Test @ 10',
-                    amount: '10.00',
-                }],
-            },
-                [{
-                    label: 'Whisky',
-                    amount: '50.00',
-                }, {
-                    label: 'Vine',
-                    amount: '60.00',
-                }, {
-                    label: 'Tipsi',
-                    amount: '110.00',
-                }])
-            setLoader(false)
-            setToken(newToken)
-
-            await stripe.completeNativePayRequest()
-            setStatus('Apple Pay payment completed')
-        } catch (error) {
-            setLoader(false)
-            setStatus(`Error: ${error.message}`)
-        }
-    }
-
 
     return (
         <View style={{ marginTop: 40, height: height - 50 }}>
@@ -209,46 +165,11 @@ const CheckoutScreen = (props) => {
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 10 }}>
                         <Title style={{ justifyContent: 'center' }}>Delivery Address</Title>
                         <Link label="Edit" onPress={() => navigation.navigate('Add Address')} />
-                        {/* <TouchableOpacity onPress={() => {
-                            navigation.navigate('Add Address')
-                        }}>
-                            <Text>Edit</Text>
-                        </TouchableOpacity> */}
                     </View>
                     <Text style={{ marginTop: 10, marginBottom: 8, fontWeight: 'bold', fontSize: 14 }}>{user.firstName + ' ' + user.lastName}</Text>
                     {user.billing && user.billing.address_1 && <Text>{user.billing.address_1 + ', ' + user.billing.address_2}</Text>}
                     <Text>{user.billing.city + ', ' + user.billing.postcode + ', ' + user.billing.state}</Text>
                     <Text style={{ marginTop: 10 }}>{'Mobile: ' + user.billing.phone}</Text>
-                    <Title style={{ marginTop: 20, justifyContent: 'center', alignItems: 'center' }}>Payment Methods</Title>
-                    {paymentMethods.map((data) =>
-                        <TouchableOpacity onPress={() => {
-                            setChecked(data)
-                        }}>
-                            <View style={{ display: 'flex', flexDirection: 'row', marginTop: 10 }}>
-                                <View style={{
-                                    height: 24,
-                                    width: 24,
-                                    borderRadius: 12,
-                                    borderWidth: 2,
-                                    borderColor: '#000',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                }}>
-                                    {checked && checked.id === data.id ?
-                                        <View style={{
-                                            height: 12,
-                                            width: 12,
-                                            borderRadius: 6,
-                                            backgroundColor: '#000',
-                                        }} />
-                                        : null
-                                    }
-                                </View>
-                                <Text style={{ marginLeft: 20, fontSize: 16 }}>{data.method_title}</Text>
-
-                            </View>
-                        </TouchableOpacity>
-                    )}
                 </View>
             </ScrollView>
             <View style={{
@@ -257,12 +178,7 @@ const CheckoutScreen = (props) => {
                 paddingLeft: 10,
                 paddingRight: 10
             }}>
-
-
-                {!token ? <Button label="Proceed" onPress={() => handleDeliveryMethodPress()} />
-                    :
-                    <Button label="Buy Now" onPress={() => doPayment()} />
-                }
+                <Button label="Proceed" onPress={() => openLink()} />
             </View>
         </View>
     )
@@ -270,15 +186,8 @@ const CheckoutScreen = (props) => {
 const mapStateToProps = ({ tote, user, payment }) => {
     return {
         tote,
-        user,
-        paymentMethods: payment.paymentMethods
+        user
     };
 }
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        PaymentAction: bindActionCreators(PaymentAction, dispatch)
-    };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(CheckoutScreen)
+export default connect(mapStateToProps, null)(CheckoutScreen)
