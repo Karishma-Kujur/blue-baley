@@ -16,9 +16,12 @@
     "@react-navigation/drawer": "^5.6.4",
     "@react-navigation/native": "^5.2.3",
     "@react-navigation/stack": "^5.2.18",
+    "@types/crypto-js": "^3.1.47",
     "axios": "^0.19.2",
+    "crypto-js": "^4.0.0",
     "globalize": "^1.5.0",
     "immutable": "^4.0.0-rc.12",
+    "oauth-1.0a": "^2.2.6",
     "react": "^16.11.0",
     "react-dom": "^16.13.1",
     "react-native": "0.62.2",
@@ -26,11 +29,13 @@
     "react-native-card-stack-swiper": "^1.2.4",
     "react-native-credit-card-input": "^0.4.1",
     "react-native-credit-card-input-fullpage": "^0.2.0",
+    "react-native-deep-linking": "^2.2.0",
     "react-native-flash-message": "^0.1.15",
     "react-native-gesture-handler": "^1.6.1",
     "react-native-htmlview": "^0.15.0",
     "react-native-image-gallery": "^2.1.5",
     "react-native-image-slider-box": "^1.0.12",
+    "react-native-inappbrowser-reborn": "^3.4.0",
     "react-native-interactable": "^2.0.1",
     "react-native-loading-spinner-overlay": "^1.1.0",
     "react-native-material-dropdown": "^0.11.1",
@@ -51,9 +56,14 @@
     "react-widgets": "^4.5.0",
     "react-widgets-globalize": "^5.0.21",
     "react-widgets-simple-number": "^4.1.24",
+    "readable-stream": "1.0.33",
     "redux": "^4.0.5",
+    "redux-persist": "^6.0.0",
     "redux-thunk": "^2.3.0",
-    "tipsi-stripe": "^7.5.3"
+    "rn-nodeify": "^10.2.0",
+    "stream-browserify": "^1.0.0",
+    "tipsi-stripe": "^7.5.3",
+    "vm-browserify": "0.0.4"
   },
   "devDependencies": {
     "@babel/core": "^7.9.6",
@@ -67,5 +77,23 @@
   },
   "jest": {
     "preset": "react-native"
+  },
+  "react-native": {
+    "_stream_transform": "readable-stream/transform",
+    "_stream_readable": "readable-stream/readable",
+    "_stream_writable": "readable-stream/writable",
+    "_stream_duplex": "readable-stream/duplex",
+    "_stream_passthrough": "readable-stream/passthrough",
+    "stream": "stream-browserify",
+    "vm": "vm-browserify"
+  },
+  "browser": {
+    "_stream_transform": "readable-stream/transform",
+    "_stream_readable": "readable-stream/readable",
+    "_stream_writable": "readable-stream/writable",
+    "_stream_duplex": "readable-stream/duplex",
+    "_stream_passthrough": "readable-stream/passthrough",
+    "stream": "stream-browserify",
+    "vm": "vm-browserify"
   }
 }
