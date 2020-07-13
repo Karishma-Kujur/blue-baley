@@ -7,6 +7,7 @@ import Button from '../components/shared/Button'
 import Back from '../assets/images/back.png'
 import Link from '../components/shared/Link'
 import * as ProductApi from '../api/Products'
+import * as ToteApi from '../api/Tote'
 import Spinner from 'react-native-loading-spinner-overlay'
 import { RadioButton, Title } from 'react-native-paper';
 import InAppBrowser from 'react-native-inappbrowser-reborn'
@@ -52,9 +53,9 @@ const CheckoutScreen = (props) => {
         }
     }, [])
 
-    const openLink = async () => {
+    const openLink = async (data) => {
         try {
-            const url = `https://www.departmynt.co/wp-json/user/getUser?username=${user.userName}&password=${user.password}&order_key=wc_order_GchNmsD3MoD8Q&orderId=674`
+            const url = `https://www.departmynt.co/wp-json/user/getUser?username=${user.userName}&password=${user.password}&order_key=${data.order_key}&orderId=${data.id}`
             if (await InAppBrowser.isAvailable()) {
                 const result = await InAppBrowser.open(url, {
                     // iOS Properties
@@ -123,15 +124,18 @@ const CheckoutScreen = (props) => {
         }
         tote.forEach((item) => {
             data.line_items.push({
-                product_id: item.productId,
-                quantity: item.quantity
+                product_id: item.id,
+                quantity: 1
             })
         })
         ProductApi.placeOder(data)
             .then((result) => {
-                ProductApi.clearTote()
+                let userData = {
+                    user_id: user.id
+                }
+                ToteApi.clearTote(userData)
                     .then((resultData) => {
-                        openLink(resultData);
+                        openLink(result);
                         setLoader(false)
                         navigation.navigate("Order Placed")
                     })
@@ -178,7 +182,7 @@ const CheckoutScreen = (props) => {
                 paddingLeft: 10,
                 paddingRight: 10
             }}>
-                <Button label="Proceed" onPress={() => openLink()} />
+                <Button label="Proceed" onPress={() => handleDeliveryMethodPress()} />
             </View>
         </View>
     )

@@ -15,7 +15,7 @@ import Spinner from 'react-native-loading-spinner-overlay';
 const { width, height } = Dimensions.get("window");
 
 const MatchesScreen = (props) => {
-    const { navigation, products, ProductAction } = props
+    const { navigation, products, ProductAction, user } = props
     const [progressStatus, changeProgressStatus] = useState(0)
     const [count, changeCount] = useState(1)
     const [spinner, setLoader] = useState('')
@@ -104,7 +104,8 @@ const MatchesScreen = (props) => {
                                 price={item.price}
                                 productId={item.id}
                                 attributes={item.attributes}
-                                actions
+                                user={user}
+                                
                             />
                         </Card>))}
                 </CardStack>
@@ -113,9 +114,10 @@ const MatchesScreen = (props) => {
     )
 }
 
-const mapStateToProps = ({ products }) => {
+const mapStateToProps = ({ products, user }) => {
     return {
-        products: products.matches
+        products: products.matches,
+        user
     };
 }
 

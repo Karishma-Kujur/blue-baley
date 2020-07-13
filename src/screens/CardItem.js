@@ -19,7 +19,8 @@ const CardItem = ({
     variant,
     price,
     productId,
-    attributes
+    attributes,
+    user
 }) => {
     // Custom styling
     const fullWidth = Dimensions.get('window').width;
@@ -97,7 +98,8 @@ const CardItem = ({
 
     const handleOnClickBag = () => {
         const data = {
-            id: productId,
+            user_id: user.id,
+            product_id: productId,
             quantity: 1
         }
         ToteApi.addToTote(data)
@@ -160,7 +162,7 @@ const CardItem = ({
                     )}
 
                     {/* ACTIONS */}
-                    {!showSize && actions && (
+                    {!showSize && (
                         <View style={styles.actionsCardItem}>
                             <TouchableOpacity style={styles.button} onPress={() => {
                                 if (sizes) {

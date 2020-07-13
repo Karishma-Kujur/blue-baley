@@ -14,7 +14,7 @@ import Spinner from 'react-native-loading-spinner-overlay';
 const { width, height } = Dimensions.get("window");
 
 const ToteScreen = (props) => {
-    const { navigation, ToteAction, toteItems, user } = props
+    const { navigation, ToteAction, toteItems, user, products } = props
     const [spinner, setLoader] = useState('')
     const [addAddress, setAddAddress] = useState(false)
     const [selectAddress, showSelectAddress] = useState(false)
@@ -30,17 +30,29 @@ const ToteScreen = (props) => {
         }
     ];
 
+    const getToteByProductId = (data) => {
+        const toteItems = [];
+        data.forEach((element) => {
+            let item = products.find((product) => product.id === Number(element.product_id))
+            if (item)
+                toteItems.push({
+                    ...element,
+                    item
+                })
+        })
+        return toteItems;
+    }
+
     const getTotes = () => {
         setLoader(true)
-        ToteApi.getTotes()
+        ToteApi.getTotes(user.id)
             .then((result) => {
+                let toteItems = getToteByProductId(result)
+                ToteAction.setTotes(toteItems)
                 setLoader(false)
-                ToteAction.setTotes(result)
-
             })
             .catch((error) => {
                 setLoader(false)
-                Alert.alert('Invalid User name or Password', 'Please enter valid user name and password')
             })
     }
 
@@ -52,8 +64,7 @@ const ToteScreen = (props) => {
     useEffect(() => {
         let totalPrice = 0
         toteItems.forEach((item) => {
-            let data = item.price.split('$')[1]
-            totalPrice = totalPrice + Number(data)
+            totalPrice = totalPrice + Number(item.price)
         })
         setPrice(totalPrice)
         setTotal(totalPrice)
@@ -87,10 +98,9 @@ const ToteScreen = (props) => {
                         <ToteItem
                             id={item.id}
                             productId={item.productId}
-                            image={item.image}
+                            image={item.images && item.images[0]}
                             name={item.name}
                             price={item.price}
-                            description={item.description}
                             quantity={item.quantity}
                             attributes={item.attributes}
                             toteEdited={handleRefreshTote}
@@ -114,7 +124,7 @@ const ToteScreen = (props) => {
                                 <Text style={{ fontSize: 16, fontWeight: 'bold', marginBottom: 10 }}>{"Total Amount"}</Text>
                                 <Text style={{ fontSize: 16, fontWeight: 'bold', marginBottom: 10 }}>{"$ " + total}</Text>
                             </View>
-                        </> : <View style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: height/3 }}>
+                        </> : <View style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: height / 3 }}>
                             <Text style={{ fontSize: 16, fontWeight: 'bold' }}> No items available in your cart</Text>
                         </View>
                     }
@@ -124,14 +134,15 @@ const ToteScreen = (props) => {
                 {toteItems.length ?
                     <Button label="Proceed to shipping" onPress={handleProceedToShipping} />
                     :
-                    <Button label="Shop Now" onPress={handleProceedToShipping} />}
+                    <Button label="Shop Now" onPress={() => navigation.navigate('View Rack')} />}
             </View>
         </View>
     )
 }
 
-const mapStateToProps = ({ tote, user }) => {
+const mapStateToProps = ({ products, tote, user }) => {
     return {
+        products: products.list,
         toteItems: tote,
         user
     };

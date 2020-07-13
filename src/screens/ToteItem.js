@@ -38,7 +38,6 @@ const quantities = [
 ]
 
 const ToteItem = ({
-    description,
     image,
     matches,
     name,
@@ -152,8 +151,7 @@ const ToteItem = ({
                 </View>
                 <View style={descriptionStyle}>
                     <Text style={styles.nameToteItem}>{name}</Text>
-                    <Text style={styles.priceToteItem}>{price}</Text>
-                    <Text style={styles.desceiptionToteItem}>{description}</Text>
+                    <Text style={styles.priceToteItem}>{'$ ' + (price || '0')}</Text>
                     {isFavorite &&
                         <View style={styles.favoriteActionContainer}>
                             <View style={{ borderWidth: 1, padding: 5 }}>
