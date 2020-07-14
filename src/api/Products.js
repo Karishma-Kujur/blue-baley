@@ -78,9 +78,9 @@ export function placeOder(data) {
     });
 }
 
-export function getOrderHistory() {
+export function getOrderHistory(userId) {
     return new Promise((resolve, reject) => {
-        const url = `${Constants.URL.wc}/wc/v3/orders?consumer_key=${Constants.Keys.ConsumerKey}&consumer_secret=${Constants.Keys.ConsumerSecret}`
+        const url = `${Constants.URL.wc}/wc/v3/orders?customer=${userId}consumer_key=${Constants.Keys.ConsumerKey}&consumer_secret=${Constants.Keys.ConsumerSecret}`
         axios.get(url).then(response => {
             resolve(getOrderHistoryFromResult(response.data))
         }).catch(err => {

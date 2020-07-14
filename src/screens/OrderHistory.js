@@ -14,7 +14,7 @@ import Spinner from 'react-native-loading-spinner-overlay';
 const { width, height } = Dimensions.get("window");
 
 const OrderHistory = (props) => {
-    const { navigation, ProductAction, orderHistory, products } = props
+    const { navigation, ProductAction, orderHistory, products, user } = props
     const [spinner, setLoader] = useState('')
     const [trackOrder, setTrackOrder] = useState(false)
     const imageStyle = [
@@ -57,54 +57,51 @@ const OrderHistory = (props) => {
             })
             .catch((error) => {
                 setLoader(false)
-                Alert.alert('Invalid User name or Password', 'Please enter valid user name and password')
             })
     }
 
     const isFocused = useIsFocused()
     useEffect(() => {
-        getOrderHistory()
+        getOrderHistory(user.id)
     }, [isFocused])
 
     return (
-        <>
-            {trackOrder ? <TrackOrder closeTackOrder={() => setTrackOrder(false)} /> :
-                <View style={styles.containerMatches}>
-                    <Spinner
-                        visible={spinner}
-                    />
-                    <View style={styles.titleContainer}>
-                        <TouchableOpacity onPress={() => { navigation.openDrawer() }}>
-                            <Image source={Avatar} style={imageStyle} />
-                        </TouchableOpacity>
-                        <Text style={styles.title}>My Orders</Text>
-                    </View>
-                    <ScrollView>
-                        <FlatList
-                            data={orderHistory}
-                            keyExtractor={(item, index) => index.toString()}
-                            renderItem={({ item }) => (
-                                <OrderedItem
-                                    id={item.id}
-                                    price={item.total}
-                                    status={item.status}
-                                    list={item.list}
-                                    currency={item.currency}
-                                    currencySymbol={item.currencySymbol}
-                                    setTrackOrder={() => setTrackOrder(true)}
-                                />
-                            )}
+        <View style={styles.containerMatches}>
+            <Spinner
+                visible={spinner}
+            />
+            <View style={styles.titleContainer}>
+                <TouchableOpacity onPress={() => { navigation.openDrawer() }}>
+                    <Image source={Avatar} style={imageStyle} />
+                </TouchableOpacity>
+                <Text style={styles.title}>My Orders</Text>
+            </View>
+            <ScrollView>
+                <FlatList
+                    data={orderHistory}
+                    keyExtractor={(item, index) => index.toString()}
+                    renderItem={({ item }) => (
+                        <OrderedItem
+                            id={item.id}
+                            price={item.total}
+                            status={item.status}
+                            list={item.list}
+                            currency={item.currency}
+                            currencySymbol={item.currencySymbol}
+                            setTrackOrder={() => setTrackOrder(true)}
                         />
-                    </ScrollView>
-                </View>}
-        </>
+                    )}
+                />
+            </ScrollView>
+        </View>
     )
 }
 
-const mapStateToProps = ({ products }) => {
+const mapStateToProps = ({ products, user }) => {
     return {
         orderHistory: products.orderHistory,
-        products: products.list
+        products: products.list,
+        user
     };
 }
 

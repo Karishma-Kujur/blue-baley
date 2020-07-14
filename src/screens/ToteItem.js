@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Text, View, Image, Dimensions, TouchableOpacity } from 'react-native';
 import { Chevron } from 'react-native-shapes';
 import CustomPicker from '../components/shared/CustomPicker'
@@ -10,18 +10,6 @@ import * as ToteAction from '../actions/ToteAction'
 import * as ProductsApi from '../api/Products';
 import CustomDialog from '../components/shared/CustomDialog'
 import RNPickerSelect from 'react-native-picker-select'
-
-const sizes = [
-    { label: 'S', value: 'S' },
-    { label: 'M', value: 'M' },
-    { label: 'L', value: 'L' }
-]
-
-const colors = [
-    { label: 'Red', value: 'red' },
-    { label: 'Blue', value: 'blue' },
-    { label: 'Green', value: 'green' }
-]
 
 const quantities = [
     { label: '0', value: '0' },
@@ -51,6 +39,10 @@ const ToteItem = ({
     toteEdited
 }) => {
     const [selectedQuantity, changeQuantity] = useState(quantity)
+    const [selectedSize, changeSize] = useState('')
+    const [selectedColor, changeColor] = useState('')
+    const [sizes, setSizes] = useState([])
+    const [colors, setColors] = useState([])
     const [showDialog, changeShowDialog] = useState(false)
     // Custom styling
     const fullWidth = Dimensions.get('window').width;
@@ -88,6 +80,21 @@ const ToteItem = ({
         }
     ]
 
+    useEffect(() => {
+        if (attributes && attributes.length) {
+            attributes.forEach((element) => {
+                if (element.name === 'size'){
+                    setSizes(element.options)
+                    changeSize(element.options[0].value)
+                }
+                else if (element.name === 'color'){
+                    setColors(element.options)
+                    changeColor(element.options[0].value)
+                }
+            })
+        }
+    }, [attributes])
+
     const handleEditToteProduct = (item) => {
         if (item.value === quantity) return;
         const data = {
@@ -106,8 +113,9 @@ const ToteItem = ({
 
     const handleMoveToBag = () => {
         const data = {
-            "product_id": productId,
-            "quantity": 1
+            user_id: user.id,
+            product_id: productId,
+            quantity: 1
         }
         ToteAction.addToTote(data)
             .then((result) => {
@@ -170,18 +178,17 @@ const ToteItem = ({
                                 <Image source={AddToFavorite} style={favoriteImageStyle} />
                             </TouchableOpacity>
                         </View>
-                        {sizes.length &&
+                        {(sizes && sizes.length) ?
                             <View>
                                 <Text>Size</Text>
                                 <View>
                                     <RNPickerSelect
-                                        value={sizes[0]}
-                                        onValueChange={(value) => console.log(value)}
+                                        value={selectedSize}
+                                        onValueChange={(value) => changeSize(value)}
                                         items={sizes}
                                         Icon={() => {
-                                            return <Chevron size={1} color="gray" />;
+                                            return <Chevron size={1} color="gray" />
                                         }}
-                                        // useNativeAndroidPickerStyle={false}
                                         style={{
                                             inputIOS: {
                                                 fontSize: 16,
@@ -189,7 +196,7 @@ const ToteItem = ({
                                                 paddingHorizontal: 5,
                                                 borderWidth: 1,
                                                 color: 'black',
-                                                paddingRight: 20, // to ensure the text is never behind the icon
+                                                paddingRight: 20,
                                             },
                                             inputAndroid: {
                                                 backgroundColor: 'transparent',
@@ -202,17 +209,18 @@ const ToteItem = ({
                                     />
                                 </View>
                             </View>
+                            : <></>
                         }
-                        {colors.length &&
+                        {(colors && colors.length) ?
                             <View>
                                 <Text>Color</Text>
                                 <View>
                                     <RNPickerSelect
-                                        value={colors[0]}
-                                        onValueChange={(value) => console.log(value)}
+                                        value={selectedColor}
+                                        onValueChange={(value) => changeColor(value)}
                                         items={colors}
                                         Icon={() => {
-                                            return <Chevron size={1} color="gray" />;
+                                            return <Chevron size={1} color="gray" />
                                         }}
                                         style={{
                                             inputIOS: {
@@ -221,7 +229,7 @@ const ToteItem = ({
                                                 paddingHorizontal: 5,
                                                 borderWidth: 1,
                                                 color: 'black',
-                                                paddingRight: 20, // to ensure the text is never behind the icon
+                                                paddingRight: 20, 
                                             },
                                             inputAndroid: {
                                                 backgroundColor: 'transparent',
@@ -233,42 +241,38 @@ const ToteItem = ({
                                         }}
                                     />
                                 </View>
-                            </View>
-                        }
-                        {quantities.length &&
+                            </View> : <></>}
+                        <View>
+                            <Text>Qty</Text>
                             <View>
-                                <Text>Qty</Text>
-                                <View>
-                                    <RNPickerSelect
-                                        value={quantities[0]}
-                                        onValueChange={(value) => handleEditToteProduct(value)}
-                                        items={quantities}
-                                        Icon={() => {
-                                            return <Chevron size={1} color="gray" />;
-                                        }}
-                                        style={{
-                                            inputIOS: {
-                                                fontSize: 16,
-                                                paddingVertical: 2,
-                                                paddingHorizontal: 5,
-                                                borderWidth: 1,
-                                                color: 'black',
-                                                paddingRight: 20, // to ensure the text is never behind the icon
-                                            },
-                                            inputAndroid: {
-                                                backgroundColor: 'transparent',
-                                            },
-                                            iconContainer: {
-                                                top: 10,
-                                                right: 7
-                                            },
-                                        }}
-                                    />
-                                </View>
+                                <RNPickerSelect
+                                    value={selectedQuantity}
+                                    onValueChange={(value) => changeQuantity(value)}
+                                    items={quantities}
+                                    Icon={() => {
+                                        return <Chevron size={1} color="gray" />
+                                    }}
+                                    style={{
+                                        inputIOS: {
+                                            fontSize: 16,
+                                            paddingVertical: 2,
+                                            paddingHorizontal: 5,
+                                            borderWidth: 1,
+                                            color: 'black',
+                                            paddingRight: 20, 
+                                        },
+                                        inputAndroid: {
+                                            backgroundColor: 'transparent',
+                                        },
+                                        iconContainer: {
+                                            top: 10,
+                                            right: 7
+                                        },
+                                    }}
+                                />
                             </View>
-                        }
+                        </View>
                     </View>}
-
             </View>
         </View>
     );
