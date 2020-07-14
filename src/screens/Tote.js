@@ -98,12 +98,13 @@ const ToteScreen = (props) => {
                     renderItem={({ item }) => (
                         <ToteItem
                             id={item.id}
-                            productId={item.productId}
+                            productId={item.product_id}
                             image={item.images && item.images[0]}
                             name={item.name}
                             price={item.price}
                             quantity={item.quantity}
                             attributes={item.attributes}
+                            user={user}
                             toteEdited={handleRefreshTote}
                         />
                     )}

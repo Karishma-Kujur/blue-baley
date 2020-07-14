@@ -29,8 +29,21 @@ export function addToTote(data) {
 
 export function editTote(data) {
     return new Promise((resolve, reject) => {
-        const url = `${Constants.URL.wc}/cocart/v1/item?consumer_key=${Constants.Keys.ConsumerKey}&consumer_secret=${Constants.Keys.ConsumerSecret}`
-        axios.post(url, data)
+        const url = `${Constants.URL.wc}/mobileCart/update?user_id=${data.userId}&product_id=${data.productId}&quantity=${data.quantity}&consumer_key=${Constants.Keys.ConsumerKey}&consumer_secret=${Constants.Keys.ConsumerSecret}`
+        axios.put(url)
+            .then(response => {
+                resolve(response)
+            }).catch(err => {
+                console.log(err);
+                reject(err)
+            })
+    });
+}
+
+export function removeToteItem(data) {
+    return new Promise((resolve, reject) => {
+        const url = `${Constants.URL.wc}/mobileCart/deleteCart?user_id=${data.userId}&product_id=${data.productId}&consumer_key=${Constants.Keys.ConsumerKey}&consumer_secret=${Constants.Keys.ConsumerSecret}`
+        axios.delete(url)
             .then(response => {
                 resolve(response)
             }).catch(err => {

@@ -22,10 +22,11 @@ const CheckoutScreen = (props) => {
     const [success, setSuccess] = useState(null)
     const [allowed, setAllowed] = useState(null)
 
-    const handleUrl = (url) => {
+    const handleUrl = ({ url }) => {
         Linking.canOpenURL(url).then((supported) => {
             if (supported) {
-                DeepLinking.evaluateUrl(url)
+                setLoader(false)
+                navigation.navigate("Order Placed")
             }
         })
     }
@@ -33,24 +34,15 @@ const CheckoutScreen = (props) => {
 
     const addRoutesToDeepLinking = () => {
         DeepLinking.addScheme('https://')
+        Linking.addEventListener('url', handleUrl);
 
-        DeepLinking.addRoute('/testurl.com/#/sign-in', (response) => {
+        DeepLinking.addRoute('/departmynt.co/checkout/order-received', (response) => {
             navigation.navigate("Order Placed")
         })
     }
 
     useEffect(() => {
         addRoutesToDeepLinking()
-        if (Platform.OS === 'android') {
-            Linking.getInitialURL().then(url => {
-                navigate(url);
-            });
-        } else {
-            Linking.addEventListener('url', handleUrl);
-        }
-        return () => {
-            Linking.removeEventListener('url', handleUrl);
-        }
     }, [])
 
     const openLink = async (data) => {
@@ -137,8 +129,6 @@ const CheckoutScreen = (props) => {
                 ToteApi.clearTote(userData)
                     .then((resultData) => {
                         openLink(result);
-                        setLoader(false)
-                        navigation.navigate("Order Placed")
                     })
                     .catch((error) => {
                         setLoader(false)

@@ -211,7 +211,7 @@ const CardItem = ({
                         showSuggestionDialog(false)
                     }
                     }
-                    dialogTitle={<DialogTitle title="Similar Products" />}
+                    dialogTitle={<DialogTitle title="Images" />}
                 >
                     <DialogContent>
                         <ScrollView
