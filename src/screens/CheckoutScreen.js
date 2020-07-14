@@ -167,14 +167,24 @@ const CheckoutScreen = (props) => {
                 <View style={{
                     padding: 20
                 }}>
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 10 }}>
-                        <Title style={{ justifyContent: 'center' }}>Delivery Address</Title>
-                        <Link label="Edit" onPress={() => navigation.navigate('Add Address')} />
-                    </View>
-                    <Text style={{ marginTop: 10, marginBottom: 8, fontWeight: 'bold', fontSize: 14 }}>{user.firstName + ' ' + user.lastName}</Text>
-                    {user.billing && user.billing.address_1 && <Text>{user.billing.address_1 + ', ' + user.billing.address_2}</Text>}
-                    <Text>{user.billing.city + ', ' + user.billing.postcode + ', ' + user.billing.state}</Text>
-                    <Text style={{ marginTop: 10 }}>{'Mobile: ' + user.billing.phone}</Text>
+                    {user.billing.first_name === '' ?
+                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 10 }}>
+                            <Link label="Add Delivery Address" onPress={() => navigation.navigate('Add Address')} />
+                        </View>
+                        :
+                        <>
+                            <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 10 }}>
+                                <Title style={{ justifyContent: 'center' }}>Delivery Address</Title>
+                                <Link label="Edit" onPress={() => navigation.navigate('Add Address')} />
+                            </View>
+
+                            <Text style={{ marginTop: 10, marginBottom: 8, fontWeight: 'bold', fontSize: 14 }}>{user.billing.first_name + ' ' + user.billing.last_name}</Text>
+                            <Text>{user.billing.email}</Text>
+                            <Text>{user.billing.address_1 + ', ' + user.billing.address_2}</Text>
+                            <Text>{user.billing.city + ', ' + user.billing.postcode + ', ' + user.billing.state}</Text>
+                            <Text style={{ marginTop: 10 }}>{'Mobile: ' + user.billing.phone}</Text>
+
+                        </>}
                 </View>
             </ScrollView>
             <View style={{

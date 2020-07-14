@@ -18,9 +18,9 @@ export function getProducts(categories) {
     return new Promise((resolve, reject) => {
         let url = ''
         if (categories)
-            url = `${Constants.URL.wc}/wc/v3/products?consumer_key=${Constants.Keys.ConsumerKey}&consumer_secret=${Constants.Keys.ConsumerSecret}&category=${categories}`
+            url = `${Constants.URL.wc}/wc/v3/products?per_page=100&consumer_key=${Constants.Keys.ConsumerKey}&consumer_secret=${Constants.Keys.ConsumerSecret}&category=${categories}`
         else
-            url = `${Constants.URL.wc}/wc/v3/products?consumer_key=${Constants.Keys.ConsumerKey}&consumer_secret=${Constants.Keys.ConsumerSecret}`
+            url = `${Constants.URL.wc}/wc/v3/products?per_page=100&consumer_key=${Constants.Keys.ConsumerKey}&consumer_secret=${Constants.Keys.ConsumerSecret}`
         axios.get(url).then(response => {
             resolve(getProjectsFromResult(response.data))
         }).catch(err => {

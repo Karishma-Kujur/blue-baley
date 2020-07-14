@@ -15,6 +15,27 @@ const AddressForm = (props) => {
     return (
         <View style={styles.accountBodyContainer}>
 
+            <Text style={styles.accountTextConatiner}>First Name</Text>
+            <TextInput
+                style={styles.accountTextInput}
+                secureTextEntry={false}
+                value={address.first_name}
+                onChangeText={text => changeAddress('first_name', text)}
+            />
+            <Text style={styles.accountTextConatiner}>Last Name</Text>
+            <TextInput
+                style={styles.accountTextInput}
+                secureTextEntry={false}
+                value={address.last_name}
+                onChangeText={text => changeAddress('last_name', text)}
+            />
+            <Text style={styles.accountTextConatiner}>Email</Text>
+            <TextInput
+                style={styles.accountTextInput}
+                secureTextEntry={false}
+                value={address.email}
+                onChangeText={text => changeAddress('email', text)}
+            />
             <Text style={styles.accountTextConatiner}>Address line 1</Text>
             <TextInput
                 style={styles.accountTextInput}

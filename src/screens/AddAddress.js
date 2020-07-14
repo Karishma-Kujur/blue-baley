@@ -23,6 +23,9 @@ const AddAddress = (props) => {
     const handleSaveAddress = () => {
         let data = {
             billing: {
+                first_name: address.first_name,
+                last_name: address.last_name,
+                email: address.email,
                 address_1: address.address_1,
                 address_2: address.address_2,
                 city: address.city,
@@ -33,13 +36,11 @@ const AddAddress = (props) => {
         }
         UserApi.updateUserDetails(user.id, data)
             .then((result) => {
-                // setLoader(false)
                 UserAction.setUser(result)
                 navigation.navigate('Checkout')
 
             })
             .catch((error) => {
-                // setLoader(false)
             })
 
     }
