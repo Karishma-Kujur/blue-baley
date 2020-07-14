@@ -30,6 +30,7 @@ const MatchesScreen = (props) => {
     ];
     const getProducts = () => {
         setLoader(true)
+        ProductAction.setMatches([])
         ProductApi.getCategory()
             .then((result) => {
                 let categories = result.join('+')

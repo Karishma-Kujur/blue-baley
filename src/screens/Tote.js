@@ -37,7 +37,7 @@ const ToteScreen = (props) => {
             if (item)
                 toteItems.push({
                     ...element,
-                    item
+                    ...item
                 })
         })
         return toteItems;
@@ -45,6 +45,7 @@ const ToteScreen = (props) => {
 
     const getTotes = () => {
         setLoader(true)
+        ToteAction.setTotes([])
         ToteApi.getTotes(user.id)
             .then((result) => {
                 let toteItems = getToteByProductId(result)

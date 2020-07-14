@@ -87,6 +87,7 @@ const HomeScreen = (props) => {
 
     const getAllProducts = () => {
         setLoader(true)
+        ProductAction.setProducts([])
         ProductApi.getProducts()
             .then((result) => {
                 setLoader(false)

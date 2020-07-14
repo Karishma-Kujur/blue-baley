@@ -25,10 +25,10 @@ const FavoritesScreen = (props) => {
     }
   ];
 
-  const getFavoritesByProductId = (productIds, data) => {
+  const getFavoritesByProductId = (productIds) => {
     const favoriteItems = [];
     productIds.forEach((productId) => {
-      let item = data.find((product) => product.id === Number(productId))
+      let item = products.find((product) => product.id === Number(productId))
       if (item)
         favoriteItems.push(item)
     })
@@ -37,19 +37,12 @@ const FavoritesScreen = (props) => {
 
   const getFavorites = () => {
     setLoader(true)
-    ProductApi.getProducts()
-      .then((result) => {
-        ProductAction.setProducts(result)
-        ProductApi.getFavorites(user.id)
-          .then((productIds) => {
-            let favoriteItems = getFavoritesByProductId(productIds, result)
-            setLoader(false)
-            ProductAction.setFavorites(favoriteItems)
-          })
-          .catch((error) => {
-            setLoader(false)
-          })
-
+    ProductAction.setFavorites([])
+    ProductApi.getFavorites(user.id)
+      .then((productIds) => {
+        let favoriteItems = getFavoritesByProductId(productIds)
+        setLoader(false)
+        ProductAction.setFavorites(favoriteItems)
       })
       .catch((error) => {
         setLoader(false)

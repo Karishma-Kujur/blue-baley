@@ -98,6 +98,7 @@ const CheckoutScreen = (props) => {
 
     const handleDeliveryMethodPress = () => {
         let data = {
+            customer_id: user.id,
             billing: {
                 first_name: user.billing.first_name,
                 last_name: user.billing.last_name,

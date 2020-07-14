@@ -48,6 +48,7 @@ const OrderHistory = (props) => {
 
     const getOrderHistory = () => {
         setLoader(true)
+        ProductAction.setOrderHistory([])
         ProductApi.getOrderHistory()
             .then((result) => {
                 setLoader(false)
