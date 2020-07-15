@@ -13,7 +13,7 @@ import * as UserAction from '../actions/UserAction'
 import Spinner from 'react-native-loading-spinner-overlay'
 
 const LogOutAlert = (props) => {
-    const [spinner, setLoader] = useState('')
+    const [spinner, setLoader] = useState(false)
 
   const redirectBack = () => {
     props.navigation.dispatch(CommonActions.goBack());

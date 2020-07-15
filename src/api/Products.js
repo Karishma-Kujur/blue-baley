@@ -80,7 +80,7 @@ export function placeOder(data) {
 
 export function getOrderHistory(userId) {
     return new Promise((resolve, reject) => {
-        const url = `${Constants.URL.wc}/wc/v3/orders?customer=${userId}consumer_key=${Constants.Keys.ConsumerKey}&consumer_secret=${Constants.Keys.ConsumerSecret}`
+        const url = `${Constants.URL.wc}/wc/v3/orders?customer=${userId}&consumer_key=${Constants.Keys.ConsumerKey}&consumer_secret=${Constants.Keys.ConsumerSecret}`
         axios.get(url).then(response => {
             resolve(getOrderHistoryFromResult(response.data))
         }).catch(err => {
@@ -148,7 +148,8 @@ const getOrderHistoryFromResult = (result) => {
             paymentMethod: element.payment_method,
             currency: element.currency,
             currencySymbol: element.currency_symbol,
-            list: element.line_items
+            list: element.line_items,
+            orderKey: element.order_key
         })
     })
     return orderHistory;

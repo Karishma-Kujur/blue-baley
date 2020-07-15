@@ -31,7 +31,8 @@ const AddAddress = (props) => {
                 city: address.city,
                 postcode: address.postcode,
                 state: address.state,
-                country: address.country
+                country: address.country,
+                phone: address.phone
             }
         }
         UserApi.updateUserDetails(user.id, data)
@@ -56,14 +57,15 @@ const AddAddress = (props) => {
                 </TouchableOpacity>
                 <Text style={{ fontWeight: 'bold', fontSize: 16, marginLeft: 20 }}>Add New Address</Text>
             </View>
-            <ScrollView>
+            <View style={{height: height - 150}}>
                 <AddressForm address={address} changeAddress={changeAddress} />
-            </ScrollView>
+            </View>
             <View style={{
                 flex: 1,
                 justifyContent: 'flex-end',
                 paddingLeft: 10,
-                paddingRight: 10
+                paddingRight: 10,
+                marginBottom: 20
             }}>
                 <Button label="Add Address" onPress={handleSaveAddress} />
             </View>

@@ -65,7 +65,7 @@ const ToteScreen = (props) => {
     useEffect(() => {
         let totalPrice = 0
         toteItems.forEach((item) => {
-            totalPrice = totalPrice + Number(item.price)
+            totalPrice = totalPrice + (Number(item.price) * Number(item.quantity))
         })
         setPrice(totalPrice)
         setTotal(totalPrice)

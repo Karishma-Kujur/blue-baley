@@ -41,7 +41,6 @@ const SurveyScreen = (props) => {
 
     const handleOnPressSave = () => {
         setLoader(true)
-        navigation.navigate('Log Off')
         let data = { ...answers }
         data.results = JSON.stringify(data.results)
         SurveyApi.submitAnswers(data)
@@ -71,9 +70,10 @@ const SurveyScreen = (props) => {
                 changeSelectedId(null)
 
             } else {
-                // navigation.navigate('Home')
                 setLoader(true)
-                SurveyApi.submitAnswers(answers)
+                let data = { ...answers }
+                data.results = JSON.stringify(data.results)
+                SurveyApi.submitAnswers(data)
                     .then((result) => {
                         setLoader(false)
                         navigation.navigate('Home')

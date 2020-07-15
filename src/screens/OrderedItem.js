@@ -7,7 +7,6 @@ import NoImage from '../assets/images/noImage.png'
 import * as Orders from '../constants/Orders'
 
 const OrderedItem = ({
-    actions,
     image,
     id,
     price,
@@ -15,7 +14,8 @@ const OrderedItem = ({
     list,
     currency,
     currencySymbol,
-    setTrackOrder
+    setTrackOrder,
+    orderNumber
 }) => {
     const fullWidth = Dimensions.get('window').width;
 
@@ -36,7 +36,7 @@ const OrderedItem = ({
                     <View style={{ backgroundColor: 'green', borderRadius: 50, width: 12, height: 12, marginRight: 10 }}></View>
                     <Text style={{ fontWeight: 'bold' }}>{status}</Text>
                 </View>
-                <Text style={{ color: 'grey', fontSize: 12 }}>Order # 123456789</Text>
+                <Text style={{ color: 'grey', fontSize: 12 }}>{"Order # "+orderNumber}</Text>
             </View>
             <ScrollView
                 horizontal={true}
@@ -58,7 +58,7 @@ const OrderedItem = ({
                     <Text style={{ color: 'grey' }}>{list.length + ' Items in Total:'}</Text>
                     <Text style={{ fontWeight: 'bold' }}>{currency + currencySymbol + price}</Text>
                 </View>
-                {!returnOrder &&
+                {!returnOrder && false &&
                     <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-end' }}>
                         <TouchableOpacity onPress={() => setTrackOrder(true)}>
                             <View style={{ borderWidth: 1, padding: 3, marginRight: 5 }}>
@@ -81,7 +81,7 @@ const OrderedItem = ({
                         </TouchableOpacity>
                     </View>
                 }
-                {returnOrder &&
+                {returnOrder && false &&
                     <>
                         <View style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', marginTop: 10 }}>
                             <Text style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 20 }}>Why are you returning this?</Text>

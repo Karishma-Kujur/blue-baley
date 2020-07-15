@@ -79,7 +79,6 @@ const CheckoutScreen = (props) => {
                         'my-custom-header': 'my custom header value'
                     }
                 })
-                Alert.alert(JSON.stringify(result))
             }
             else
                 Linking.openURL(url)
@@ -140,7 +139,7 @@ const CheckoutScreen = (props) => {
     }
 
     return (
-        <View style={{ marginTop: 40, height: height - 50 }}>
+        <View style={{ marginTop: 40, height: height - 60 }}>
             <Spinner
                 visible={spinner}
             />

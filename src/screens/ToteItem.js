@@ -1,14 +1,12 @@
 import React, {useState, useEffect} from 'react';
 import {Text, View, Image, Dimensions, TouchableOpacity} from 'react-native';
 import {Chevron} from 'react-native-shapes';
-import CustomPicker from '../components/shared/CustomPicker';
 import styles from '../assets/styles';
 import NoImage from '../assets/images/noImage.png';
 import AddToFavorite from '../assets/images/favorite.jpeg';
 import AddToBag from '../assets/images/bag.jpeg';
 import * as ToteApi from '../api/Tote';
 import * as ProductsApi from '../api/Products';
-import CustomDialog from '../components/shared/CustomDialog';
 import RNPickerSelect from 'react-native-picker-select';
 
 const quantities = [
@@ -137,10 +135,10 @@ const ToteItem = ({
 
   const handleMoveToFavorites = () => {
     const data = {
-      cart_item_key: id,
-      quantity: 0,
-    };
-    ToteAction.editTote(data)
+        userId: user.id,
+        productId: productId
+      };
+    ToteApi.removeToteItem(data)
       .then((result) => {
         ProductsApi.saveProducts({productId: productId})
           .then((result) => {
@@ -196,6 +194,7 @@ const ToteItem = ({
                     value={selectedSize}
                     onValueChange={(value) => changeSize(value)}
                     items={sizes}
+                    useNativeAndroidPickerStyle={false}
                     Icon={() => {
                       return <Chevron size={1} color="gray" />;
                     }}
@@ -209,7 +208,11 @@ const ToteItem = ({
                         paddingRight: 20,
                       },
                       inputAndroid: {
-                        backgroundColor: 'transparent',
+                        fontSize: 16,
+                        paddingVertical: 2,
+                        paddingHorizontal: 5,
+                        color: 'black',
+                        paddingRight: 20,
                       },
                       iconContainer: {
                         top: 10,
@@ -230,6 +233,7 @@ const ToteItem = ({
                     value={selectedColor}
                     onValueChange={(value) => changeColor(value)}
                     items={colors}
+                    useNativeAndroidPickerStyle={false}
                     Icon={() => {
                       return <Chevron size={1} color="gray" />;
                     }}
@@ -243,7 +247,11 @@ const ToteItem = ({
                         paddingRight: 20,
                       },
                       inputAndroid: {
-                        backgroundColor: 'transparent',
+                        fontSize: 16,
+                        paddingVertical: 2,
+                        paddingHorizontal: 5,
+                        color: 'black',
+                        paddingRight: 20,
                       },
                       iconContainer: {
                         top: 10,
@@ -263,6 +271,7 @@ const ToteItem = ({
                   value={selectedQuantity}
                   onValueChange={(value) => handleEditToteProduct(value)}
                   items={quantities}
+                  useNativeAndroidPickerStyle={false}
                   Icon={() => {
                     return <Chevron size={1} color="gray" />;
                   }}
@@ -276,7 +285,11 @@ const ToteItem = ({
                       paddingRight: 20,
                     },
                     inputAndroid: {
-                      backgroundColor: 'transparent',
+                        fontSize: 16,
+                        paddingVertical: 2,
+                        paddingHorizontal: 5,
+                        color: 'black',
+                        paddingRight: 20,
                     },
                     iconContainer: {
                       top: 10,

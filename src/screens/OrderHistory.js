@@ -49,7 +49,7 @@ const OrderHistory = (props) => {
     const getOrderHistory = () => {
         setLoader(true)
         ProductAction.setOrderHistory([])
-        ProductApi.getOrderHistory()
+        ProductApi.getOrderHistory(user.id)
             .then((result) => {
                 setLoader(false)
                 ProductAction.setOrderHistory(getDataById(result))
@@ -77,12 +77,14 @@ const OrderHistory = (props) => {
                 <Text style={styles.title}>My Orders</Text>
             </View>
             <ScrollView>
+                {orderHistory.length ?
                 <FlatList
                     data={orderHistory}
                     keyExtractor={(item, index) => index.toString()}
                     renderItem={({ item }) => (
                         <OrderedItem
                             id={item.id}
+                            orderNumber={item.orderKey}
                             price={item.total}
                             status={item.status}
                             list={item.list}
@@ -91,7 +93,11 @@ const OrderHistory = (props) => {
                             setTrackOrder={() => setTrackOrder(true)}
                         />
                     )}
-                />
+                /> : 
+                    <View style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: height / 3 }}>
+                            <Text style={{ fontSize: 16, fontWeight: 'bold' }}> No items ordered yet</Text>
+                    </View>
+                }
             </ScrollView>
         </View>
     )

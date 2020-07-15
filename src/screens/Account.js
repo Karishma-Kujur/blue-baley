@@ -32,15 +32,18 @@ const AccountScreen = (props) => {
                 first_name: personalDetails.firstName,
                 last_name: personalDetails.lastName,
                 billing: {
-                    first_name: personalDetails.firstName,
-                    last_name: personalDetails.lastName,
                     phone: personalDetails.phone
                 }
             }
             UserApi.updateUserDetails(user.id, data)
                 .then((result) => {
                     // setLoader(false)
-                    UserAction.setUser(result)
+                    let userData = {
+                        ...result,
+                        userName: user.userName,
+                        password: user.password
+                    }
+                    UserAction.setUser(userData)
                 })
                 .catch((error) => {
                     // setLoader(false)
@@ -53,21 +56,29 @@ const AccountScreen = (props) => {
         if (editAddress) {
             let data = {
                 billing: {
+                    first_name: address.first_name,
+                    last_name: address.last_name,
+                    email: address.email,
                     address_1: address.address_1,
                     address_2: address.address_2,
                     city: address.city,
                     postcode: address.postcode,
-                    state: address.state
+                    state: address.state,
+                    country: address.country,
+                    phone: address.phone
                 }
             }
             UserApi.updateUserDetails(user.id, data)
                 .then((result) => {
-                    // setLoader(false)
-                    UserAction.setUser(result)
+                    let userData = {
+                        ...result,
+                        userName: user.userName,
+                        password: user.password
+                    }
+                    UserAction.setUser(userData)
 
                 })
                 .catch((error) => {
-                    // setLoader(false)
                 })
         }
         changeEditAddress(!editAddress)
@@ -118,8 +129,13 @@ const AccountScreen = (props) => {
         setLoader(true)
         UserApi.getUserDetails(user.id)
             .then((result) => {
+                let userData = {
+                    ...result,
+                    userName: user.userName,
+                    password: user.password
+                }
+                UserAction.setUser(userData)
                 setLoader(false)
-                UserAction.setUser(result)
 
             })
             .catch((error) => {

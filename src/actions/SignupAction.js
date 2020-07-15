@@ -7,7 +7,6 @@ export function signupUser(data) {
         const url = `${Constants.URL.wc}/wc/v3/customers?consumer_key=${Constants.Keys.ConsumerKey}&consumer_secret=${Constants.Keys.ConsumerSecret}`
         axios.post(url, data, { headers: { 'content-type': 'application/json' } })
             .then(response => {
-                console.log(response.data)
                 resolve(response)
             }).catch(err => {
                 console.log(err);
