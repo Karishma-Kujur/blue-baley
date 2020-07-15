@@ -14,9 +14,6 @@ const CustomDialog = (props) => {
                 animationType="slide"
                 transparent={true}
                 visible={modalVisible}
-                onRequestClose={() => {
-                    Alert.alert("Modal has been closed.");
-                }}
             >
                 <View style={styles.centeredView}>
                     <View style={styles.modalView}>
@@ -50,7 +47,8 @@ const styles = StyleSheet.create({
     modalText: {
         margin: 5,
         textAlign: "center",
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        width: '100%'
     }
 });
 

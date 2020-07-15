@@ -33,6 +33,7 @@ const styles = StyleSheet.create({
 
     textInput: {
         fontSize: 16,
-        fontFamily: "Avenir"
+        fontFamily: "Avenir",
+        width: '100%'
     }
 });

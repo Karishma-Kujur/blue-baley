@@ -104,11 +104,11 @@ const ToteScreen = (props) => {
                                 <Text style={{ fontSize: 16, marginBottom: 10 }}>0.00</Text>
                             </View>
                             <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-                                <Text style={{ fontSize: 16, fontWeight: 'bold', marginBottom: 10 }}>{"Total Amount"}</Text>
-                                <Text style={{ fontSize: 16, fontWeight: 'bold', marginBottom: 10 }}>{"$ " + total}</Text>
+                                <Text style={{ fontSize: 16, marginBottom: 10 }}>{"Total Amount"}</Text>
+                                <Text style={{ fontSize: 16, marginBottom: 10 }}>{"$ " + total}</Text>
                             </View>
                         </> : <View style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: height / 3 }}>
-                            <Text style={{ fontSize: 16, fontWeight: 'bold' }}> No items available in your cart</Text>
+                            <Text style={{ fontSize: 16, fontWeight: 'bold', width: '100%', textAlign: 'center'}}> No items available in your cart</Text>
                         </View>
                     }
                 </View>

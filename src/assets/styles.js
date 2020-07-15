@@ -234,7 +234,7 @@ export default StyleSheet.create({
 		height: 50
 	},
 	homeText: { paddingBottom: 10, fontSize: 16 },
-	homeTitle: { paddingBottom: 10, fontSize: 22, color: DARK_GRAY, fontWeight: 'bold' },
+	homeTitle: { paddingBottom: 10, fontSize: 22, color: DARK_GRAY, fontWeight: 'bold', width: '100%', textAlign: 'center' },
 
 	avatar: {
 		borderRadius: 30,
@@ -491,8 +491,8 @@ export default StyleSheet.create({
 	transitionMessage: {
 		fontSize: 18,
 		fontWeight: 'bold',
-		justifyContent: 'center',
-		alignItems: 'center'
+		width: '100%',
+		textAlign: 'center'
 	},
 	containerAccountTitle: {
 		flexDirection: 'row',

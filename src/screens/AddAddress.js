@@ -7,6 +7,7 @@ import Back from '../assets/images/back.png'
 import Button from '../components/shared/Button'
 import * as UserApi from '../api/User'
 import * as UserAction from '../actions/UserAction'
+import styles from '../assets/styles';
 
 const { width, height } = Dimensions.get("window");
 
@@ -47,12 +48,11 @@ const AddAddress = (props) => {
     }
 
     return (
-        <View style={{ marginTop: 40, height: height - 50 }}>
-            <View style={{ flexDirection: 'row' }}>
+        <View style={styles.containerMatches}>
+            <View style={styles.titleContainer}>
                 <TouchableOpacity onPress={() => {
                     navigation.navigate('Checkout')
-                }}
-                    style={{ marginLeft: 20 }}>
+                }}>
                     <Image source={Back} style={{ width: 24, height: 24, borderRadius: 12 }} />
                 </TouchableOpacity>
                 <Text style={{ fontWeight: 'bold', fontSize: 16, marginLeft: 20 }}>Add New Address</Text>
@@ -60,13 +60,7 @@ const AddAddress = (props) => {
             <View style={{height: height - 150}}>
                 <AddressForm address={address} changeAddress={changeAddress} />
             </View>
-            <View style={{
-                flex: 1,
-                justifyContent: 'flex-end',
-                paddingLeft: 10,
-                paddingRight: 10,
-                marginBottom: 20
-            }}>
+            <View style={styles.bottom}>
                 <Button label="Add Address" onPress={handleSaveAddress} />
             </View>
         </View>

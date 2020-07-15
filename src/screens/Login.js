@@ -115,7 +115,7 @@ const LoginScreen = (props) => {
                 <View style={styles.formButton}>
                     <Button label="Login" onPress={handleOnSubmit} />
                     <View style={styles.linkContainer}>
-                        <Text style={styles.label}>Don’t have an account? </Text>
+                        <Text style={styles.label}>{"Don’t have an account? "}</Text>
                         <Link label="Sign Up" onPress={() => navigation.navigate('Sign Up')} />
                     </View>
                 </View>

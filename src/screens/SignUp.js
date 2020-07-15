@@ -167,7 +167,7 @@ const SignUpScreen = (props) => {
                 <View style={styles.formButton}>
                     <Button label="Begin Survey" onPress={handleSignup} />
                     <View style={styles.linkContainer}>
-                        <Text style={styles.label}>Existing User? </Text>
+                        <Text style={styles.label}>{"Existing User? "}</Text>
                         <Link label="Login" onPress={() => navigation.navigate('Login')} />
                     </View>
                 </View>

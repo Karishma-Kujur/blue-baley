@@ -84,7 +84,7 @@ const FavoritesScreen = (props) => {
                 alignItems: 'center',
                 marginTop: height / 3,
               }}>
-              <Text style={{ fontSize: 16, fontWeight: 'bold' }}>
+              <Text style={{ fontSize: 16, fontWeight: 'bold', width: '100%', textAlign: 'center'}}>
                 No items added to Favorites!
             </Text>
             </View>

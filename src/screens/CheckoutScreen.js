@@ -8,6 +8,7 @@ import Back from '../assets/images/back.png'
 import Link from '../components/shared/Link'
 import * as ProductApi from '../api/Products'
 import * as ToteApi from '../api/Tote'
+import styles from '../assets/styles';
 import Spinner from 'react-native-loading-spinner-overlay'
 import { RadioButton, Title } from 'react-native-paper';
 import InAppBrowser from 'react-native-inappbrowser-reborn'
@@ -139,15 +140,14 @@ const CheckoutScreen = (props) => {
     }
 
     return (
-        <View style={{ marginTop: 40, height: height - 60 }}>
+        <View style={styles.containerMatches}>
             <Spinner
                 visible={spinner}
             />
-            <View style={{ flexDirection: 'row' }}>
+            <View style={styles.titleContainer}>
                 <TouchableOpacity onPress={() => {
                     navigation.navigate('View Tote')
-                }}
-                    style={{ marginLeft: 20 }}>
+                }}>
                     <Image source={Back} style={{ width: 24, height: 24, borderRadius: 12 }} />
                 </TouchableOpacity>
                 <Text style={{ fontWeight: 'bold', fontSize: 16, marginLeft: 20 }}>Payment</Text>
@@ -176,12 +176,7 @@ const CheckoutScreen = (props) => {
                         </>}
                 </View>
             </ScrollView>
-            <View style={{
-                flex: 1,
-                justifyContent: 'flex-end',
-                paddingLeft: 10,
-                paddingRight: 10
-            }}>
+            <View style={styles.bottom}>
                 <Button label="Proceed" onPress={() => handleDeliveryMethodPress()} />
             </View>
         </View>

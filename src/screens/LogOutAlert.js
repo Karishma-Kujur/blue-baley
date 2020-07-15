@@ -50,7 +50,7 @@ const LogOutAlert = (props) => {
               alignItems: 'center',
               justifyContent: 'center',
             }}>
-            <Text style={{fontSize: 20}}>Are you sure you want to log out</Text>
+            <Text style={{fontSize: 20, paddingTop: 20, paddingLeft: 10, paddingRight: 10}}>Are you sure you want to log out</Text>
           </View>
         }
         visible={true}

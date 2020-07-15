@@ -12,7 +12,9 @@ const LinkContainer = (props) => {
 export default LinkContainer
 const styles = StyleSheet.create({
     text: {
+        width: '100%',
         fontWeight: 'bold',
-        color: 'blue'
+        color: 'blue',
+        marginRight: 5
     }
 })

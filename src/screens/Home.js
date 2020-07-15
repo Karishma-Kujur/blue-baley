@@ -30,10 +30,10 @@ const HomeScreen = (props) => {
             name: 'View Favorites',
             onClick: () => { navigation.navigate('View Favorites') }
         },
-        {
-            name: 'My Chart',
-            onClick: () => { navigation.navigate('My Chart') }
-        },
+        // {
+        //     name: 'My Chart',
+        //     onClick: () => { navigation.navigate('My Chart') }
+        // },
         {
             name: 'Order History',
             onClick: () => { navigation.navigate('Order History') }

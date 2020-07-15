@@ -77,7 +77,7 @@ const OrderHistory = (props) => {
                         )}
                     /> :
                     <View style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: height / 3 }}>
-                        <Text style={{ fontSize: 16, fontWeight: 'bold' }}> No items ordered yet</Text>
+                        <Text style={{ fontSize: 16, fontWeight: 'bold', width: '100%', textAlign: 'center'}}> No items ordered yet</Text>
                     </View>
                 }
             </ScrollView>
