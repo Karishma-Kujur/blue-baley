@@ -6,10 +6,9 @@ import { View, Dimensions, Text, ScrollView, TouchableOpacity, FlatList, Image }
 import styles from '../assets/styles';
 import OrderedItem from './OrderedItem'
 import TrackOrder from './TrackOrder'
-import Avatar from '../assets/images/avatar.jpeg'
 import * as ProductAction from '../actions/ProductAction';
 import * as ProductApi from '../api/Products'
-import Spinner from 'react-native-loading-spinner-overlay';
+import AppLayout from '../components/shared/AppLayout';
 
 const { width, height } = Dimensions.get("window");
 
@@ -17,14 +16,6 @@ const OrderHistory = (props) => {
     const { navigation, ProductAction, orderHistory, products, user } = props
     const [spinner, setLoader] = useState('')
     const [trackOrder, setTrackOrder] = useState(false)
-    const imageStyle = [
-        {
-            alignItems: 'flex-start',
-            width: 30,
-            height: 30,
-            borderRadius: 15
-        }
-    ];
 
     const getDataById = (data) => {
         const orders = [...data];
@@ -66,46 +57,37 @@ const OrderHistory = (props) => {
     }, [isFocused])
 
     return (
-        <View style={styles.containerMatches}>
-            <Spinner
-                visible={spinner}
-            />
-            <View style={styles.titleContainer}>
-                <TouchableOpacity onPress={() => { navigation.openDrawer() }}>
-                    <Image source={Avatar} style={imageStyle} />
-                </TouchableOpacity>
-                <Text style={styles.title}>My Orders</Text>
-            </View>
+        <AppLayout title={"My Orders"} spinner={spinner} openDrawer={() => { navigation.openDrawer() }}>
             <ScrollView>
                 {orderHistory.length ?
-                <FlatList
-                    data={orderHistory}
-                    keyExtractor={(item, index) => index.toString()}
-                    renderItem={({ item }) => (
-                        <OrderedItem
-                            id={item.id}
-                            orderNumber={item.orderKey}
-                            price={item.total}
-                            status={item.status}
-                            list={item.list}
-                            currency={item.currency}
-                            currencySymbol={item.currencySymbol}
-                            setTrackOrder={() => setTrackOrder(true)}
-                        />
-                    )}
-                /> : 
+                    <FlatList
+                        data={orderHistory}
+                        keyExtractor={(item, index) => index.toString()}
+                        renderItem={({ item }) => (
+                            <OrderedItem
+                                id={item.id}
+                                orderNumber={item.orderKey}
+                                price={item.total}
+                                status={item.status}
+                                list={item.list}
+                                currency={item.currency}
+                                currencySymbol={item.currencySymbol}
+                                setTrackOrder={() => setTrackOrder(true)}
+                            />
+                        )}
+                    /> :
                     <View style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: height / 3 }}>
-                            <Text style={{ fontSize: 16, fontWeight: 'bold' }}> No items ordered yet</Text>
+                        <Text style={{ fontSize: 16, fontWeight: 'bold' }}> No items ordered yet</Text>
                     </View>
                 }
             </ScrollView>
-        </View>
+        </AppLayout>
     )
 }
 
 const mapStateToProps = ({ products, user }) => {
     return {
-        orderHistory: products.orderHistory,
+        orderHistory: products.orderHistory || [],
         products: products.list,
         user
     };

@@ -6,10 +6,9 @@ import { View, Dimensions, Text, ScrollView, TouchableOpacity, FlatList, Image, 
 import Button from '../components/shared/Button'
 import styles from '../assets/styles';
 import ToteItem from './ToteItem'
-import Avatar from '../assets/images/avatar.jpeg'
 import * as ToteAction from '../actions/ToteAction';
 import * as ToteApi from '../api/Tote'
-import Spinner from 'react-native-loading-spinner-overlay';
+import AppLayout from '../components/shared/AppLayout';
 
 const { width, height } = Dimensions.get("window");
 
@@ -20,15 +19,6 @@ const ToteScreen = (props) => {
     const [selectAddress, showSelectAddress] = useState(false)
     const [price, setPrice] = useState(0)
     const [total, setTotal] = useState(0)
-
-    const imageStyle = [
-        {
-            alignItems: 'flex-start',
-            width: 30,
-            height: 30,
-            borderRadius: 15
-        }
-    ];
 
     const getToteByProductId = (data) => {
         const toteItems = [];
@@ -81,16 +71,7 @@ const ToteScreen = (props) => {
     }
 
     return (
-        <View style={styles.containerMatches}>
-            <Spinner
-                visible={spinner}
-            />
-            <View style={styles.titleContainer}>
-                <TouchableOpacity onPress={() => { navigation.openDrawer() }}>
-                    <Image source={Avatar} style={imageStyle} />
-                </TouchableOpacity>
-                <Text style={styles.title}>Tote</Text>
-            </View>
+        <AppLayout spinner={spinner} title={"Tote"} openDrawer={() => { navigation.openDrawer() }}>
             <ScrollView>
                 <FlatList
                     data={toteItems}
@@ -138,7 +119,7 @@ const ToteScreen = (props) => {
                     :
                     <Button label="Shop Now" onPress={() => navigation.navigate('View Rack')} />}
             </View>
-        </View>
+        </AppLayout>
     )
 }
 

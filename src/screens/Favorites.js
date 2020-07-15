@@ -1,7 +1,7 @@
-import React, {useState, useEffect} from 'react';
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
-import {useIsFocused} from '@react-navigation/native';
+import React, { useState, useEffect } from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { useIsFocused } from '@react-navigation/native';
 import {
   View,
   Dimensions,
@@ -14,24 +14,15 @@ import {
 import Button from '../components/shared/Button';
 import styles from '../assets/styles';
 import FavoritesItem from './ToteItem';
-import Avatar from '../assets/images/avatar.jpeg';
 import * as ProductAction from '../actions/ProductAction';
 import * as ProductApi from '../api/Products';
-import Spinner from 'react-native-loading-spinner-overlay';
+import AppLayout from '../components/shared/AppLayout';
 
-const {width, height} = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 
 const FavoritesScreen = (props) => {
-  const {navigation, ProductAction, products, user, favorites} = props;
+  const { navigation, ProductAction, products, user, favorites } = props;
   const [spinner, setLoader] = useState('');
-  const imageStyle = [
-    {
-      alignItems: 'flex-start',
-      width: 30,
-      height: 30,
-      borderRadius: 15,
-    },
-  ];
 
   const getFavoritesByProductId = (productIds) => {
     const favoriteItems = [];
@@ -65,23 +56,13 @@ const FavoritesScreen = (props) => {
     getFavorites();
   }, [isFocused]);
   return (
-    <View style={styles.containerMatches}>
-      <Spinner visible={spinner} />
-      <View style={styles.titleContainer}>
-        <TouchableOpacity
-          onPress={() => {
-            navigation.openDrawer();
-          }}>
-          <Image source={Avatar} style={imageStyle} />
-        </TouchableOpacity>
-        <Text style={styles.title}>Favorites</Text>
-      </View>
+    <AppLayout title={'Favorite'} spinner={spinner} openDrawer={() => { navigation.openDrawer() }}>
       <ScrollView>
         {favorites.length ? (
           <FlatList
             data={favorites}
             keyExtractor={(item, index) => index.toString()}
-            renderItem={({item}) => (
+            renderItem={({ item }) => (
               <TouchableOpacity>
                 <FavoritesItem
                   image={item.images && item.images[0]}
@@ -96,18 +77,18 @@ const FavoritesScreen = (props) => {
             )}
           />
         ) : (
-          <View
-            style={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              marginTop: height / 3,
-            }}>
-            <Text style={{fontSize: 16, fontWeight: 'bold'}}>
-              No items added to Favorites!
+            <View
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                marginTop: height / 3,
+              }}>
+              <Text style={{ fontSize: 16, fontWeight: 'bold' }}>
+                No items added to Favorites!
             </Text>
-          </View>
-        )}
+            </View>
+          )}
       </ScrollView>
       <View style={styles.bottom}>
         <Button
@@ -115,12 +96,12 @@ const FavoritesScreen = (props) => {
           onPress={() => navigation.navigate('View Tote')}
         />
       </View>
-    </View>
+    </AppLayout>
   );
 };
-const mapStateToProps = ({products, user}) => {
+const mapStateToProps = ({ products, user }) => {
   return {
-    favorites: products.favorites,
+    favorites: products.favorites || [],
     products: products.list,
     user,
   };
