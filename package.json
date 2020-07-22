@@ -30,6 +30,7 @@
     "react-native-credit-card-input": "^0.4.1",
     "react-native-credit-card-input-fullpage": "^0.2.0",
     "react-native-deep-linking": "^2.2.0",
+    "react-native-eject": "^0.1.2",
     "react-native-flash-message": "^0.1.15",
     "react-native-gesture-handler": "^1.6.1",
     "react-native-htmlview": "^0.15.0",
