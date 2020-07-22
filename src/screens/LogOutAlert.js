@@ -45,12 +45,12 @@ const LogOutAlert = (props) => {
         dialogTitle={
           <View
             style={{
-              height: 40,
+              height:80,
               width: 300,
               alignItems: 'center',
               justifyContent: 'center',
             }}>
-            <Text style={{fontSize: 20, paddingTop: 20, paddingLeft: 10, paddingRight: 10}}>Are you sure you want to log out</Text>
+            <Text style={{fontSize: 20, paddingTop: 20, paddingLeft: 10, paddingRight: 10, paddingBottom: 20, textAlign: 'center'}}>Are you sure you want to log out?</Text>
           </View>
         }
         visible={true}

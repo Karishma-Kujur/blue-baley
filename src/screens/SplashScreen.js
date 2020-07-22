@@ -10,11 +10,11 @@ const { width, height } = Dimensions.get("window");
 const SplashScreen = (props) => {
     const { navigation, user } = props
 
-    useEffect(() => {
-        if (user && user.userName && user.password) {
-            navigation.navigate('Home')
-        }
-    }, [])
+    // useEffect(() => {
+    //     if (user && user.userName && user.password) {
+    //         navigation.navigate('Home')
+    //     }
+    // }, [])
 
     const onSwipeLeft = (gestureState) => {
         navigation.navigate('Sign Up')
@@ -35,8 +35,10 @@ const SplashScreen = (props) => {
             <View style={styles.actionsContainer}>
                 <Button label="GET STATRED" onPress={() => navigation.navigate('Sign Up')} />
                 <View style={styles.linkContainer}>
-                    <Text style={styles.text}>I am existing user?</Text>
+                <Text  style={styles.text}>{"Existing user? "}</Text>
                     <Link label="Login" onPress={() => navigation.navigate('Login')} />
+                    <Text  style={styles.text}>{"Or "}</Text>
+                    <Link label="Forgot my password" onPress={() => navigation.navigate('Forgot Password')} />
                 </View>
             </View>
         </GestureRecognizer>

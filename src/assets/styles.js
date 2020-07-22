@@ -335,7 +335,7 @@ export default StyleSheet.create({
 		justifyContent: 'flex-end'
 	},
 	linkContainer: {
-		width: DIMENSION_WIDTH - 20,
+		width: '100%',
 		flexDirection: 'row',
 		justifyContent: 'center'
 	},
@@ -462,7 +462,7 @@ export default StyleSheet.create({
 		color: 'red'
 	},
 	transitionContainer: {
-		height: DIMENSION_HEIGHT,
+		flex: 1,
 		justifyContent: 'center',
 		alignItems: 'center',
 	},
@@ -512,6 +512,7 @@ export default StyleSheet.create({
 		margin: 20
 	},
 	accountTextConatiner: {
+		marginTop: 20,
 		color: 'grey',
 		marginBottom: 5
 	},
@@ -520,7 +521,6 @@ export default StyleSheet.create({
 		fontSize: 16
 	},
 	accountTextInput: {
-		marginBottom: 20,
 		fontSize: 16,
 		borderWidth: 1,
 		padding: 5

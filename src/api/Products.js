@@ -2,9 +2,9 @@ import axios from 'axios';
 
 import Constants from '../appConfig/Constants';
 
-export function getCategory() {
+export function getCategory(userId) {
     return new Promise((resolve, reject) => {
-        const url = `${Constants.URL.wc}/user_survey/getCategoryResults?consumer_key=${Constants.Keys.ConsumerKey}&consumer_secret=${Constants.Keys.ConsumerSecret}`
+        const url = `${Constants.URL.wc}/user_survey/getCategoryResults?consumer_key=${Constants.Keys.ConsumerKey}&consumer_secret=${Constants.Keys.ConsumerSecret}&userId=${userId}`
         axios.get(url).then(response => {
             resolve(response.data)
         }).catch(err => {

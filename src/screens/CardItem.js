@@ -173,15 +173,15 @@ const CardItem = ({
                                 }
                             }}>
                                 <Text style={styles.flash}>
-                                    BAG it
+                                    Bag It
                         </Text>
                             </TouchableOpacity>
 
                             <TouchableOpacity onPress={handleOnClickSave}
-                                style={styles.button}
+                                style={  {...styles.button,marginHorizontal:10 }}
                             >
                                 <Text style={styles.flash}>
-                                    SAVE it
+                                    Save It
                         </Text>
                             </TouchableOpacity>
 
@@ -196,10 +196,10 @@ const CardItem = ({
                             }}
                                 style={styles.button}>
                                 <Text style={styles.flash}>
-                                    LOSE it
+                                    Lose It
                         </Text>
                             </TouchableOpacity>
-                        </View>
+                            </View>
                     )}
                 </View>
                 <PopupDialog

@@ -37,3 +37,29 @@ const getUserData = (result) => {
     }
 
 }
+
+export function forgotPassword(data) {
+    return new Promise((resolve, reject) => {
+        const url = `${Constants.URL.wc}/bdpwr/v1/reset-password`
+        axios.post(url, data,{ headers: { 'content-type': 'application/json' } })
+            .then(response => {
+                resolve(response.data)
+            }).catch(err => {
+                console.log(err);
+                reject(err)
+            })
+    });
+}
+
+export function resetPassword(data) {
+    return new Promise((resolve, reject) => {
+        const url = `${Constants.URL.wc}/bdpwr/v1/set-password`
+        axios.post(url, data,{ headers: { 'content-type': 'application/json' } })
+            .then(response => {
+                resolve(response.data)
+            }).catch(err => {
+                console.log(err);
+                reject(err)
+            })
+    });
+}

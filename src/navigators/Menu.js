@@ -13,6 +13,9 @@ import OrderPlaced from '../screens/OrderPlaced';
 import AddAddress from '../screens/AddAddress';
 import OrderDetails from '../screens/OrderDetails';
 import CheckOutScreen from '../screens/CheckoutScreen'
+import ForgotPassword from '../screens/ForgotPassword'
+import OtpScreen from '../screens/OtpScreen'
+import ResetPassword from '../screens/ResetPassword'
 
 const NavigatorMenu = (props) => {
     const Stack = createStackNavigator();
@@ -34,6 +37,9 @@ const NavigatorMenu = (props) => {
             <Stack.Screen name="Add Address" component={AddAddress} />
             <Stack.Screen name="Order Details" component={OrderDetails} />
             <Stack.Screen name="Checkout" component={CheckOutScreen} />
+            <Stack.Screen name="Forgot Password" component={ForgotPassword} />
+            <Stack.Screen name="Reset Password" component={ResetPassword} />
+            <Stack.Screen name="Otp Screen" component={OtpScreen} />
         </Stack.Navigator>
     )
 }

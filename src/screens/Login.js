@@ -6,6 +6,8 @@ import Button from '../components/shared/Button'
 import TextInput from '../components/shared/TextInput'
 import Link from '../components/shared/Link'
 import * as LoginApi from '../api/Login';
+import * as SurveyApi from '../api/Survey'
+import * as SurveyAction from '../actions/SurveyAction'
 import * as UserAction from '../actions/UserAction';
 import styles from '../assets/styles';
 import Spinner from 'react-native-loading-spinner-overlay';
@@ -13,7 +15,7 @@ import Spinner from 'react-native-loading-spinner-overlay';
 const { width, height } = Dimensions.get("window");
 
 const LoginScreen = (props) => {
-    const { navigation, UserAction } = props
+    const { navigation, UserAction, SurveyAction } = props
     const [userName, setUserName] = useState('')
     const [userNameError, setUserNameError] = useState(false)
     const [password, setPassword] = useState('')
@@ -58,6 +60,16 @@ const LoginScreen = (props) => {
         }
     }
 
+    const getFilteredQuestions = (answeredQuestions, questions) => {
+        let data = [...questions]
+        answeredQuestions.forEach((questionId) => {
+           data =  data.filter((element)  => {
+                return element.id !== questionId
+            })
+        })
+        return data
+    }
+
     const handleOnSubmit = () => {
         validateInput(userName, setUserNameError);
         validateInput(password, setPasswordError);
@@ -71,14 +83,33 @@ const LoginScreen = (props) => {
         setLoader(true)
         LoginApi.login(data)
             .then((result) => {
-                setLoader(false)
                 let userData = {
                     ...result,
                     userName: userName,
                     password: password
                 }
-                UserAction.setUser(userData)
-                navigation.navigate('Home')
+                SurveyApi.getSurveyStatus(userData.id)
+                .then((answerResult) => {
+                    SurveyApi.getSurveyQuestions()
+                    .then((questionResult) => {
+                        setLoader(false)
+                        if(answerResult.length === questionResult.length) {
+                            UserAction.setUser(userData)
+                            navigation.navigate('Home')
+                        }
+                        else {
+                            let filteredQuestions = getFilteredQuestions(answerResult, questionResult)
+                            SurveyAction.setSurveyQuestions(filteredQuestions)
+                            navigation.navigate('Survey')
+                        }
+                    })
+                    .catch((error) => {
+                        setLoader(false)
+                    })
+                })
+                .catch((error) => {
+                    setLoader(false)
+                })
             })
             .catch((error) => {
                 setLoader(false)
@@ -126,7 +157,8 @@ const LoginScreen = (props) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        UserAction: bindActionCreators(UserAction, dispatch)
+        UserAction: bindActionCreators(UserAction, dispatch),
+        SurveyAction: bindActionCreators(SurveyAction, dispatch)
     };
 }
 

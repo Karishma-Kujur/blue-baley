@@ -101,6 +101,7 @@ const SignUpScreen = (props) => {
             })
             .catch((error) => {
                 setLoader(false)
+                Alert.alert('Error', 'Error occured while signing up! Please try again')
             })
     }
 

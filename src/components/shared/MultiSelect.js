@@ -29,9 +29,8 @@ const MultiSelect = (props) => {
         <View>
             {items.map((item) => {
                 return (
-                    <View style={{ flexDirection: 'row', marginLeft: 20, marginBottom: 15 }}>
-                        <TouchableOpacity onPress={() => {
-                            let ids = [...selectedId || []]
+                    <TouchableOpacity onPress={() => {
+                        let ids = [...selectedId || []]
                             if (ids.includes(item.id)) {
                                 ids = ids.filter(id =>
                                     id !== item.id
@@ -42,18 +41,19 @@ const MultiSelect = (props) => {
                             changeSelectedId(ids)
                         }
                         }>
+                            <View style={{ flexDirection: 'row', marginLeft: 20, marginBottom: 15 }}>
                             {selectedId && selectedId.includes(item.id) ?
                                 <Image source={Checked} style={imageStyle} /> :
                                 <Image source={UnChecked} style={imageStyle} />}
-                        </TouchableOpacity>
                         {answerType === 'image' ?
                             <Image source={item.answer ? {
                                 uri: item.answer,
                             } : NoImage}
-                                style={answerImageStyle} /> :
+                            style={answerImageStyle} /> :
                             <Text style={{ fontSize: 16, marginLeft: 5, marginRight: 10 }}>{item.answer}</Text>
                         }
                     </View>
+                        </TouchableOpacity>
                 )
             })}
         </View>

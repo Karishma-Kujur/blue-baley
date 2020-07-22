@@ -7,7 +7,6 @@ import { View, StyleSheet, Dimensions, Text, ScrollView, TouchableOpacity, FlatL
 import Button from '../components/shared/Button'
 import styles from '../assets/styles';
 import SurveyItem from '../components/SurveyItem'
-import { Survey } from '../constants/Survey'
 import * as SurveyAction from '../actions/SurveyAction';
 import * as SurveyApi from '../api/Survey'
 import RadioButton from '../components/shared/RadioButton'
@@ -25,12 +24,27 @@ const SurveyScreen = (props) => {
         quizId: 2,
         results: []
     })
-    const { navigation, SurveyAction, questions } = props
+    const { navigation, SurveyAction, questions, answeredQuestions } = props
     const surveyQuestion = (questions && questions.length > surveyCount) ? questions[surveyCount] : null
+
+    const getSurveyQuestions = () => {
+        setLoader(true)
+        SurveyAction.setSurveyQuestions([])
+        SurveyApi.getSurveyQuestions()
+            .then((result) => {
+                setLoader(false)
+                SurveyAction.setSurveyQuestions(result)
+            })
+            .catch((error) => {
+                setLoader(false)
+            })
+
+    }
 
     const isFocused = useIsFocused()
     useEffect(() => {
-        SurveyAction.getSurveyQuestions()
+        if(!questions.length)
+            getSurveyQuestions()
     }, [isFocused])
 
     useEffect(() => {
@@ -211,7 +225,8 @@ const SurveyScreen = (props) => {
 }
 const mapStateToProps = ({ survey }) => {
     return {
-        questions: survey
+        questions: survey.surveyQuestions,
+        answeredQuestions: survey.answeredQuestions
     };
 }
 

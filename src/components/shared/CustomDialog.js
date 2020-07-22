@@ -4,9 +4,11 @@ import {
     Modal,
     StyleSheet,
     Text,
-    View
+    View,
+    Dimensions
 } from "react-native";
 
+const fullWidth = Dimensions.get('window').width;
 const CustomDialog = (props) => {
     const { modalVisible, message } = props;
     return (
@@ -28,9 +30,11 @@ const styles = StyleSheet.create({
     centeredView: {
         flex: 1,
         justifyContent: "center",
-        alignItems: "center"
+        alignItems: "center",
+        width: fullWidth
     },
     modalView: {
+        width: '100%',
         backgroundColor: "white",
         borderRadius: 15,
         padding: 5,
