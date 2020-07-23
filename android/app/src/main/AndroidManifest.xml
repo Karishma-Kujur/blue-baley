@@ -28,7 +28,8 @@
 
                 <data
                     android:scheme="https"
-                    android:host="www.departmynt.co" />
+                    android:host="www.departmynt.co"
+                    android:pathPrefix="/checkout/order-received" />
 
             </intent-filter>
       </activity>
