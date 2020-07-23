@@ -68,7 +68,7 @@ const CheckoutScreen = (props) => {
 
   const openLink = async (data) => {
     try {
-      const url = `https://www.departmynt.co/wp-json/user/getUser?username=${user.userName}&password=${user.password}&order_key=${data.order_key}&orderId=${data.id}`;
+      const url = `https://www.departmynt.co/wp-json/process/payment?username=${user.userName}&password=${user.password}&order_key=${data.order_key}&orderId=${data.id}`;
       if (await InAppBrowser.isAvailable()) {
         const result = await InAppBrowser.open(url, {
           // iOS Properties

@@ -62,7 +62,7 @@ const LoginScreen = (props) => {
 
     const getFilteredQuestions = (answeredQuestions, questions) => {
         let data = [...questions]
-        answeredQuestions.forEach((questionId) => {
+        answeredQuestions && answeredQuestions.forEach((questionId) => {
            data =  data.filter((element)  => {
                 return element.id !== questionId
             })
